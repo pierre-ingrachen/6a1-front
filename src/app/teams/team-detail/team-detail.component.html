@@ -1,0 +1,37 @@
+<a mat-button routerLink="/teams">← Équipes</a>
+@if (teamNotFound) {
+<p class="not-found">Équipe introuvable</p>
+} @else {
+@if (team$ | async; as team) {
+<h1>{{ team.name }}</h1>
+<p class="country">{{ team.country }}</p>
+}
+<div class="season">
+  <label for="season" class="form-label">Saison</label>
+  <select id="season" class="form-select" [ngModel]="selectedSeason" (ngModelChange)="selectSeason($event)">
+    @for (season of seasons; track season.startYear) {
+    <option [ngValue]="season.startYear">{{ season.label }}</option>
+    }
+  </select>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th scope="col">Poste</th>
+      <th scope="col">Taille (cm)</th>
+      <th scope="col">Poids (kg)</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (player of players$ | async; track player.id) {
+    <tr>
+      <td>{{ player.name }}</td>
+      <td>{{ player.position }}</td>
+      <td>{{ player.heightCm ?? "—" }}</td>
+      <td>{{ player.weightKg ?? "—" }}</td>
+    </tr>
+    }
+  </tbody>
+</table>
+}

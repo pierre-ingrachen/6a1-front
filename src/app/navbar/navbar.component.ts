@@ -7,9 +7,10 @@ import { Link } from "models/links.model"
   styleUrls: ["./navbar.component.scss"],
 })
 export class NavbarComponent {
-  links: Link[] = [
-    { name: "Accueil", href: "" },
-    { name: "Étudiants", href: "etudiants" },
-    { name: "Filières", href: "filieres" },
-  ]
+  links: Link[] = []
+
+  constructor() {
+    this.links.push({ name: "Étudiants", href: "etudiants" })
+    this.links.push({ name: "Filières", href: "filieres" })
+  }
 }
