@@ -1,37 +1,54 @@
-<a mat-button routerLink="/teams">← Équipes</a>
+<main class="team-page">
+  <a class="back-link" mat-button routerLink="/teams">← Toutes les équipes</a>
 @if (teamNotFound) {
 <p class="not-found">Équipe introuvable</p>
 } @else {
 @if (team$ | async; as team) {
-<h1>{{ team.name }}</h1>
-<p class="country">{{ team.country }}</p>
+<header class="team-header">
+  <div>
+    <span class="eyebrow">Effectif de l’équipe</span>
+    <h1>{{ team.name }}</h1>
+    <p class="country">{{ team.country }}</p>
+  </div>
+  <div class="season">
+    <label for="season" class="form-label">Saison</label>
+    <select id="season" class="form-select" [ngModel]="selectedSeason" (ngModelChange)="selectSeason($event)">
+      @for (season of seasons; track season.startYear) {
+      <option [ngValue]="season.startYear">{{ season.label }}</option>
+      }
+    </select>
+  </div>
+</header>
 }
-<div class="season">
-  <label for="season" class="form-label">Saison</label>
-  <select id="season" class="form-select" [ngModel]="selectedSeason" (ngModelChange)="selectSeason($event)">
-    @for (season of seasons; track season.startYear) {
-    <option [ngValue]="season.startYear">{{ season.label }}</option>
+@if (players$ | async; as players) {
+  @if (players.length > 0) {
+  <section class="player-grid" aria-label="Joueurs de l’équipe">
+    @for (player of players; track player.id) {
+    <article class="player-card">
+      <div class="player-card-header">
+        <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
+        <div class="player-heading">
+          <h2>{{ player.name }}</h2>
+          <span class="position">{{ player.position }}</span>
+        </div>
+        <span class="jersey-mark" aria-hidden="true">⚽</span>
+      </div>
+      <div class="player-details">
+        <div class="player-detail">
+          <span class="detail-label">Taille</span>
+          <strong>{{ player.heightCm ?? "—" }}<small>{{ player.heightCm !== null ? " cm" : "" }}</small></strong>
+        </div>
+        <div class="player-detail">
+          <span class="detail-label">Poids</span>
+          <strong>{{ player.weightKg ?? "—" }}<small>{{ player.weightKg !== null ? " kg" : "" }}</small></strong>
+        </div>
+      </div>
+    </article>
     }
-  </select>
-</div>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Nom</th>
-      <th scope="col">Poste</th>
-      <th scope="col">Taille (cm)</th>
-      <th scope="col">Poids (kg)</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (player of players$ | async; track player.id) {
-    <tr>
-      <td>{{ player.name }}</td>
-      <td>{{ player.position }}</td>
-      <td>{{ player.heightCm ?? "—" }}</td>
-      <td>{{ player.weightKg ?? "—" }}</td>
-    </tr>
-    }
-  </tbody>
-</table>
+  </section>
+  } @else {
+  <p class="empty-state">Aucun joueur n’est disponible pour cette saison.</p>
+  }
 }
+}
+</main>

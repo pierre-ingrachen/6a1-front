@@ -1,19 +1,117 @@
-<div class="d-flex align-items-center">
-  <h1>Équipes</h1>
-</div>
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Nom</th>
-      <th scope="col">Pays</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (team of teams$ | async; track team.id) {
-    <tr routerLink="/teams/{{ team.id }}">
-      <td>{{ team.name }}</td>
-      <td>{{ team.country }}</td>
-    </tr>
+<main class="teams-page">
+  <header class="page-heading">
+    <span class="eyebrow">Effectifs & saisons</span>
+    <h1>Les équipes</h1>
+    <p>Choisissez une équipe et une saison pour parcourir son effectif.</p>
+  </header>
+
+  <section class="filters" aria-label="Filtres des joueurs">
+    <div class="filter-field">
+      <label for="team">Équipe</label>
+      <div class="team-search">
+        <input
+          id="team"
+          type="search"
+          class="form-control"
+          placeholder="Rechercher une équipe…"
+          autocomplete="off"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-controls="team-options"
+          [attr.aria-expanded]="showTeamOptions"
+          [ngModel]="teamSearch"
+          (ngModelChange)="searchTeams($event)"
+          (focus)="openTeamSearch()"
+          (blur)="closeTeamSearch()"
+          (keydown.escape)="closeTeamSearch()"
+          [disabled]="isLoadingTeams || teams.length === 0"
+        />
+        @if (showTeamOptions && filteredTeams.length > 0) {
+        <ul id="team-options" class="team-options" role="listbox">
+          @for (team of filteredTeams; track team.id) {
+          <li role="option" [attr.aria-selected]="selectedTeamId === team.id">
+            <button
+              type="button"
+              (mousedown)="$event.preventDefault()"
+              (click)="selectTeam(team.id)"
+            >
+              <span>{{ team.name }}</span>
+              <small>{{ team.country }}</small>
+            </button>
+          </li>
+          }
+        </ul>
+        } @else if (showTeamOptions && teamSearch.trim()) {
+        <div class="team-options no-results">Aucune équipe trouvée.</div>
+        }
+      </div>
+    </div>
+
+    <div class="filter-field">
+      <label for="season">Saison</label>
+      <select
+        id="season"
+        class="form-select"
+        [ngModel]="selectedSeason"
+        (ngModelChange)="selectSeason($event)"
+        [disabled]="selectedTeamId === null || isLoadingSeasons || seasons.length === 0"
+      >
+        <option [ngValue]="null">Choisir une saison</option>
+        @for (season of seasons; track season.startYear) {
+        <option [ngValue]="season.startYear">{{ season.label }}</option>
+        }
+      </select>
+    </div>
+  </section>
+
+  @if (isLoadingTeams) {
+  <p class="status-message">Chargement des équipes…</p>
+  } @else if (teams.length === 0 && !errorMessage) {
+  <p class="status-message">Aucune équipe disponible pour le moment.</p>
+  }
+
+  @if (isLoadingSeasons) {
+  <p class="status-message">Chargement des saisons…</p>
+  } @else if (selectedTeamId !== null && seasons.length === 0 && !errorMessage) {
+  <p class="status-message">Aucune saison disponible pour cette équipe.</p>
+  }
+
+  @if (errorMessage) {
+  <p class="status-message error-message" role="alert">{{ errorMessage }}</p>
+  }
+
+  @if (selectedTeamId === null && !isLoadingTeams && teams.length > 0 && !errorMessage) {
+  <p class="status-message">Recherchez puis sélectionnez une équipe pour afficher son effectif.</p>
+  }
+
+  @if (isLoadingPlayers) {
+  <p class="status-message">Chargement des joueurs…</p>
+  } @else if (selectedSeason !== null && players.length > 0) {
+  <section class="player-grid" aria-label="Joueurs de l’équipe sélectionnée">
+    @for (player of players; track player.id) {
+    <article class="player-card">
+      <div class="player-card-header">
+        <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
+        <div class="player-heading">
+          <h2>{{ player.name }}</h2>
+          <span class="position">{{ player.position }}</span>
+        </div>
+        <span class="ball-mark" aria-hidden="true">⚽</span>
+      </div>
+      <div class="player-details">
+        <div class="player-detail">
+          <span class="detail-label">Taille</span>
+          <strong>{{ player.heightCm ?? "—" }}<small>{{ player.heightCm !== null ? " cm" : "" }}</small></strong>
+        </div>
+        <div class="player-detail">
+          <span class="detail-label">Poids</span>
+          <strong>{{ player.weightKg ?? "—" }}<small>{{ player.weightKg !== null ? " kg" : "" }}</small></strong>
+        </div>
+      </div>
+    </article>
     }
-  </tbody>
-</table>
+  </section>
+  } @else if (selectedSeason !== null && !errorMessage && !isLoadingPlayers) {
+  <p class="status-message">Aucun joueur disponible pour cette saison.</p>
+  }
+</main>
