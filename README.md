@@ -24,7 +24,7 @@ mon-dossier/
 └── 6a1-front/
 ```
 
-Prérequis : avoir créé le fichier `.env` du back (voir le README du back).
+Prérequis : Docker Desktop lancé, et le fichier `.env` du back créé (voir le README du back). Le script charge ce `.env` automatiquement (nécessite un shell Unix : macOS, Linux ou Git Bash).
 
 Depuis le dossier du front, lancer `npm run dev`. Cette commande :
 1. démarre la base de données (`docker compose up -d` dans le back) ;
