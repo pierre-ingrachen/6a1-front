@@ -1,0 +1,23 @@
+@use "theme";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px;
+
+  h1 {
+    color: theme.$common-purple;
+    font-size: xx-large;
+    margin: 10px 0 0;
+  }
+
+  .season {
+    margin-top: 10px;
+    width: 250px;
+  }
+
+  table {
+    margin-top: 20px;
+  }
+}
