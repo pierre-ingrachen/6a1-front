@@ -9,6 +9,8 @@ import { MajorsComponent } from "majors/majors.component"
 import { MajorsResolver } from "majors/majors.resolver"
 import { MajorStudentsResolver } from "majors/major-students/major-students.resolver"
 import { MajorStudentsComponent } from "majors/major-students/major-students.component"
+import { TeamListComponent } from "teams/team-list/team-list.component"
+import { TeamDetailComponent } from "teams/team-detail/team-detail.component"
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -40,6 +42,8 @@ const routes: Routes = [
       studentsFromMajor: MajorStudentsResolver,
     },
   },
+  { path: "teams", component: TeamListComponent },
+  { path: "teams/:teamId", component: TeamDetailComponent },
 ]
 
 @NgModule({
