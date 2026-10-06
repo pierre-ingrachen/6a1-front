@@ -1,4 +1,9 @@
+@use "@angular/material" as mat;
 @use "theme";
+
+@include mat.core();
+@include mat.all-component-colors(theme.$my-theme);
+
 @import "./bootstrap/_bootstrap";
 
 :root {
