@@ -22,8 +22,20 @@
 }
 @if (players$ | async; as players) {
   @if (players.length > 0) {
+  <div class="sort-bar">
+    <label for="sort">Trier par</label>
+    <select id="sort" class="form-select" [ngModel]="sortKey" (ngModelChange)="selectSortKey($event)">
+        @for (option of sortOptions; track option.key) {
+        <option [ngValue]="option.key">{{ option.label }}</option>
+        }
+      </select>
+    <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [(ngModel)]="sortDirection">
+        <option value="asc">Croissant</option>
+        <option value="desc">Décroissant</option>
+      </select>
+  </div>
   <section class="player-grid" aria-label="Joueurs de l’équipe">
-    @for (player of players; track player.id) {
+    @for (player of sorted(players); track player.id) {
     <article class="player-card">
       <div class="player-card-header">
         <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
@@ -31,16 +43,16 @@
           <h2>{{ player.name }}</h2>
           <span class="position">{{ player.position }}</span>
         </div>
-        <span class="jersey-mark" aria-hidden="true">⚽</span>
+        <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne">{{ player.averageRating !== null ? (player.averageRating | number: "1.2-2") : "—" }}</span>
       </div>
       <div class="player-details">
         <div class="player-detail">
-          <span class="detail-label">Taille</span>
-          <strong>{{ player.heightCm ?? "—" }}<small>{{ player.heightCm !== null ? " cm" : "" }}</small></strong>
+          <span class="detail-label">Buts</span>
+          <strong>{{ player.goals ?? "—" }}</strong>
         </div>
         <div class="player-detail">
-          <span class="detail-label">Poids</span>
-          <strong>{{ player.weightKg ?? "—" }}<small>{{ player.weightKg !== null ? " kg" : "" }}</small></strong>
+          <span class="detail-label">Passes décisives</span>
+          <strong>{{ player.assists ?? "—" }}</strong>
         </div>
       </div>
     </article>

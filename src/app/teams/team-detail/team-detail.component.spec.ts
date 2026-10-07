@@ -8,8 +8,8 @@ import { Player } from "models/player.model"
 
 describe("TeamDetailComponent", () => {
   const playersBySeason: Record<number, Player[]> = {
-    2025: [{ id: 1, name: "Bukayo Saka", position: "Forward", heightCm: 178, weightKg: null }],
-    2024: [{ id: 2, name: "Declan Rice", position: "Midfielder", heightCm: 185, weightKg: 80 }],
+    2025: [{ id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: null, averageRating: 7.3 }],
+    2024: [{ id: 2, name: "Declan Rice", position: "Midfielder", goals: 0, assists: 2, averageRating: null }],
   }
   let teamService: jasmine.SpyObj<TeamService>
   let fixture: ComponentFixture<TeamDetailComponent>
@@ -17,9 +17,13 @@ describe("TeamDetailComponent", () => {
   const element = (): HTMLElement => fixture.nativeElement
   const select = (): HTMLSelectElement => element().querySelector("select")!
   const playerCells = () =>
-    Array.from(element().querySelectorAll<HTMLTableRowElement>("tbody tr")).map((row) =>
-      Array.from(row.cells).map((cell) => cell.textContent?.trim()),
-    )
+    Array.from(element().querySelectorAll<HTMLElement>(".player-card")).map((card) => [
+      card.querySelector("h2")?.textContent?.trim(),
+      card.querySelector(".position")?.textContent?.trim(),
+      ...Array.from(card.querySelectorAll(".player-detail strong")).map((v) => v.textContent?.trim()),
+      card.querySelector(".rating-badge")?.textContent?.trim(),
+      card.querySelector(".rating-badge")?.className.match(/rating-(\w+)$/)?.[1],
+    ])
 
   const render = () => {
     fixture = TestBed.createComponent(TeamDetailComponent)
@@ -67,7 +71,7 @@ describe("TeamDetailComponent", () => {
 
     expect(select().selectedOptions[0].textContent?.trim()).toBe("2025/2026")
     expect(teamService.findPlayersByTeam).toHaveBeenCalledOnceWith(13, 2025)
-    expect(playerCells()).toEqual([["Bukayo Saka", "Forward", "178", "—"]])
+    expect(playerCells()).toEqual([["Bukayo Saka", "Forward", "5", "—", "7.30", "outstanding"]])
   }))
 
   it("reloads the squad when another season is selected", fakeAsync(() => {
@@ -79,7 +83,7 @@ describe("TeamDetailComponent", () => {
 
     expect(teamService.findPlayersByTeam).toHaveBeenCalledTimes(2)
     expect(teamService.findPlayersByTeam).toHaveBeenCalledWith(13, 2024)
-    expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "185", "80"]])
+    expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "0", "2", "—", "none"]])
   }))
 
   it("displays a message when the team does not exist", fakeAsync(() => {
