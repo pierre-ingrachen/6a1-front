@@ -8,8 +8,8 @@ import { Player } from "models/player.model"
 
 describe("TeamDetailComponent", () => {
   const playersBySeason: Record<number, Player[]> = {
-    2025: [{ id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: null, averageRating: 7.3 }],
-    2024: [{ id: 2, name: "Declan Rice", position: "Midfielder", goals: 0, assists: 2, averageRating: null }],
+    2025: [{ id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: null, averageRating: 7.3, matchesPlayed: 8 }],
+    2024: [{ id: 2, name: "Declan Rice", position: "Midfielder", goals: 0, assists: 2, averageRating: null, matchesPlayed: 8 }],
   }
   let teamService: jasmine.SpyObj<TeamService>
   let fixture: ComponentFixture<TeamDetailComponent>
@@ -71,7 +71,7 @@ describe("TeamDetailComponent", () => {
 
     expect(select().selectedOptions[0].textContent?.trim()).toBe("2025/2026")
     expect(teamService.findPlayersByTeam).toHaveBeenCalledOnceWith(13, 2025)
-    expect(playerCells()).toEqual([["Bukayo Saka", "Forward", "5", "—", "7.30", "outstanding"]])
+    expect(playerCells()).toEqual([["Bukayo Saka", "Forward", "8", "5", "—", "7.30", "outstanding"]])
   }))
 
   it("reloads the squad when another season is selected", fakeAsync(() => {
@@ -83,7 +83,7 @@ describe("TeamDetailComponent", () => {
 
     expect(teamService.findPlayersByTeam).toHaveBeenCalledTimes(2)
     expect(teamService.findPlayersByTeam).toHaveBeenCalledWith(13, 2024)
-    expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "0", "2", "—", "none"]])
+    expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "8", "0", "2", "—", "none"]])
   }))
 
   it("displays a message when the team does not exist", fakeAsync(() => {

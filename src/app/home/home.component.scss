@@ -26,8 +26,8 @@
   width: fit-content;
   padding: 0.45rem 0.8rem;
   border-radius: 999px;
-  background: rgba(128, 73, 170, 0.12);
-  border: 1px solid rgba(128, 73, 170, 0.2);
+  background: rgba(42, 100, 220, 0.12);
+  border: 1px solid rgba(42, 100, 220, 0.2);
   color: #5a2a7a;
   font-size: 0.8rem;
   font-weight: 700;
@@ -41,7 +41,7 @@
   font-size: clamp(2.8rem, 6vw, 5rem);
   line-height: 1;
   letter-spacing: -0.06em;
-  color: #1d1028;
+  color: #0a1633;
 }
 
 .hero-copy p {
@@ -67,13 +67,13 @@
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 28px;
   background: #fff;
-  box-shadow: 0 28px 70px rgba(46, 19, 58, 0.16);
+  box-shadow: 0 28px 70px rgba(10, 26, 64, 0.16);
   transform: rotate(2deg);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 
   &:hover {
     transform: rotate(0) translateY(-5px);
-    box-shadow: 0 34px 80px rgba(46, 19, 58, 0.2);
+    box-shadow: 0 34px 80px rgba(10, 26, 64, 0.2);
   }
 }
 
@@ -216,20 +216,20 @@
 }
 
 .player-stat strong {
-  color: #32163d;
+  color: #0a1a40;
   font-size: 2rem;
   line-height: 1;
 }
 
 .player-stat span {
-  color: #756b7b;
+  color: #5a6b8c;
   font-size: 0.8rem;
 }
 
 .stat-divider {
   width: 1px;
   height: 42px;
-  background: #eee8f0;
+  background: #e3e9f5;
 }
 
 @media (max-width: 700px) {

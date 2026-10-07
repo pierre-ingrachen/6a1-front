@@ -1,67 +1,88 @@
-<h1>Comparer deux joueurs</h1>
+<header class="page-heading">
+  <span class="eyebrow"><mat-icon>compare_arrows</mat-icon> Duel de joueurs</span>
+  <h1>Comparer deux joueurs</h1>
+  <p>Choisissez un joueur puis une saison pour chacun, et confrontez leurs statistiques.</p>
+</header>
 
-<div class="controls">
-  <div class="season">
-    <label for="season" class="form-label">Saison</label>
-    <select id="season" class="form-select" [ngModel]="selectedSeason" (ngModelChange)="selectSeason($event)">
-      @for (season of seasons; track season.startYear) {
-      <option [ngValue]="season.startYear">{{ season.label }}</option>
-      }
-    </select>
-  </div>
+<div class="mode-toggle">
   <mat-button-toggle-group [value]="mode" (change)="mode = $event.value" aria-label="Mode d'affichage des stats">
     <mat-button-toggle value="total">Totaux</mat-button-toggle>
     <mat-button-toggle value="per90">Par 90 min</mat-button-toggle>
   </mat-button-toggle-group>
 </div>
 
-@if (selectedSeason) {
-<div class="players">
-  <player-search
+@if (seasons.length) {
+<section class="players" aria-label="Sélection des joueurs">
+  <player-picker
     inputId="first-player"
     label="Joueur 1"
-    [season]="selectedSeason"
+    [seasons]="firstSeasons"
+    [selectedSeason]="firstSeason"
     [selectedName]="firstSlot.player?.name"
+    [hasPlayer]="!!firstPlayerId"
     (playerSelected)="selectFirstPlayer($event)"
+    (seasonSelected)="selectFirstSeason($event)"
   />
-  <player-search
+  <player-picker
     inputId="second-player"
     label="Joueur 2"
-    [season]="selectedSeason"
+    [seasons]="secondSeasons"
+    [selectedSeason]="secondSeason"
     [selectedName]="secondSlot.player?.name"
+    [hasPlayer]="!!secondPlayerId"
     (playerSelected)="selectSecondPlayer($event)"
+    (seasonSelected)="selectSecondSeason($event)"
   />
-</div>
+</section>
 }
 
 <ng-template #header let-slot>
-  <div class="player-header">
+  <article class="player-header player-card">
     @if (slot.player; as player) {
-    <h2>{{ player.name }}</h2>
-    <p class="identity">{{ positionLabels[player.position] ?? player.position }} · {{ player.teamName }}</p>
+    <div class="player-card-header">
+      <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
+      <div class="player-heading">
+        <h2>{{ player.name }}</h2>
+        <span class="position">{{ positionLabels[player.position] ?? player.position }} · {{ player.teamName }}</span>
+      </div>
+      <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne">{{ player.averageRating !== null ? (player.averageRating | number : "1.2-2") : "—" }}</span>
+    </div>
     @if (player.teamEstimated) {
     <p class="estimated">
       Équipe estimée : le joueur a joué pour 2 clubs cette saison et l'ordre n'est pas connu en base.
     </p>
     }
-    <dl>
-      <dt>Taille</dt>
-      <dd>@if (player.heightCm !== null) {{{ player.heightCm }} cm} @else {—}</dd>
-      <dt>Poids</dt>
-      <dd>@if (player.weightKg !== null) {{{ player.weightKg }} kg} @else {—}</dd>
-      <dt>Note</dt>
-      <dd>@if (player.rating !== null) {{{ player.rating }}/99} @else {—}</dd>
-      <dt>Note WhoScored</dt>
-      <dd>@if (player.averageRating !== null) {{{ player.averageRating | number : "1.2-2" }}} @else {—}</dd>
-      <dt>Minutes</dt>
-      <dd>{{ player.minutes }}</dd>
-    </dl>
-    } @else if (slot.missing) {
-    <p class="missing">Ce joueur n'a pas de stats sur cette saison.</p>
+    <div class="player-details">
+      <div class="player-detail">
+        <span class="detail-label">Taille</span>
+        <strong>@if (player.heightCm !== null) {{{ player.heightCm }} cm} @else {—}</strong>
+      </div>
+      <div class="player-detail">
+        <span class="detail-label">Poids</span>
+        <strong>@if (player.weightKg !== null) {{{ player.weightKg }} kg} @else {—}</strong>
+      </div>
+      <div class="player-detail">
+        <span class="detail-label">Note</span>
+        <strong>@if (player.rating !== null) {{{ player.rating }}/99} @else {—}</strong>
+      </div>
+      <div class="player-detail">
+        <span class="detail-label">Minutes</span>
+        <strong>{{ player.minutes }}</strong>
+      </div>
+    </div>
     } @else {
-    <p class="placeholder">Choisis un joueur.</p>
+    <div class="player-card-header empty">
+      <div class="player-avatar" aria-hidden="true">?</div>
+      <div class="player-heading">
+        @if (slot.missing) {
+        <p class="missing">Ce joueur n'a pas de stats sur la saison choisie.</p>
+        } @else {
+        <p class="placeholder">Choisissez un joueur.</p>
+        }
+      </div>
+    </div>
     }
-  </div>
+  </article>
 </ng-template>
 
 <div class="headers">
@@ -69,16 +90,11 @@
   <ng-container *ngTemplateOutlet="header; context: { $implicit: secondSlot }" />
 </div>
 
-@if (categories.length) {
-<p class="legend">
-  Barre = percentile parmi les joueurs de la saison ayant au moins 450 minutes (gardiens entre eux pour les stats de
-  gardien). Les ratios ne sont affichés qu'à partir d'un minimum de tentatives.
-</p>
-}
 
 @for (category of categories; track category.key) {
 <section class="category">
   <h3>{{ category.label }}</h3>
+  <div class="category-body">
   @for (row of category.mainStats; track row.key) {
   <stat-row
     [label]="row.label"
@@ -100,5 +116,6 @@
     }
   </details>
   }
+  </div>
 </section>
 }

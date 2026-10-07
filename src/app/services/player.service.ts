@@ -12,8 +12,8 @@ export class PlayerService {
 
   constructor(private http: HttpClient) {}
 
-  searchPlayers(season: number, query: string): Observable<PlayerSearchResult[]> {
-    const params = new HttpParams().set("season", season).set("query", query)
+  searchPlayers(query: string): Observable<PlayerSearchResult[]> {
+    const params = new HttpParams().set("query", query)
     return this.http.get<PlayerSearchResult[]>(`${this.playerUrl}/search`, { params })
   }
 

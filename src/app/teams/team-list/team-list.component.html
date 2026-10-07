@@ -1,6 +1,6 @@
 <main class="teams-page">
   <header class="page-heading">
-    <span class="eyebrow">Effectifs & saisons</span>
+    <span class="eyebrow"><mat-icon>sports_soccer</mat-icon> Effectifs &amp; saisons</span>
     <h1>Les équipes</h1>
     <p>Choisissez une équipe et une saison pour parcourir son effectif.</p>
   </header>
@@ -114,6 +114,10 @@
         <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne">{{ player.averageRating !== null ? (player.averageRating | number: "1.2-2") : "—" }}</span>
       </div>
       <div class="player-details">
+        <div class="player-detail">
+          <span class="detail-label">Matchs joués</span>
+          <strong>{{ player.matchesPlayed }}</strong>
+        </div>
         <div class="player-detail">
           <span class="detail-label">Buts</span>
           <strong>{{ player.goals ?? "—" }}</strong>

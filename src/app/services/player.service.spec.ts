@@ -29,12 +29,12 @@ describe("PlayerService and SeasonService", () => {
     request.flush(seasons)
   })
 
-  it("searches players with GET /players/search?season=&query=", () => {
-    const results: PlayerSearchResult[] = [{ id: 300713, name: "Kylian Mbappé", position: "Forward", teamName: "Real Madrid" }]
+  it("searches players with GET /players/search?query=", () => {
+    const results: PlayerSearchResult[] = [{ id: 300713, name: "Kylian Mbappé", position: "Forward", teamName: "Real Madrid", seasons: [{ startYear: 2025, teamName: "Real Madrid" }] }]
 
-    playerService.searchPlayers(2025, "mba").subscribe((receivedResults) => expect(receivedResults).toEqual(results))
+    playerService.searchPlayers("mba").subscribe((receivedResults) => expect(receivedResults).toEqual(results))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/players/search?season=2025&query=mba")
+    const request = httpTestingController.expectOne("http://localhost:8080/players/search?query=mba")
     expect(request.request.method).toBe("GET")
     request.flush(results)
   })

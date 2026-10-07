@@ -25,7 +25,7 @@
 }
 
 .eyebrow {
-  color: #70438a;
+  color: #1f4fb8;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -34,7 +34,7 @@
 
 h1 {
   margin: 0.4rem 0 0;
-  color: #1d1028;
+  color: #0a1633;
   font-size: clamp(2rem, 5vw, 3.25rem);
   font-weight: 750;
   letter-spacing: -0.05em;
@@ -42,7 +42,7 @@ h1 {
 
 .country {
   margin: 0.35rem 0 0;
-  color: #756b7b;
+  color: #5a6b8c;
   font-size: 1rem;
 }
 
@@ -52,16 +52,16 @@ h1 {
 }
 
 .season .form-label {
-  color: #54445f;
+  color: #3a4a6b;
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .season .form-select {
-  border: 1px solid rgba(128, 73, 170, 0.2);
+  border: 1px solid rgba(42, 100, 220, 0.2);
   border-radius: 12px;
   background-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 8px 24px rgba(46, 19, 58, 0.06);
+  box-shadow: 0 8px 24px rgba(10, 26, 64, 0.06);
 }
 
 .player-grid {
@@ -75,12 +75,12 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 18px 40px rgba(46, 19, 58, 0.09);
+  box-shadow: 0 18px 40px rgba(10, 26, 64, 0.09);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 24px 48px rgba(46, 19, 58, 0.14);
+    box-shadow: 0 24px 48px rgba(10, 26, 64, 0.14);
   }
 }
 
@@ -92,7 +92,7 @@ h1 {
   min-height: 0;
   padding: 1.25rem;
   color: #fff;
-  background: linear-gradient(140deg, #281233, #60336f 72%, #824481);
+  background: linear-gradient(140deg, #050e2b, #0b2a6b 72%, #1747b0);
 }
 
 .player-avatar {
@@ -103,7 +103,7 @@ h1 {
   place-items: center;
   border: 2px solid rgba(255, 255, 255, 0.28);
   border-radius: 15px;
-  background: linear-gradient(145deg, #db9b57, #a64f61);
+  background: linear-gradient(145deg, #3b82ff, #1747b0);
   color: #fff;
   font-size: 1.2rem;
   font-weight: 800;
@@ -135,7 +135,7 @@ h1 {
 
 .player-details {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   padding: 0.7rem 1.25rem;
 }
 
@@ -145,13 +145,13 @@ h1 {
   gap: 0.35rem;
 
   & + & {
-    padding-left: 1.25rem;
-    border-left: 1px solid #eee8f0;
+    padding-left: 1rem;
+    border-left: 1px solid #e3e9f5;
   }
 }
 
 .detail-label {
-  color: #756b7b;
+  color: #5a6b8c;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -159,12 +159,12 @@ h1 {
 }
 
 .player-detail strong {
-  color: #32163d;
+  color: #0a1a40;
   font-size: 1.2rem;
 }
 
 .player-detail small {
-  color: #756b7b;
+  color: #5a6b8c;
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -172,10 +172,10 @@ h1 {
 .empty-state,
 .not-found {
   padding: 2rem;
-  border: 1px dashed rgba(128, 73, 170, 0.3);
+  border: 1px dashed rgba(42, 100, 220, 0.3);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.6);
-  color: #62546e;
+  color: #4a5b7d;
   text-align: center;
 }
 
