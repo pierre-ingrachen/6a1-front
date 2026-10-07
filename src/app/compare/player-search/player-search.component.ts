@@ -13,7 +13,6 @@ const SEARCH_DEBOUNCE_MS = 300
   styleUrls: ["./player-search.component.scss"],
 })
 export class PlayerSearchComponent {
-  @Input({ required: true }) season!: number
   @Input({ required: true }) inputId!: string
   @Input({ required: true }) label!: string
   @Input() set selectedName(name: string | null | undefined) {
@@ -29,7 +28,7 @@ export class PlayerSearchComponent {
     debounceTime(SEARCH_DEBOUNCE_MS),
     distinctUntilChanged(),
     switchMap((query) =>
-      query.length >= MINIMUM_QUERY_LENGTH ? this.playerService.searchPlayers(this.season, query) : of([]),
+      query.length >= MINIMUM_QUERY_LENGTH ? this.playerService.searchPlayers(query) : of([]),
     ),
   )
 

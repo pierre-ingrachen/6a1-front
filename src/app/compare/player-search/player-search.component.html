@@ -15,7 +15,7 @@
 >
   @for (player of results$ | async; track player.id) {
   <mat-option [value]="player">
-    {{ player.name }} <small class="team">· {{ player.teamName }}</small>
+    {{ player.name }}
   </mat-option>
   }
 </mat-autocomplete>

@@ -6,6 +6,8 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle"
 import { NoopAnimationsModule } from "@angular/platform-browser/animations"
 import { of, throwError } from "rxjs"
 import { PlayerCompareComponent } from "compare/player-compare/player-compare.component"
+import { MatIconModule } from "@angular/material/icon"
+import { PlayerPickerComponent } from "compare/player-picker/player-picker.component"
 import { PlayerSearchComponent } from "compare/player-search/player-search.component"
 import { StatRowComponent } from "compare/stat-row/stat-row.component"
 import { SeasonService } from "services/season.service"
@@ -94,8 +96,8 @@ describe("PlayerCompareComponent", () => {
     playerService.searchPlayers.and.returnValue(of([]))
 
     TestBed.configureTestingModule({
-      declarations: [PlayerCompareComponent, PlayerSearchComponent, StatRowComponent],
-      imports: [FormsModule, ReactiveFormsModule, MatAutocompleteModule, MatButtonToggleModule, NoopAnimationsModule],
+      declarations: [PlayerCompareComponent, PlayerPickerComponent, PlayerSearchComponent, StatRowComponent],
+      imports: [FormsModule, ReactiveFormsModule, MatAutocompleteModule, MatButtonToggleModule, MatIconModule, NoopAnimationsModule],
       providers: [
         { provide: Router, useValue: router },
         { provide: ActivatedRoute, useValue: {} },
@@ -114,40 +116,41 @@ describe("PlayerCompareComponent", () => {
     })
   })
 
-  it("selects the most recent season by default and writes it in the URL", () => {
-    render({})
-
-    expect(fixture.componentInstance.selectedSeason).toBe(2025)
-    expect(router.navigate).toHaveBeenCalledWith(
-      [],
-      jasmine.objectContaining({ queryParams: { season: 2025 }, queryParamsHandling: "merge", replaceUrl: true }),
-    )
-  })
-
-  it("restores the comparison from the URL", () => {
-    render({ season: "2024", p1: "1", p2: "2" })
+  it("restores both players and their own season from the URL", () => {
+    render({ p1: "1", s1: "2024", p2: "2", s2: "2025" })
 
     expect(playerService.findPlayerStats).toHaveBeenCalledWith(1, 2024)
-    expect(playerService.findPlayerStats).toHaveBeenCalledWith(2, 2024)
+    expect(playerService.findPlayerStats).toHaveBeenCalledWith(2, 2025)
     expect(router.navigate).not.toHaveBeenCalled()
     const names = Array.from(element().querySelectorAll(".player-header h2")).map((title) => title.textContent)
     expect(names).toEqual(["Kylian Mbappé", "Erling Haaland"])
     expect(element().querySelectorAll(".estimated").length).toBe(1)
   })
 
-  it("writes the selected players in the URL and resets them when the season changes", () => {
-    render({ season: "2025" })
+  it("selects the latest season the player actually played when chosen", () => {
+    render({})
 
-    fixture.componentInstance.selectFirstPlayer({ id: 1, name: "Kylian Mbappé", position: "Forward", teamName: "PSG" })
-    fixture.componentInstance.selectSecondPlayer({ id: 2, name: "Erling Haaland", position: "Forward", teamName: "City" })
-    fixture.componentInstance.selectSeason(2024)
+    fixture.componentInstance.selectFirstPlayer({ id: 1, name: "Kylian Mbappé", position: "Forward", teamName: "PSG", seasons: [{ startYear: 2025, teamName: "PSG" }, { startYear: 2024, teamName: "PSG" }] })
+    fixture.componentInstance.selectSecondPlayer({ id: 2, name: "Erling Haaland", position: "Forward", teamName: "City", seasons: [{ startYear: 2024, teamName: "City" }] })
 
     const urlUpdates = router.navigate.calls.allArgs().map(([, extras]) => extras?.queryParams)
-    expect(urlUpdates).toEqual([{ p1: 1 }, { p2: 2 }, { season: 2024, p1: null, p2: null }])
+    expect(urlUpdates).toEqual([
+      { p1: 1, s1: 2025 },
+      { p2: 2, s2: 2024 },
+    ])
+  })
+
+  it("changes the season of one player only", () => {
+    render({ p1: "1", s1: "2025", p2: "2", s2: "2025" })
+
+    fixture.componentInstance.selectSecondSeason(2024)
+
+    const urlUpdates = router.navigate.calls.allArgs().map(([, extras]) => extras?.queryParams)
+    expect(urlUpdates).toEqual([{ s2: 2024 }])
   })
 
   it("switches every value between totals and per 90 minutes", () => {
-    render({ season: "2025", p1: "1", p2: "2" })
+    render({ p1: "1", s1: "2025", p2: "2", s2: "2025" })
     expect(sideValues("Buts")).toEqual(["6", "4"])
 
     element().querySelectorAll<HTMLButtonElement>("mat-button-toggle button")[1].click()
@@ -157,14 +160,14 @@ describe("PlayerCompareComponent", () => {
   })
 
   it("highlights the best player on each row, including when lower is better", () => {
-    render({ season: "2025", p1: "1", p2: "2" })
+    render({ p1: "1", s1: "2025", p2: "2", s2: "2025" })
 
     expect(rowNamed("Buts").querySelector(".best")?.classList).toContain("first")
     expect(rowNamed("Cartons jaunes").querySelector(".best")?.classList).toContain("second")
   })
 
   it("displays a dash without bar for null values", () => {
-    render({ season: "2025", p1: "1", p2: "2" })
+    render({ p1: "1", s1: "2025", p2: "2", s2: "2025" })
 
     expect(sideValues("Penaltys")).toEqual(["2", "—"])
     expect(rowNamed("Penaltys").querySelector(".second .bar")).toBeNull()
@@ -173,7 +176,7 @@ describe("PlayerCompareComponent", () => {
   })
 
   it("puts breakdowns in a collapsed details section and hides empty categories", () => {
-    render({ season: "2025", p1: "1", p2: "2" })
+    render({ p1: "1", s1: "2025", p2: "2", s2: "2025" })
 
     const details = element().querySelector("details")!
     expect(details.open).toBeFalse()
@@ -183,8 +186,8 @@ describe("PlayerCompareComponent", () => {
   })
 
   it("tells when a player has no stats in the selected season", () => {
-    render({ season: "2025", p1: "1", p2: "99" })
+    render({ p1: "1", s1: "2025", p2: "99", s2: "2025" })
 
-    expect(element().querySelector(".missing")?.textContent).toContain("pas de stats sur cette saison")
+    expect(element().querySelector(".missing")?.textContent).toContain("pas de stats sur la saison choisie")
   })
 })
