@@ -71,6 +71,9 @@ h1 {
 }
 
 .player-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 22px;

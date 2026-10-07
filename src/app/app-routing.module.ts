@@ -11,6 +11,7 @@ import { MajorStudentsResolver } from "majors/major-students/major-students.reso
 import { MajorStudentsComponent } from "majors/major-students/major-students.component"
 import { TeamListComponent } from "teams/team-list/team-list.component"
 import { TeamDetailComponent } from "teams/team-detail/team-detail.component"
+import { PlayerProfileComponent } from "players/player-profile/player-profile.component"
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -44,6 +45,7 @@ const routes: Routes = [
   },
   { path: "teams", component: TeamListComponent },
   { path: "teams/:teamId", component: TeamDetailComponent },
+  { path: "joueurs/:playerId", component: PlayerProfileComponent },
   { path: "compare", loadChildren: () => import("compare/compare.module").then((module) => module.CompareModule) },
 ]
 
