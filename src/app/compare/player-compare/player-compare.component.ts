@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core"
 import { ActivatedRoute, ParamMap, Params, Router } from "@angular/router"
 import { catchError, forkJoin, map, Observable, of, switchMap, tap } from "rxjs"
-import { Season } from "models/season.model"
+import { Season, SeasonOption } from "models/season.model"
 import { PlayerSearchResult } from "models/player-search-result.model"
 import { PlayerStat, PlayerStats } from "models/player-stats.model"
+import { ratingLevel } from "utils/rating"
 import { SeasonService } from "services/season.service"
 import { PlayerService } from "services/player.service"
 
@@ -24,10 +25,9 @@ export interface CategoryComparison {
   detailStats: StatComparison[]
 }
 
-interface Selection {
-  season: number
-  firstPlayerId: number | null
-  secondPlayerId: number | null
+interface SlotSelection {
+  playerId: number | null
+  season: number | null
 }
 
 export interface PlayerSlot {
@@ -41,6 +41,7 @@ export interface PlayerSlot {
   styleUrls: ["./player-compare.component.scss"],
 })
 export class PlayerCompareComponent implements OnInit {
+  readonly ratingLevel = ratingLevel
   readonly positionLabels: Partial<Record<string, string>> = {
     Forward: "Attaquant",
     Midfielder: "Milieu",
@@ -49,7 +50,12 @@ export class PlayerCompareComponent implements OnInit {
   }
 
   seasons: Season[] = []
-  selectedSeason: number | null = null
+  firstSeason: number | null = null
+  secondSeason: number | null = null
+  firstSeasons: SeasonOption[] = []
+  secondSeasons: SeasonOption[] = []
+  firstPlayerId: number | null = null
+  secondPlayerId: number | null = null
   firstSlot: PlayerSlot = { player: null, missing: false }
   secondSlot: PlayerSlot = { player: null, missing: false }
   categories: CategoryComparison[] = []
@@ -67,7 +73,7 @@ export class PlayerCompareComponent implements OnInit {
       .findAllSeasons()
       .pipe(
         tap((seasons) => (this.seasons = seasons)),
-        switchMap((seasons) => this.route.queryParamMap.pipe(switchMap((params) => this.loadSelection(params, seasons)))),
+        switchMap(() => this.route.queryParamMap.pipe(switchMap((params) => this.loadSelection(params)))),
       )
       .subscribe(([firstSlot, secondSlot]) => {
         this.firstSlot = firstSlot
@@ -76,48 +82,55 @@ export class PlayerCompareComponent implements OnInit {
       })
   }
 
-  selectSeason(season: number) {
-    this.updateUrl({ season, p1: null, p2: null })
+  selectFirstPlayer(player: PlayerSearchResult) {
+    this.firstSeasons = this.seasonsOf(player)
+    this.updateUrl({ p1: player.id, s1: this.defaultSeason(player, this.firstSeason) })
   }
 
-  selectFirstPlayer(player: PlayerSearchResult) {
-    this.updateUrl({ p1: player.id })
+  selectFirstSeason(season: number) {
+    this.updateUrl({ s1: season })
   }
 
   selectSecondPlayer(player: PlayerSearchResult) {
-    this.updateUrl({ p2: player.id })
+    this.secondSeasons = this.seasonsOf(player)
+    this.updateUrl({ p2: player.id, s2: this.defaultSeason(player, this.secondSeason) })
   }
 
-  private loadSelection(params: ParamMap, seasons: Season[]): Observable<[PlayerSlot, PlayerSlot]> {
-    const selection = this.toSelection(params, seasons)
-    if (!selection) {
-      return of([this.emptySlot(), this.emptySlot()])
-    }
-    this.selectedSeason = selection.season
-    if (!params.has("season")) {
-      this.updateUrl({ season: selection.season }, true)
-    }
-    return forkJoin([
-      this.loadSlot(selection.firstPlayerId, selection.season),
-      this.loadSlot(selection.secondPlayerId, selection.season),
-    ])
+  selectSecondSeason(season: number) {
+    this.updateUrl({ s2: season })
   }
 
-  private toSelection(params: ParamMap, seasons: Season[]): Selection | null {
-    const [latestSeason] = seasons
-    const season = Number(params.get("season")) || latestSeason?.startYear
-    if (!season) {
-      return null
-    }
+  private seasonsOf(player: PlayerSearchResult): SeasonOption[] {
+    return this.seasons
+      .map((season) => ({ ...season, teamName: player.seasons.find((played) => played.startYear === season.startYear)?.teamName }))
+      .filter((season) => season.teamName !== undefined)
+  }
+
+  private defaultSeason(player: PlayerSearchResult, currentSeason: number | null): number {
+    return player.seasons.some((played) => played.startYear === currentSeason) ? currentSeason! : player.seasons[0].startYear
+  }
+
+  private loadSelection(params: ParamMap): Observable<[PlayerSlot, PlayerSlot]> {
+    const first = this.toSlotSelection(params, "p1", "s1")
+    const second = this.toSlotSelection(params, "p2", "s2")
+    this.firstPlayerId = first.playerId
+    this.firstSeasons = this.firstSeasons.length ? this.firstSeasons : this.seasons
+    this.secondSeasons = this.secondSeasons.length ? this.secondSeasons : this.seasons
+    this.secondPlayerId = second.playerId
+    this.firstSeason = first.season
+    this.secondSeason = second.season
+    return forkJoin([this.loadSlot(first), this.loadSlot(second)])
+  }
+
+  private toSlotSelection(params: ParamMap, playerKey: string, seasonKey: string): SlotSelection {
     return {
-      season,
-      firstPlayerId: Number(params.get("p1")) || null,
-      secondPlayerId: Number(params.get("p2")) || null,
+      playerId: Number(params.get(playerKey)) || null,
+      season: Number(params.get(seasonKey)) || null,
     }
   }
 
-  private loadSlot(playerId: number | null, season: number): Observable<PlayerSlot> {
-    if (playerId === null) {
+  private loadSlot({ playerId, season }: SlotSelection): Observable<PlayerSlot> {
+    if (playerId === null || season === null) {
       return of(this.emptySlot())
     }
     return this.playerService.findPlayerStats(playerId, season).pipe(

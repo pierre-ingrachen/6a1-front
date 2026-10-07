@@ -1,0 +1,46 @@
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(42, 100, 220, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+:host ::ng-deep .form-label,
+.form-label {
+  margin: 0;
+  color: #3a4a6b;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+:host ::ng-deep .form-control,
+.form-select {
+  min-height: 46px;
+  border: 1px solid rgba(42, 100, 220, 0.2);
+  border-radius: 11px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #0a1a40;
+  box-shadow: none;
+}
+
+:host ::ng-deep .form-control:focus,
+.form-select:focus {
+  border-color: #2a64dc;
+  box-shadow: 0 0 0 3px rgba(42, 100, 220, 0.12);
+}
+
+@media (max-width: 600px) {
+  :host {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+}

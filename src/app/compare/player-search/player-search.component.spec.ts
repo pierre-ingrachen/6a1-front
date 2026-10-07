@@ -19,7 +19,7 @@ describe("PlayerSearchComponent", () => {
   beforeEach(() => {
     playerService = jasmine.createSpyObj<PlayerService>("PlayerService", ["searchPlayers"])
     playerService.searchPlayers.and.returnValue(
-      of([{ id: 300713, name: "Kylian Mbappé", position: "Forward", teamName: "Real Madrid" }]),
+      of([{ id: 300713, name: "Kylian Mbappé", position: "Forward", teamName: "Real Madrid", seasons: [{ startYear: 2025, teamName: "Real Madrid" }] }]),
     )
     TestBed.configureTestingModule({
       declarations: [PlayerSearchComponent],
@@ -27,7 +27,6 @@ describe("PlayerSearchComponent", () => {
       providers: [{ provide: PlayerService, useValue: playerService }],
     })
     fixture = TestBed.createComponent(PlayerSearchComponent)
-    fixture.componentRef.setInput("season", 2025)
     fixture.componentRef.setInput("inputId", "first-player")
     fixture.componentRef.setInput("label", "Joueur 1")
     fixture.detectChanges()
@@ -43,7 +42,7 @@ describe("PlayerSearchComponent", () => {
     type("mba")
     tick(300)
 
-    expect(playerService.searchPlayers).toHaveBeenCalledOnceWith(2025, "mba")
+    expect(playerService.searchPlayers).toHaveBeenCalledOnceWith("mba")
   }))
 
   it("shows the selected player name in the input", async () => {
