@@ -48,7 +48,7 @@ describe("TeamService", () => {
   })
 
   it("fetches the players of a team for a season with GET /teams/{teamId}/players?season=", () => {
-    const players: Player[] = [{ id: 1, name: "Bukayo Saka", position: "Forward", heightCm: 178, weightKg: null }]
+    const players: Player[] = [{ id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: null, averageRating: 7.3 }]
 
     teamService.findPlayersByTeam(13, 2024).subscribe((receivedPlayers) => expect(receivedPlayers).toEqual(players))
 
