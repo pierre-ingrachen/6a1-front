@@ -1,0 +1,21 @@
+<label class="form-label" [for]="inputId">{{ label }}</label>
+<input
+  [id]="inputId"
+  class="form-control"
+  type="search"
+  placeholder="Rechercher un joueur…"
+  autocomplete="off"
+  [formControl]="searchControl"
+  [matAutocomplete]="autocomplete"
+/>
+<mat-autocomplete
+  #autocomplete="matAutocomplete"
+  [displayWith]="displayPlayer"
+  (optionSelected)="playerSelected.emit($event.option.value)"
+>
+  @for (player of results$ | async; track player.id) {
+  <mat-option [value]="player">
+    {{ player.name }} <small class="team">· {{ player.teamName }}</small>
+  </mat-option>
+  }
+</mat-autocomplete>
