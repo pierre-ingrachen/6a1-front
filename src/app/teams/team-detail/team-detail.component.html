@@ -36,7 +36,7 @@
   </div>
   <section class="player-grid" aria-label="Joueurs de l’équipe">
     @for (player of sorted(players); track player.id) {
-    <article class="player-card">
+    <a class="player-card" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season: selectedSeason }">
       <div class="player-card-header">
         <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
         <div class="player-heading">
@@ -59,7 +59,7 @@
           <strong>{{ player.assists ?? "—" }}</strong>
         </div>
       </div>
-    </article>
+    </a>
     }
   </section>
   } @else {

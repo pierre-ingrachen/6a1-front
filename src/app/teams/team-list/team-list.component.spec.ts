@@ -1,6 +1,7 @@
 import { FormsModule } from "@angular/forms"
 import { TestBed } from "@angular/core/testing"
 import { of } from "rxjs"
+import { provideRouter, RouterLink } from "@angular/router"
 import { TeamListComponent } from "teams/team-list/team-list.component"
 import { TeamService } from "services/team.service"
 
@@ -41,8 +42,8 @@ describe("TeamListComponent", () => {
 
     TestBed.configureTestingModule({
       declarations: [TeamListComponent],
-      imports: [FormsModule],
-      providers: [{ provide: TeamService, useValue: teamService }],
+      imports: [FormsModule, RouterLink],
+      providers: [provideRouter([]), { provide: TeamService, useValue: teamService }],
     })
   })
 
