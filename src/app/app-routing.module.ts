@@ -44,6 +44,7 @@ const routes: Routes = [
   },
   { path: "teams", component: TeamListComponent },
   { path: "teams/:teamId", component: TeamDetailComponent },
+  { path: "compare", loadChildren: () => import("compare/compare.module").then((module) => module.CompareModule) },
 ]
 
 @NgModule({
