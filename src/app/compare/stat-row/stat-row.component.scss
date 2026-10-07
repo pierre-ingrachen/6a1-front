@@ -1,0 +1,95 @@
+@use "theme";
+
+:host {
+  display: grid;
+  grid-template-columns: 1fr minmax(8rem, 14rem) 1fr;
+  grid-template-areas: "first label second";
+  align-items: center;
+  gap: 0.25rem 1rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.label {
+  grid-area: label;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.side {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+
+  &.first {
+    grid-area: first;
+    direction: rtl;
+  }
+
+  &.second {
+    grid-area: second;
+  }
+
+  &.best {
+    background: rgba(theme.$common-purple, 0.08);
+
+    .value {
+      font-weight: bold;
+      color: theme.$common-purple;
+    }
+
+    .fill {
+      background: theme.$common-red;
+    }
+  }
+}
+
+.value {
+  min-width: 3.5rem;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+
+  &.empty {
+    color: #999;
+  }
+}
+
+.bar {
+  height: 0.5rem;
+  background: #eee;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: theme.$common-purple;
+  border-radius: 0.25rem;
+}
+
+.rank {
+  font-size: 0.75rem;
+  color: #666;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+@media (max-width: 576px) {
+  :host {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "label label"
+      "first second";
+  }
+
+  .side {
+    grid-template-columns: auto 1fr;
+
+    .rank {
+      grid-column: 1 / -1;
+    }
+  }
+}

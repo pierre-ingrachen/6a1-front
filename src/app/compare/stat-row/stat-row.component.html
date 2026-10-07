@@ -1,0 +1,26 @@
+<ng-template #side let-stat let-isBest="isBest" let-position="position">
+  <div class="side {{ position }}" [class.best]="isBest">
+    @if (stat?.value != null) {
+    <span class="value">{{ stat.value | number : "1.0-2" }}</span>
+    @if (stat.percentile != null) {
+    <div
+      class="bar"
+      role="meter"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-valuenow]="stat.percentile"
+      [attr.aria-label]="'Percentile ' + stat.percentile"
+    >
+      <div class="fill" [style.width.%]="stat.percentile"></div>
+    </div>
+    <span class="rank">Top {{ stat.topPercent }} %</span>
+    }
+    } @else {
+    <span class="value empty">—</span>
+    }
+  </div>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="side; context: { $implicit: first, isBest: best === 'first', position: 'first' }" />
+<div class="label">{{ label }}</div>
+<ng-container *ngTemplateOutlet="side; context: { $implicit: second, isBest: best === 'second', position: 'second' }" />
