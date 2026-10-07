@@ -35,6 +35,7 @@ describe("TeamListComponent", () => {
           goals: 4,
           assists: 1,
           averageRating: 6.72,
+          rating: 85,
           matchesPlayed: 8,
         },
       ]),

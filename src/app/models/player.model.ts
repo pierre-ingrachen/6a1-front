@@ -5,5 +5,6 @@ export interface Player {
   goals: number | null
   assists: number | null
   averageRating: number | null
+  rating: number | null
   matchesPlayed: number
 }

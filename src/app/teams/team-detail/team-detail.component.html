@@ -51,6 +51,10 @@
           <strong>{{ player.matchesPlayed }}</strong>
         </div>
         <div class="player-detail">
+          <span class="detail-label">Rating</span>
+          <strong>@if (player.rating !== null) {{{ player.rating }}/99} @else {—}</strong>
+        </div>
+        <div class="player-detail">
           <span class="detail-label">Buts</span>
           <strong>{{ player.goals ?? "—" }}</strong>
         </div>
