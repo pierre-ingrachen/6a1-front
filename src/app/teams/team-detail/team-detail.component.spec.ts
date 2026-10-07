@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing"
 import { FormsModule } from "@angular/forms"
-import { ActivatedRoute, convertToParamMap, provideRouter } from "@angular/router"
+import { ActivatedRoute, convertToParamMap, provideRouter, RouterLink } from "@angular/router"
 import { of, throwError } from "rxjs"
 import { TeamDetailComponent } from "teams/team-detail/team-detail.component"
 import { TeamService } from "services/team.service"
@@ -49,7 +49,7 @@ describe("TeamDetailComponent", () => {
 
     TestBed.configureTestingModule({
       declarations: [TeamDetailComponent],
-      imports: [FormsModule],
+      imports: [FormsModule, RouterLink],
       providers: [
         provideRouter([]),
         { provide: TeamService, useValue: teamService },
