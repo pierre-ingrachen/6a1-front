@@ -35,9 +35,9 @@
 
 .filters {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  max-width: 760px;
+  max-width: 1000px;
   margin-bottom: 2rem;
   padding: 1.25rem;
   border: 1px solid rgba(128, 73, 170, 0.12);
@@ -79,6 +79,16 @@
 .filter-field .form-control:focus {
   border-color: #8049aa;
   box-shadow: 0 0 0 3px rgba(128, 73, 170, 0.12);
+}
+
+.sort-field {
+  display: flex;
+  gap: 0.5rem;
+
+  .form-select {
+    min-width: 0;
+    flex: 1 1 0;
+  }
 }
 
 .team-search {
@@ -129,12 +139,12 @@
 .team-options.no-results {
   padding: 0.85rem;
   color: #756b7b;
-  font-size: 0.9rem;
+  font-size: 0.72rem;
 }
 
 .player-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 265px), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
 }
 
@@ -156,23 +166,23 @@
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  min-height: 116px;
-  padding: 1.25rem;
+  min-height: 0;
+  padding: 0.9rem 1.25rem;
   color: #fff;
   background: linear-gradient(140deg, #281233, #60336f 72%, #824481);
 }
 
 .player-avatar {
   display: grid;
-  flex: 0 0 58px;
-  width: 58px;
-  height: 58px;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
   place-items: center;
   border: 2px solid rgba(255, 255, 255, 0.28);
-  border-radius: 19px;
+  border-radius: 15px;
   background: linear-gradient(145deg, #db9b57, #a64f61);
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -184,7 +194,7 @@
 .player-heading h2 {
   overflow: hidden;
   margin: 0 0 0.5rem;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -200,16 +210,10 @@
   font-weight: 600;
 }
 
-.ball-mark {
-  margin-left: auto;
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 1.25rem;
-}
-
 .player-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding: 1.1rem 1.25rem;
+  padding: 0.7rem 1.25rem;
 }
 
 .player-detail {
@@ -233,7 +237,7 @@
 
 .player-detail strong {
   color: #32163d;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 
 .player-detail small {
@@ -256,6 +260,10 @@
 }
 
 @media (max-width: 600px) {
+  .player-grid {
+    grid-template-columns: 1fr;
+  }
+
   :host {
     padding-right: 1rem;
     padding-left: 1rem;

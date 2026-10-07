@@ -69,3 +69,43 @@ a {
 .table tbody tr:hover {
   background: rgba(128, 73, 170, 0.04);
 }
+
+.rating-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.2rem;
+  margin-left: auto;
+  padding: 0.35rem 0.7rem;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+
+  &.rating-poor { background: #d64545; }
+  &.rating-average { background: #e8832a; }
+  &.rating-good { background: #d9b100; }
+  &.rating-great { background: #5aae3d; }
+  &.rating-outstanding { background: #1f8f4e; }
+  &.rating-none { background: rgba(255, 255, 255, 0.2); }
+}
+
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  color: var(--muted-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  .form-select {
+    width: auto;
+    border: 1px solid rgba(128, 73, 170, 0.2);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.85);
+  }
+}

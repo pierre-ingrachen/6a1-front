@@ -31,8 +31,9 @@ describe("TeamListComponent", () => {
           id: 1,
           name: "Alex Martin",
           position: "Attaquant",
-          heightCm: 180,
-          weightKg: 75,
+          goals: 4,
+          assists: 1,
+          averageRating: 6.72,
         },
       ]),
     )
