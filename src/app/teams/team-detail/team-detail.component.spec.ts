@@ -8,8 +8,8 @@ import { Player } from "models/player.model"
 
 describe("TeamDetailComponent", () => {
   const playersBySeason: Record<number, Player[]> = {
-    2025: [{ id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: null, averageRating: 7.3 }],
-    2024: [{ id: 2, name: "Declan Rice", position: "Midfielder", goals: 0, assists: 2, averageRating: null }],
+    2025: [{ id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: null, averageRating: 7.3, matchesPlayed: 8 }],
+    2024: [{ id: 2, name: "Declan Rice", position: "Midfielder", goals: 0, assists: 2, averageRating: null, matchesPlayed: 8 }],
   }
   let teamService: jasmine.SpyObj<TeamService>
   let fixture: ComponentFixture<TeamDetailComponent>

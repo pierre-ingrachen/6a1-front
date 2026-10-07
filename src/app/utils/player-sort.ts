@@ -1,11 +1,12 @@
 import { Player } from "models/player.model"
 
-export type PlayerSortKey = "name" | "goals" | "assists" | "averageRating"
+export type PlayerSortKey = "name" | "goals" | "assists" | "averageRating" | "matchesPlayed"
 
 export type SortDirection = "asc" | "desc"
 
 export const PLAYER_SORT_OPTIONS: { key: PlayerSortKey; label: string }[] = [
   { key: "name", label: "Nom" },
+  { key: "matchesPlayed", label: "Matchs joués" },
   { key: "goals", label: "Buts" },
   { key: "assists", label: "Passes décisives" },
   { key: "averageRating", label: "Note moyenne" },

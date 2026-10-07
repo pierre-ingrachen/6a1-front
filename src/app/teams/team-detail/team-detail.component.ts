@@ -16,8 +16,8 @@ import { TeamService } from "services/team.service"
 export class TeamDetailComponent implements OnInit {
   readonly ratingLevel = ratingLevel
   readonly sortOptions = PLAYER_SORT_OPTIONS
-  sortKey: PlayerSortKey = "name"
-  sortDirection: SortDirection = "asc"
+  sortKey: PlayerSortKey = "averageRating"
+  sortDirection: SortDirection = "desc"
   teamId = Number(this.route.snapshot.paramMap.get("teamId"))
   team$: Observable<Team> = this.teamService.findTeamById(this.teamId).pipe(catchError(() => EMPTY))
   seasons: Season[] = []
