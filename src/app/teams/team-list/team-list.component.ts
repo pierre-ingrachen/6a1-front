@@ -17,8 +17,8 @@ import { TeamService } from "services/team.service"
 export class TeamListComponent implements OnInit {
   readonly ratingLevel = ratingLevel
   readonly sortOptions = PLAYER_SORT_OPTIONS
-  sortKey: PlayerSortKey = "name"
-  sortDirection: SortDirection = "asc"
+  sortKey: PlayerSortKey = "averageRating"
+  sortDirection: SortDirection = "desc"
   teams: Team[] = []
   seasons: Season[] = []
   players: Player[] = []

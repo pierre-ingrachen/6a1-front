@@ -3,7 +3,7 @@ import { sortPlayers } from "utils/player-sort"
 
 describe("sortPlayers", () => {
   const p = (name: string, goals: number | null, assists: number | null, averageRating: number | null): Player => ({
-    id: 0, name, position: "Forward", goals, assists, averageRating,
+    id: 0, name, position: "Forward", goals, assists, averageRating, matchesPlayed: 0,
   })
   const players = [p("Bob", 2, null, 6.5), p("Alice", 5, 1, null), p("Carl", 5, 3, 7.1)]
   const names = (key: Parameters<typeof sortPlayers>[1], dir: Parameters<typeof sortPlayers>[2] = key === "name" ? "asc" : "desc") => sortPlayers(players, key, dir).map((x) => x.name)
