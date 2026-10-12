@@ -13,12 +13,12 @@
     [class.target]="isTarget(placed.slot)"
     [class.draw-target]="isDrawTarget(placed.slot)"
     [disabled]="isDisabled(placed.slot)"
-    [attr.title]="placed.slot.player ? placed.slot.player.name + ' · ' + placed.slot.player.teamName + ' ' + placed.slot.player.seasonLabel : name(placed.slot.position)"
+    [attr.title]="placed.slot.player ? placed.slot.player.name + ' · ' + placed.slot.player.teamName + ' ' + placed.slot.player.seasonLabel + ' · note ' + placed.slot.player.rating : name(placed.slot.position)"
     (click)="slotClicked.emit(placed.slot.index)"
   >
     <app-jersey
       class="jersey"
-      [number]="placed.slot.player ? placed.slot.player.rating : '?'"
+      [number]="jerseyNumbers().get(placed.slot.index) ?? '?'"
       [goalkeeper]="placed.slot.line === 'GOALKEEPER'"
     />
     <span class="label">{{ placed.slot.player ? shortName(placed.slot.player.name) : label(placed.slot.position) }}</span>

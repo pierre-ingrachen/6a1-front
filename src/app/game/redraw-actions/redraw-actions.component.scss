@@ -1,15 +1,19 @@
+:host {
+  display: contents;
+}
+
 .redraws {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
+  display: contents;
 }
 
 .quota {
+  grid-column: 1;
+  grid-row: 4;
+  margin-top: 0.85rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #4b5a85;
+  color: #fff;
 
   strong {
     display: inline-flex;
@@ -18,8 +22,8 @@
     min-width: 2rem;
     height: 2rem;
     border-radius: 999px;
-    background: #0a2260;
-    color: #f2cf72;
+    background: #f2cf72;
+    color: #0a2260;
 
     &.exhausted {
       background: #9aa3bd;
@@ -30,21 +34,33 @@
 
 button {
   padding: 0.55rem 1rem;
-  border: 2px solid #0a2260;
+  border: 2px solid #f2cf72;
   border-radius: 10px;
-  background: #fff;
-  color: #0a2260;
+  background: transparent;
+  color: #f2cf72;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 
   &:hover:not(:disabled) {
-    background: #0a2260;
-    color: #f2cf72;
+    background: #f2cf72;
+    color: #0a2260;
   }
 
   &:disabled {
     opacity: 0.4;
     cursor: not-allowed;
   }
+}
+
+.season {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: center;
+}
+
+.team {
+  grid-column: 2;
+  grid-row: 4;
+  align-self: end;
 }

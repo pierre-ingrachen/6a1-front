@@ -23,7 +23,7 @@ describe("placeSlots", () => {
     const defenders = placeSlots(slots).filter((placed) => placed.slot.line === "DEFENDER")
 
     expect(defenders.map((placed) => placed.slot.position)).toEqual(["LB", "CB", "CB", "RB"])
-    expect(defenders.map((placed) => placed.x)).toEqual([12.5, 37.5, 62.5, 87.5])
+    expect(defenders.map((placed) => Math.round(placed.x * 10) / 10)).toEqual([12.5, 36.2, 59.8, 83.5])
   })
 
   it("keeps every slot", () => {

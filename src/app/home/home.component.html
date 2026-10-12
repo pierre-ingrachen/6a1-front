@@ -6,38 +6,18 @@
       Retrouvez les joueurs, leurs équipes et les performances qui font la
       différence sur le terrain.
     </p>
-    <span class="coming-soon">Les statistiques du football, bientôt réunies au même endroit.</span>
+    <nav class="quick-links" aria-label="Accès rapides">
+      @for (link of links; track link.href) {
+      <a class="quick-link" [routerLink]="link.href">
+        <mat-icon>{{ link.icon }}</mat-icon>
+        <span class="quick-link-text">
+          <strong>{{ link.title }}</strong>
+          <small>{{ link.description }}</small>
+        </span>
+      </a>
+      }
+    </nav>
   </div>
 
-  <article class="player-card" aria-label="Exemple de fiche joueur">
-    <div class="card-top">
-      <div class="card-heading">
-        <span class="card-label">Fiche joueur</span>
-        <span class="sample-badge">Le GOAT :</span>
-      </div>
-      <div class="player-identity">
-        <div class="player-avatar" aria-hidden="true">PP</div>
-        <div>
-          <h2>Pierre Prime</h2>
-          <p class="team-name"><span class="team-mark" aria-hidden="true"></span> FC Boutantin</p>
-        </div>
-      </div>
-      <div class="rating">
-        <span>Note moyenne</span>
-        <strong>8,7<small>/10</small></strong>
-      </div>
-    </div>
-
-    <div class="player-stats">
-      <div class="player-stat">
-        <strong>614</strong>
-        <span>Buts</span>
-      </div>
-      <div class="stat-divider" aria-hidden="true"></div>
-      <div class="player-stat">
-        <strong>118</strong>
-        <span>Passes décisives</span>
-      </div>
-    </div>
-  </article>
+  <dream-team />
 </section>

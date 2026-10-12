@@ -6,7 +6,8 @@
 .lineup {
   position: relative;
   width: 100%;
-  aspect-ratio: 5 / 3;
+  aspect-ratio: var(--lineup-aspect-ratio, 5 / 3);
+  height: var(--lineup-height, auto);
   container-type: size;
   overflow: hidden;
   background:
