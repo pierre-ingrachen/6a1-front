@@ -3,6 +3,7 @@
     <span class="kicker">Équipe tirée au sort</span>
     <h2>{{ draw().teamName }}</h2>
     <p>{{ draw().seasonLabel }} · {{ draw().country }}</p>
+    <ng-content />
   </header>
   <div class="players">
     @for (group of groups(); track group.line) {

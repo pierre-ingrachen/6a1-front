@@ -20,6 +20,7 @@
       </div>
       <squad-board
         [slots]="currentGame.slots"
+        [formation]="currentGame.formation"
         [highlightedSlots]="highlightedSlots()"
         [selectedSlot]="selectedSlot()"
         [moveTargets]="moveTargets()"
@@ -40,17 +41,18 @@
     <section class="actions">
       @if (currentGame.draw; as draw) {
       @if (drawRevealed()) {
-      <redraw-actions
-        [redrawsRemaining]="currentGame.redrawsRemaining"
-        [disabled]="loading()"
-        (redrawRequested)="redraw($event)"
-      />
       <team-draw-card
         [draw]="draw"
         [slots]="currentGame.slots"
         [disabled]="loading()"
         (playerSelected)="selectDrawPlayer($event)"
-      />
+      >
+        <redraw-actions
+          [redrawsRemaining]="currentGame.redrawsRemaining"
+          [disabled]="loading()"
+          (redrawRequested)="redraw($event)"
+        />
+      </team-draw-card>
       } @else if (drawLoading()) {
       <div class="ready draw-loading" role="status" aria-live="polite">
         <span class="spinner" aria-hidden="true"></span>

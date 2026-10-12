@@ -28,11 +28,17 @@ describe("SquadBoardComponent", () => {
     expect(create().querySelectorAll(".slot").length).toBe(3)
   })
 
-  it("shows the picked player with its rating", () => {
+  it("shows the picked player with the jersey number of its position", () => {
     const filled = create().querySelector(".slot.filled") as HTMLElement
 
     expect(filled.textContent).toContain("L.Messi")
-    expect(filled.textContent).toContain("95")
+    expect(filled.textContent).toContain("9")
+  })
+
+  it("numbers the goalkeeper 1 even when empty", () => {
+    const goalkeeper = Array.from(create().querySelectorAll(".slot")).pop() as HTMLElement
+
+    expect(goalkeeper.querySelector("text")?.textContent?.trim()).toBe("1")
   })
 
   it("highlights only empty eligible slots", () => {

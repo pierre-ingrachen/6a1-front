@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  justify-self: center;
+}
+
+.dream-team {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  height: 100%;
+  --lineup-aspect-ratio: 5 / 4;
+
+  h2 {
+    margin: 0;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid rgba(42, 100, 220, 0.2);
+    border-radius: 999px;
+    background: rgba(42, 100, 220, 0.12);
+    color: #5a2a7a;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  app-lineup {
+    align-self: stretch;
+    flex: 1;
+    min-height: 22rem;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(10, 26, 64, 0.18);
+  }
+}
+
+@media (min-width: 701px) {
+  .dream-team {
+    --lineup-height: 100%;
+  }
+}

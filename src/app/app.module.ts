@@ -17,6 +17,7 @@ import { MajorStudentsComponent } from "majors/major-students/major-students.com
 import { HttpClientModule } from "@angular/common/http"
 import { TeamListComponent } from "teams/team-list/team-list.component"
 import { TeamDetailComponent } from "teams/team-detail/team-detail.component"
+import { DreamTeamComponent } from "home/dream-team/dream-team.component"
 import { PlayerProfileComponent } from "players/player-profile/player-profile.component"
 
 @NgModule({
@@ -41,6 +42,7 @@ import { PlayerProfileComponent } from "players/player-profile/player-profile.co
     MatIconModule,
     MatButtonModule,
     HttpClientModule,
+    DreamTeamComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
