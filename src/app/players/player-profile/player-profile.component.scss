@@ -26,6 +26,21 @@
   }
 }
 
+.compare-link {
+  margin-left: auto;
+  align-self: flex-end;
+  min-width: 160px;
+  height: 44px;
+  padding: 0 1.75rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  --mdc-filled-button-container-color: #60336f;
+  --mdc-filled-button-label-text-color: #fff;
+  --mdc-filled-button-container-shape: 999px;
+  font-weight: 650;
+  background-image: linear-gradient(140deg, #281233, #60336f 72%, #824481);
+}
+
 .profile-header {
   display: flex;
   align-items: center;
