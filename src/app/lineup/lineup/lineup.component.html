@@ -1,0 +1,19 @@
+<div class="lineup" role="img" [attr.aria-label]="ariaLabel()">
+  <app-pitch-lines />
+
+  @for (placed of placedPlayers(); track $index) {
+  <div class="slot" [style.left.%]="placed.slot.x" [style.top.%]="placed.slot.y">
+    <app-jersey
+      class="slot__jersey"
+      [number]="placed.player.number"
+      [color]="teamColor()"
+      [numberColor]="numberColor()"
+      [goalkeeper]="placed.goalkeeper"
+    />
+    @if (placed.player.captain) {
+    <span class="slot__captain">C</span>
+    }
+    <span class="slot__name">{{ placed.player.name }}</span>
+  </div>
+  }
+</div>

@@ -20,6 +20,13 @@ export class PlayerCardComponent {
   readonly choices = computed(() => slotChoicesOf(this.player(), this.slots()))
   readonly selectable = computed(() => !this.player().alreadyPicked && this.choices().length > 0)
 
+  readonly tier = computed(() => {
+    const rating = this.player().rating
+    if (rating >= 90) return "elite"
+    if (rating >= 80) return "gold"
+    return "standard"
+  })
+
   readonly name = positionName
   readonly label = positionLabel
 }

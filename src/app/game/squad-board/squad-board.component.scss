@@ -1,99 +1,79 @@
-.pitch {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  padding: 1.25rem 0.75rem;
-  border-radius: 18px;
-  background:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 40px, transparent 40px 80px),
-    linear-gradient(180deg, #1c7a3e, #14602f);
-  border: 3px solid #0d3f1f;
+:host {
+  display: block;
 }
 
-.row {
-  display: flex;
-  justify-content: space-around;
-  gap: 0.5rem;
+.pitch {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  container-type: size;
+  overflow: hidden;
+  border-radius: 1.2cqw;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 55%, rgba(80, 90, 240, 0.55), transparent 75%),
+    linear-gradient(160deg, #2b2fc7 0%, #3338d0 50%, #2a2ec2 100%);
 }
 
 .slot {
-  flex: 1 1 0;
-  max-width: 130px;
-  min-height: 92px;
+  position: absolute;
+  transform: translate(-50%, -4.2cqw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.15rem;
-  padding: 0.4rem;
-  border-radius: 12px;
-  border: 2px dashed rgba(255, 255, 255, 0.45);
+  gap: 0.7cqw;
+  padding: 0;
+  border: 0;
   background: transparent;
   font: inherit;
   color: #fff;
-  text-align: center;
   cursor: default;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  transition: transform 0.2s;
 
-  .position {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    opacity: 0.85;
+  .jersey {
+    transition: filter 0.2s, opacity 0.2s;
   }
 
-  .empty {
-    font-size: 1.6rem;
-    opacity: 0.5;
+  .label {
+    max-width: 24cqw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: 500 2.2cqw/1.1 "Nunito Sans", "Fira Sans", sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-shadow: 0 0.1cqw 0.4cqw rgba(0, 0, 40, 0.35);
   }
 
-  .rating {
-    font-size: 1.5rem;
-    color: #f2cf72;
+  &:not(.filled) .jersey {
+    opacity: 0.35;
   }
 
-  .player-name {
-    font-size: 0.8rem;
-    font-weight: 700;
-    line-height: 1.1;
-  }
-
-  small {
-    font-size: 0.62rem;
-    opacity: 0.8;
-  }
-
-  &.filled {
-    border-style: solid;
-    border-color: #f2cf72;
-    background: rgba(5, 24, 80, 0.75);
-  }
-
-  &.filled:not(:disabled) {
+  &.filled:not(:disabled),
+  &.target {
     cursor: pointer;
   }
 
-  &.selected {
-    border-color: #fff;
-    box-shadow: 0 0 0 3px #f2cf72;
+  &.highlighted .jersey,
+  &.draw-target .jersey {
+    opacity: 1;
+    filter: drop-shadow(0 0 1cqw #f2cf72);
+  }
+
+  &.selected .jersey {
+    filter: drop-shadow(0 0 1cqw #fff) drop-shadow(0 0 0.4cqw #fff);
   }
 
   &.target {
-    cursor: pointer;
-    border-style: solid;
-    border-color: #7dffa3;
-    background: rgba(125, 255, 163, 0.22);
-    transform: scale(1.04);
+    transform: translate(-50%, -4.2cqw) scale(1.06);
+
+    .jersey {
+      opacity: 1;
+      filter: drop-shadow(0 0 1cqw #7dffa3);
+    }
   }
 
-  &.draw-target {
-    border-color: #f2cf72;
-    background: rgba(242, 207, 114, 0.3);
-  }
-
-  &.highlighted {
-    border-color: #f2cf72;
-    background: rgba(242, 207, 114, 0.18);
-    transform: scale(1.04);
+  &:focus-visible {
+    outline: 0.2cqw solid #fff;
+    outline-offset: 0.4cqw;
   }
 }

@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  width: 9.4cqw;
+  height: 8.4cqw;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0.3cqw 0.4cqw rgba(0, 0, 10, 0.35));
+}
+
+.collar {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.6;
+}
+
+.number {
+  font-family: "Nunito Sans", "Fira Sans", sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+  paint-order: stroke;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}

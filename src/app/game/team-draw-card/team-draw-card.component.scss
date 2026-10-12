@@ -32,8 +32,33 @@ header {
 .players {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   max-height: 560px;
   overflow-y: auto;
   padding-right: 0.25rem;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    color: #6071a0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #dbe3f7;
+    }
+  }
 }

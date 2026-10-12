@@ -1,30 +1,27 @@
 <div class="pitch" role="list" aria-label="Ton équipe">
-  @for (row of rows(); track row.line) {
-  <div class="row">
-    @for (slot of row.slots; track slot.index) {
-    <button
-      type="button"
-      class="slot"
-      role="listitem"
-      [class.filled]="slot.player"
-      [class.highlighted]="isHighlighted(slot) && !slot.player && selectedSlot() === null"
-      [class.selected]="selectedSlot() === slot.index"
-      [class.target]="isTarget(slot)"
-      [class.draw-target]="isDrawTarget(slot)"
-      [disabled]="isDisabled(slot)"
-      [attr.title]="name(slot.position)"
-      (click)="slotClicked.emit(slot.index)"
-    >
-      <span class="position">{{ label(slot.position) }}</span>
-      @if (slot.player; as player) {
-      <strong class="rating">{{ player.rating }}</strong>
-      <span class="player-name">{{ player.name }}</span>
-      <small>{{ player.teamName }} {{ player.seasonLabel }}</small>
-      } @else {
-      <span class="empty">?</span>
-      }
-    </button>
-    }
-  </div>
+  <app-pitch-lines />
+  @for (placed of placedSlots(); track placed.slot.index) {
+  <button
+    type="button"
+    class="slot"
+    role="listitem"
+    [style.left.%]="placed.x"
+    [style.top.%]="placed.y"
+    [class.filled]="placed.slot.player"
+    [class.highlighted]="isHighlighted(placed.slot) && !placed.slot.player && selectedSlot() === null"
+    [class.selected]="selectedSlot() === placed.slot.index"
+    [class.target]="isTarget(placed.slot)"
+    [class.draw-target]="isDrawTarget(placed.slot)"
+    [disabled]="isDisabled(placed.slot)"
+    [attr.title]="placed.slot.player ? placed.slot.player.name + ' · ' + placed.slot.player.teamName + ' ' + placed.slot.player.seasonLabel : name(placed.slot.position)"
+    (click)="slotClicked.emit(placed.slot.index)"
+  >
+    <app-jersey
+      class="jersey"
+      [number]="placed.slot.player ? placed.slot.player.rating : '?'"
+      [goalkeeper]="placed.slot.line === 'GOALKEEPER'"
+    />
+    <span class="label">{{ placed.slot.player ? shortName(placed.slot.player.name) : label(placed.slot.position) }}</span>
+  </button>
   }
 </div>
