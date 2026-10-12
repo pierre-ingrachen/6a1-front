@@ -16,13 +16,26 @@ export class SquadBoardComponent {
   readonly highlightedSlots = input<number[]>([])
   readonly selectedSlot = input<number | null>(null)
   readonly moveTargets = input<number[]>([])
+  readonly drawTargets = input<number[]>([])
+  readonly selectingDrawPlayer = input(false)
   @Output() readonly slotClicked = new EventEmitter<number>()
   readonly points = computed(() => pitchPointsOf(this.formation(), this.slots()))
 
   readonly label = positionLabel
 
   isTarget(slot: Slot): boolean {
-    return this.moveTargets().includes(slot.index)
+    return this.moveTargets().includes(slot.index) || this.drawTargets().includes(slot.index)
+  }
+
+  isDrawTarget(slot: Slot): boolean {
+    return this.drawTargets().includes(slot.index)
+  }
+
+  isDisabled(slot: Slot): boolean {
+    if (this.selectingDrawPlayer()) {
+      return !this.isDrawTarget(slot)
+    }
+    return !slot.player && !this.moveTargets().includes(slot.index)
   }
 
   isHighlighted(slot: Slot): boolean {

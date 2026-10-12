@@ -24,19 +24,46 @@
         [highlightedSlots]="highlightedSlots()"
         [selectedSlot]="selectedSlot()"
         [moveTargets]="moveTargets()"
+        [drawTargets]="drawTargets()"
+        [selectingDrawPlayer]="selectedDrawPlayer() !== null"
         (slotClicked)="selectSlot($event)"
       />
-      <p class="hint">Astuce : clique sur un joueur de ton équipe puis sur un poste vert pour le déplacer ou l'échanger.</p>
+      <p class="hint">
+        @if (selectedDrawPlayer(); as player) {
+        Choisis un poste en surbrillance pour placer {{ player.name }}.
+        } @else {
+        Clique sur un joueur tiré au sort, puis sur un poste compatible du terrain pour le placer. Tu peux aussi déplacer
+        un joueur déjà dans ton équipe en le sélectionnant sur le terrain.
+        }
+      </p>
     </aside>
 
     <section class="actions">
       @if (currentGame.draw; as draw) {
+      @if (drawRevealed()) {
       <redraw-actions
         [redrawsRemaining]="currentGame.redrawsRemaining"
         [disabled]="loading()"
         (redrawRequested)="redraw($event)"
       />
-      <team-draw-card [draw]="draw" [slots]="currentGame.slots" [disabled]="loading()" (picked)="pick($event)" />
+      <team-draw-card
+        [draw]="draw"
+        [slots]="currentGame.slots"
+        [disabled]="loading()"
+        (playerSelected)="selectDrawPlayer($event)"
+      />
+      } @else if (drawLoading()) {
+      <div class="ready draw-loading" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <h2>Le tirage est en cours…</h2>
+      </div>
+      } @else {
+      <div class="ready">
+        <h2>Prêt pour le prochain tirage ?</h2>
+        <p>Découvre l'équipe et les joueurs proposés pour compléter ta formation.</p>
+        <button type="button" [disabled]="loading() || drawLoading()" (click)="revealDraw()">Lancer le tirage</button>
+      </div>
+      }
       } @else if (readyToSimulate()) {
       <div class="ready">
         <h2>Ton onze est complet !</h2>

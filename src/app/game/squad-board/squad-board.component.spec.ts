@@ -82,4 +82,17 @@ describe("SquadBoardComponent", () => {
     expect(element.querySelectorAll(".slot.selected").length).toBe(1)
     expect(element.querySelectorAll(".slot.target").length).toBe(1)
   })
+
+  it("enables only compatible draw targets while selecting a drawn player", () => {
+    const fixture = TestBed.createComponent(SquadBoardComponent)
+    fixture.componentRef.setInput("slots", slots)
+    fixture.componentRef.setInput("drawTargets", [2])
+    fixture.componentRef.setInput("selectingDrawPlayer", true)
+    fixture.detectChanges()
+    const element = fixture.nativeElement as HTMLElement
+
+    expect((element.querySelector(".slot.draw-target") as HTMLButtonElement).disabled).toBeFalse()
+    expect((element.querySelector(".slot.filled") as HTMLButtonElement).disabled).toBeTrue()
+    expect((element.querySelector(".slot:not(.draw-target):not(.filled)") as HTMLButtonElement).disabled).toBeTrue()
+  })
 })
