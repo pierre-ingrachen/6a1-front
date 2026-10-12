@@ -1,0 +1,23 @@
+<div class="filter-field">
+  <player-search
+    [inputId]="inputId"
+    [label]="label"
+    [selectedName]="selectedName"
+    (playerSelected)="playerSelected.emit($event)"
+  />
+</div>
+<div class="filter-field">
+  <label class="form-label" [for]="inputId + '-season'">Saison</label>
+  <select
+    [id]="inputId + '-season'"
+    class="form-select"
+    [ngModel]="selectedSeason"
+    (ngModelChange)="seasonSelected.emit($event)"
+    [disabled]="!hasPlayer || seasons.length === 0"
+  >
+    <option [ngValue]="null" disabled>Choisir une saison</option>
+    @for (season of seasons; track season.startYear) {
+    <option [ngValue]="season.startYear">{{ season.label }}@if (season.teamName) { · {{ season.teamName }}}</option>
+    }
+  </select>
+</div>
