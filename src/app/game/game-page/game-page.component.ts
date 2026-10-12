@@ -1,11 +1,11 @@
 import { HttpErrorResponse } from "@angular/common/http"
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from "@angular/core"
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop"
-import { Observable } from "rxjs"
+import { Observable, timer } from "rxjs"
 import { CompetitionResultComponent } from "game/competition-result/competition-result.component"
 import { FormationPickerComponent } from "game/formation-picker/formation-picker.component"
 import { CompetitionResult } from "game/models/competition.model"
-import { Game, PickCommand, RedrawType } from "game/models/game.model"
+import { DrawPlayer, Game, PickCommand, RedrawType } from "game/models/game.model"
 import { RedrawActionsComponent } from "game/redraw-actions/redraw-actions.component"
 import { GameApiService } from "game/services/game-api.service"
 import { moveTargetsOf } from "game/utils/move-targets"
@@ -35,21 +35,89 @@ export class GamePageComponent {
   readonly result = signal<CompetitionResult | null>(null)
   readonly loading = signal(false)
   readonly errorMessage = signal<string | null>(null)
+  readonly drawRevealed = signal(false)
+  readonly drawLoading = signal(false)
+  readonly selectedDrawPlayer = signal<DrawPlayer | null>(null)
 
-  readonly highlightedSlots = computed(() => this.game()?.draw?.players.flatMap((player) => player.eligibleSlots) ?? [])
+  readonly drawTargets = computed(() => {
+    const player = this.selectedDrawPlayer()
+    const slots = this.game()?.slots ?? []
+    return player
+      ? player.eligibleSlots.filter((index) => slots.some((slot) => slot.index === index && !slot.player))
+      : []
+  })
+  readonly highlightedSlots = computed(() =>
+    this.selectedDrawPlayer()
+      ? this.drawTargets()
+      : this.drawRevealed()
+        ? (this.game()?.draw?.players.flatMap((player) => player.eligibleSlots) ?? [])
+        : [],
+  )
   readonly selectedSlot = signal<number | null>(null)
   readonly moveTargets = computed(() => moveTargetsOf(this.game()?.slots ?? [], this.selectedSlot()))
   readonly readyToSimulate = computed(() => this.game()?.status === "READY_TO_SIMULATE")
 
   startGame(formation: string): void {
-    this.run(this.api.createGame(formation), (game) => this.game.set(game))
+    this.run(this.api.createGame(formation), (game) => {
+      this.game.set(game)
+      this.drawRevealed.set(false)
+      this.drawLoading.set(false)
+      this.selectedDrawPlayer.set(null)
+    })
+  }
+
+  revealDraw(): void {
+    if (this.drawLoading() || this.drawRevealed()) {
+      return
+    }
+
+    this.loadDraw()
+  }
+
+  private loadDraw(): void {
+    this.drawRevealed.set(false)
+    this.drawLoading.set(true)
+    timer(700)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.drawLoading.set(false)
+        this.drawRevealed.set(true)
+      })
   }
 
   pick(command: PickCommand): void {
-    this.withGame((game) => this.run(this.api.pickPlayer(game.id, command), (updated) => this.game.set(updated)))
+    this.withGame((game) =>
+      this.run(this.api.pickPlayer(game.id, command), (updated) => {
+        this.game.set(updated)
+        this.selectedDrawPlayer.set(null)
+        if (updated.draw) {
+          this.loadDraw()
+        } else {
+          this.drawRevealed.set(false)
+          this.drawLoading.set(false)
+        }
+      }),
+    )
+  }
+
+  selectDrawPlayer(player: DrawPlayer): void {
+    if (this.loading() || player.alreadyPicked) {
+      return
+    }
+
+    this.selectedSlot.set(null)
+    this.selectedDrawPlayer.update((selected) => (selected?.playerId === player.playerId ? null : player))
   }
 
   selectSlot(slotIndex: number): void {
+    const drawPlayer = this.selectedDrawPlayer()
+    if (drawPlayer) {
+      if (this.drawTargets().includes(slotIndex)) {
+        this.pick({ playerId: drawPlayer.playerId, slotIndex })
+      }
+      return
+    }
+
     const slots = this.game()?.slots ?? []
     const clicked = slots.find((slot) => slot.index === slotIndex)
     const selected = this.selectedSlot()
@@ -63,7 +131,18 @@ export class GamePageComponent {
   }
 
   redraw(type: RedrawType): void {
-    this.withGame((game) => this.run(this.api.redraw(game.id, type), (updated) => this.game.set(updated)))
+    this.withGame((game) =>
+      this.run(this.api.redraw(game.id, type), (updated) => {
+        this.game.set(updated)
+        this.selectedDrawPlayer.set(null)
+        if (updated.draw) {
+          this.loadDraw()
+        } else {
+          this.drawRevealed.set(false)
+          this.drawLoading.set(false)
+        }
+      }),
+    )
   }
 
   private movePlayer(fromSlot: number, toSlot: number): void {
@@ -79,6 +158,9 @@ export class GamePageComponent {
 
   restart(): void {
     this.game.set(null)
+    this.drawRevealed.set(false)
+    this.drawLoading.set(false)
+    this.selectedDrawPlayer.set(null)
     this.selectedSlot.set(null)
     this.result.set(null)
     this.errorMessage.set(null)
