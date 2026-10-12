@@ -31,7 +31,7 @@ describe("SquadBoardComponent", () => {
   it("shows the picked player with its rating", () => {
     const filled = create().querySelector(".slot.filled") as HTMLElement
 
-    expect(filled.textContent).toContain("Lionel Messi")
+    expect(filled.textContent).toContain("L.Messi")
     expect(filled.textContent).toContain("95")
   })
 

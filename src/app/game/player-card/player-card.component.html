@@ -7,9 +7,17 @@
   [attr.aria-pressed]="selected()"
   (click)="playerSelected.emit(player())"
 >
-  <div class="rating">{{ player().rating }}</div>
+  <div class="rating" [attr.data-tier]="tier()">
+    <span>{{ player().rating }}</span>
+    <small>NOTE</small>
+  </div>
   <div class="identity">
     <strong>{{ player().name }}</strong>
+    <span class="positions">
+      @for (position of player().positions; track position) {
+      <em [attr.title]="name(position)">{{ label(position) }}</em>
+      }
+    </span>
     @if (player().alreadyPicked) {
     <small>Déjà dans ton équipe</small>
     } @else if (!selectable()) {
@@ -21,6 +29,7 @@
     }
   </div>
   <div class="choices" aria-hidden="true">
+    <span class="hint">Postes libres</span>
     @for (choice of choices(); track choice.slotIndex) {
     <span [attr.title]="name(choice.position)">{{ label(choice.position) }}</span>
     }

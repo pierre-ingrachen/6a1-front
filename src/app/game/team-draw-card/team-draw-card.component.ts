@@ -2,6 +2,15 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, inp
 import { Draw, DrawPlayer, Line, Slot } from "game/models/game.model"
 import { PlayerCardComponent } from "game/player-card/player-card.component"
 
+const LINES_FROM_GOALKEEPER: Line[] = ["GOALKEEPER", "DEFENDER", "MIDFIELDER", "ATTACKER"]
+
+const LINE_LABELS: Record<Line, string> = {
+  GOALKEEPER: "Gardien",
+  DEFENDER: "Défenseurs",
+  MIDFIELDER: "Milieux",
+  ATTACKER: "Attaquants",
+}
+
 @Component({
   selector: "team-draw-card",
   standalone: true,
@@ -16,14 +25,13 @@ export class TeamDrawCardComponent {
   readonly disabled = input(false)
   @Output() readonly playerSelected = new EventEmitter<DrawPlayer>()
 
-  private readonly lineOrder: Record<Line, number> = {
-    ATTACKER: 0,
-    MIDFIELDER: 1,
-    DEFENDER: 2,
-    GOALKEEPER: 3,
-  }
-
-  readonly players = computed(() =>
-    [...this.draw().players].sort((first, second) => this.lineOrder[first.line] - this.lineOrder[second.line]),
+  readonly groups = computed(() =>
+    LINES_FROM_GOALKEEPER.map((line) => ({
+      line,
+      label: LINE_LABELS[line],
+      players: this.draw()
+        .players.filter((player) => player.line === line)
+        .sort((first, second) => second.rating - first.rating),
+    })).filter((group) => group.players.length > 0),
   )
 }

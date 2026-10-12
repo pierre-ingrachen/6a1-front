@@ -1,0 +1,32 @@
+.demo {
+  max-width: 1800px;
+  margin: 0 auto;
+
+  &__toolbar {
+    padding: 1rem;
+  }
+
+  &__players {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 0.5rem;
+    margin: 0;
+    padding: 1rem;
+    list-style: none;
+
+    li {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    input[type="number"] {
+      width: 4rem;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}

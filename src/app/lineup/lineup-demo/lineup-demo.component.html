@@ -1,0 +1,24 @@
+<section class="demo">
+  <header class="demo__toolbar">
+    <label>
+      Dispositif
+      <select [value]="formation()" (change)="selectFormation($event)">
+        @for (id of formationIds; track id) {
+        <option [value]="id">{{ id }}</option>
+        }
+      </select>
+    </label>
+  </header>
+
+  <app-lineup [players]="players()" [formation]="formation()" />
+
+  <ul class="demo__players">
+    @for (player of players(); track $index) {
+    <li>
+      <input type="number" min="0" max="99" [value]="player.number" (input)="updateNumber($index, $event)" />
+      <input type="text" [value]="player.name" (input)="updateName($index, $event)" />
+      <label><input type="checkbox" [checked]="!!player.captain" (change)="updateCaptain($index, $event)" /> C</label>
+    </li>
+    }
+  </ul>
+</section>

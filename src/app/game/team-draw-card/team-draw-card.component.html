@@ -5,13 +5,18 @@
     <p>{{ draw().seasonLabel }} · {{ draw().country }}</p>
   </header>
   <div class="players">
-    @for (player of players(); track player.playerId) {
-    <player-card
-      [player]="player"
-      [slots]="slots()"
-      [disabled]="disabled()"
-      (playerSelected)="playerSelected.emit($event)"
-    />
+    @for (group of groups(); track group.line) {
+    <div class="group" [attr.data-line]="group.line">
+      <h3>{{ group.label }}</h3>
+      @for (player of group.players; track player.playerId) {
+      <player-card
+        [player]="player"
+        [slots]="slots()"
+        [disabled]="disabled()"
+        (playerSelected)="playerSelected.emit($event)"
+      />
+      }
+    </div>
     }
   </div>
 </section>

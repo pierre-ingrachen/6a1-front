@@ -16,7 +16,7 @@ const draw: Draw = {
 }
 
 describe("TeamDrawCardComponent", () => {
-  it("lists attackers first and goalkeepers last, regardless of rating", () => {
+  it("lists goalkeepers first and attackers last, regardless of rating", () => {
     const fixture = TestBed.createComponent(TeamDrawCardComponent)
     fixture.componentRef.setInput("draw", draw)
     fixture.componentRef.setInput("slots", [])
@@ -26,6 +26,6 @@ describe("TeamDrawCardComponent", () => {
       element.textContent?.trim(),
     )
 
-    expect(names).toEqual(["Striker", "Midfielder", "Defender", "Keeper"])
+    expect(names).toEqual(["Keeper", "Defender", "Midfielder", "Striker"])
   })
 })

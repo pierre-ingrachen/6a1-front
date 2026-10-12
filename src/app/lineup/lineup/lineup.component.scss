@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.lineup {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  container-type: size;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 55%, rgba(80, 90, 240, 0.55), transparent 75%),
+    linear-gradient(160deg, #2b2fc7 0%, #3338d0 50%, #2a2ec2 100%);
+  box-shadow: inset 0 0 0 0.15cqw rgba(63, 169, 245, 0.35);
+  user-select: none;
+}
+
+.slot {
+  position: absolute;
+  width: 0;
+  height: 0;
+
+  &__jersey {
+    position: absolute;
+    left: -4.7cqw;
+    top: -4.2cqw;
+  }
+
+  &__captain {
+    position: absolute;
+    left: 3.3cqw;
+    top: 2.45cqw;
+    display: grid;
+    place-items: center;
+    width: 2.8cqw;
+    height: 1.7cqw;
+    background: #2ec4f0;
+    color: #14214a;
+    font: 800 1.3cqw/1 "Nunito Sans", "Fira Sans", sans-serif;
+  }
+
+  &__name {
+    position: absolute;
+    left: 0;
+    top: 6cqw;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font: 500 2.2cqw/1 "Nunito Sans", "Fira Sans", sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 0.1cqw 0.4cqw rgba(0, 0, 40, 0.35);
+  }
+}

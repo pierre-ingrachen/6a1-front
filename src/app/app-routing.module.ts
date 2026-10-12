@@ -47,6 +47,10 @@ const routes: Routes = [
     path: "jeu",
     loadComponent: () => import("game/game-page/game-page.component").then((module) => module.GamePageComponent),
   },
+  {
+    path: "lineup",
+    loadComponent: () => import("lineup/lineup-demo/lineup-demo.component").then((module) => module.LineupDemoComponent),
+  },
   { path: "teams", component: TeamListComponent },
   { path: "teams/:teamId", component: TeamDetailComponent },
   { path: "joueurs/:playerId", component: PlayerProfileComponent },
