@@ -5,8 +5,13 @@
     <p>{{ draw().seasonLabel }} · {{ draw().country }}</p>
   </header>
   <div class="players">
-    @for (player of draw().players; track player.playerId) {
-    <player-card [player]="player" [slots]="slots()" [disabled]="disabled()" (picked)="picked.emit($event)" />
+    @for (player of players(); track player.playerId) {
+    <player-card
+      [player]="player"
+      [slots]="slots()"
+      [disabled]="disabled()"
+      (playerSelected)="playerSelected.emit($event)"
+    />
     }
   </div>
 </section>

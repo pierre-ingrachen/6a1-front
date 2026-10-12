@@ -86,6 +86,11 @@
     transform: scale(1.04);
   }
 
+  &.draw-target {
+    border-color: #f2cf72;
+    background: rgba(242, 207, 114, 0.3);
+  }
+
   &.highlighted {
     border-color: #f2cf72;
     background: rgba(242, 207, 114, 0.18);

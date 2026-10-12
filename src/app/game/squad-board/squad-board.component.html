@@ -10,7 +10,8 @@
       [class.highlighted]="isHighlighted(slot) && !slot.player && selectedSlot() === null"
       [class.selected]="selectedSlot() === slot.index"
       [class.target]="isTarget(slot)"
-      [disabled]="!slot.player && !isTarget(slot)"
+      [class.draw-target]="isDrawTarget(slot)"
+      [disabled]="isDisabled(slot)"
       [attr.title]="name(slot.position)"
       (click)="slotClicked.emit(slot.index)"
     >
