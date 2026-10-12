@@ -16,6 +16,7 @@
         <option value="per90">Par 90 min</option>
       </select>
     </div>
+    <a class="compare-link" mat-flat-button [routerLink]="['/compare']" [queryParams]="{ p1: playerId, s1: season$ | async }"><mat-icon>compare_arrows</mat-icon>Comparer</a>
   </div>
 
   @if (player$ | async; as player) {
