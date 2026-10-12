@@ -1,0 +1,94 @@
+.pitch {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.25rem 0.75rem;
+  border-radius: 18px;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 40px, transparent 40px 80px),
+    linear-gradient(180deg, #1c7a3e, #14602f);
+  border: 3px solid #0d3f1f;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.5rem;
+}
+
+.slot {
+  flex: 1 1 0;
+  max-width: 130px;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.4rem;
+  border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, 0.45);
+  background: transparent;
+  font: inherit;
+  color: #fff;
+  text-align: center;
+  cursor: default;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+
+  .position {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    opacity: 0.85;
+  }
+
+  .empty {
+    font-size: 1.6rem;
+    opacity: 0.5;
+  }
+
+  .rating {
+    font-size: 1.5rem;
+    color: #f2cf72;
+  }
+
+  .player-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  small {
+    font-size: 0.62rem;
+    opacity: 0.8;
+  }
+
+  &.filled {
+    border-style: solid;
+    border-color: #f2cf72;
+    background: rgba(5, 24, 80, 0.75);
+  }
+
+  &.filled:not(:disabled) {
+    cursor: pointer;
+  }
+
+  &.selected {
+    border-color: #fff;
+    box-shadow: 0 0 0 3px #f2cf72;
+  }
+
+  &.target {
+    cursor: pointer;
+    border-style: solid;
+    border-color: #7dffa3;
+    background: rgba(125, 255, 163, 0.22);
+    transform: scale(1.04);
+  }
+
+  &.highlighted {
+    border-color: #f2cf72;
+    background: rgba(242, 207, 114, 0.18);
+    transform: scale(1.04);
+  }
+}

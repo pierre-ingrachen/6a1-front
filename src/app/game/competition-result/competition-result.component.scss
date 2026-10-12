@@ -1,0 +1,84 @@
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.banner {
+  padding: 1.75rem;
+  border-radius: 18px;
+  text-align: center;
+  background: linear-gradient(90deg, #040b24, #0a2260 70%, #0d3a9a);
+  color: #fff;
+
+  h2 {
+    margin: 0;
+    font-size: 2.2rem;
+  }
+
+  p {
+    margin: 0.4rem 0;
+    opacity: 0.9;
+  }
+
+  small {
+    color: #f2cf72;
+  }
+
+  &.champion {
+    background: linear-gradient(90deg, #86610c, #d9a420 50%, #86610c);
+    color: #0a1a40;
+
+    small {
+      color: #0a1a40;
+    }
+  }
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+
+  h3 {
+    margin: 0 0 0.75rem;
+    color: #0a2260;
+  }
+}
+
+.matches {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6071a0;
+  }
+}
+
+.replay {
+  align-self: center;
+  padding: 0.8rem 2.2rem;
+  border: 0;
+  border-radius: 12px;
+  background: #f2cf72;
+  color: #0a2260;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover {
+    background: #e9bd45;
+  }
+}

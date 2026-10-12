@@ -1,0 +1,14 @@
+<div class="match" [class]="verdict()">
+  <span class="opponent">
+    <strong>{{ match().opponent.teamName }}</strong>
+    <small>{{ match().opponent.seasonLabel }} · note {{ match().opponent.rating }}</small>
+  </span>
+  <span class="score">
+    {{ match().goalsFor }} - {{ match().goalsAgainst }}
+    @if (match().extraTime) {
+    <small>a.p.</small>
+    } @if (hasPenalties()) {
+    <small>t.a.b. {{ match().penaltiesFor }}-{{ match().penaltiesAgainst }}</small>
+    }
+  </span>
+</div>
