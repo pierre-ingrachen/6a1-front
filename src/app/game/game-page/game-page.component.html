@@ -1,0 +1,52 @@
+<main class="game">
+  <h1>Compose ton onze de légende</h1>
+
+  @if (errorMessage(); as message) {
+  <p class="error" role="alert">{{ message }}</p>
+  }
+
+  @if (result(); as competitionResult) {
+  <competition-result [result]="competitionResult" (replayRequested)="restart()" />
+  } @else {
+  @if (game(); as currentGame) {
+  <div class="draft">
+    <aside>
+      <div class="summary">
+        <span>Formation <strong>{{ currentGame.formation }}</strong></span>
+        <span>Choix restants <strong>{{ currentGame.picksRemaining }}</strong></span>
+        @if (currentGame.squadAverageRating !== null) {
+        <span>Note moyenne <strong>{{ currentGame.squadAverageRating.toFixed(1) }}</strong></span>
+        }
+      </div>
+      <squad-board
+        [slots]="currentGame.slots"
+        [highlightedSlots]="highlightedSlots()"
+        [selectedSlot]="selectedSlot()"
+        [moveTargets]="moveTargets()"
+        (slotClicked)="selectSlot($event)"
+      />
+      <p class="hint">Astuce : clique sur un joueur de ton équipe puis sur un poste vert pour le déplacer ou l'échanger.</p>
+    </aside>
+
+    <section class="actions">
+      @if (currentGame.draw; as draw) {
+      <redraw-actions
+        [redrawsRemaining]="currentGame.redrawsRemaining"
+        [disabled]="loading()"
+        (redrawRequested)="redraw($event)"
+      />
+      <team-draw-card [draw]="draw" [slots]="currentGame.slots" [disabled]="loading()" (picked)="pick($event)" />
+      } @else if (readyToSimulate()) {
+      <div class="ready">
+        <h2>Ton onze est complet !</h2>
+        <p>Place à la compétition : phase de groupes, puis élimination directe.</p>
+        <button type="button" [disabled]="loading()" (click)="simulate()">Lancer la compétition</button>
+      </div>
+      }
+    </section>
+  </div>
+  } @else {
+  <formation-picker [formations]="formations()" [disabled]="loading()" (formationSelected)="startGame($event)" />
+  }
+  }
+</main>

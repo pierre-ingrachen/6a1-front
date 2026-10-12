@@ -3,7 +3,7 @@ import { sortPlayers } from "utils/player-sort"
 
 describe("sortPlayers", () => {
   const p = (name: string, goals: number | null, assists: number | null, averageRating: number | null): Player => ({
-    id: 0, name, position: "Forward", goals, assists, averageRating, matchesPlayed: 0,
+    id: 0, name, position: "Forward", goals, assists, averageRating, rating: null, matchesPlayed: 0,
   })
   const players = [p("Bob", 2, null, 6.5), p("Alice", 5, 1, null), p("Carl", 5, 3, 7.1)]
   const names = (key: Parameters<typeof sortPlayers>[1], dir: Parameters<typeof sortPlayers>[2] = key === "name" ? "asc" : "desc") => sortPlayers(players, key, dir).map((x) => x.name)
@@ -12,6 +12,10 @@ describe("sortPlayers", () => {
   it("sorts goals descending, ties by name", () => expect(names("goals")).toEqual(["Alice", "Carl", "Bob"]))
   it("puts missing assists last", () => expect(names("assists")).toEqual(["Carl", "Alice", "Bob"]))
   it("puts missing ratings last", () => expect(names("averageRating")).toEqual(["Carl", "Bob", "Alice"]))
+  it("sorts by rating descending, missing last", () => {
+    const rated = [{ ...players[0], rating: 80 }, { ...players[1], rating: null }, { ...players[2], rating: 90 }]
+    expect(sortPlayers(rated, "rating", "desc").map((x) => x.name)).toEqual(["Carl", "Bob", "Alice"])
+  })
   it("sorts name descending", () => expect(names("name", "desc")).toEqual(["Carl", "Bob", "Alice"]))
   it("sorts goals ascending", () => expect(names("goals", "asc")).toEqual(["Bob", "Alice", "Carl"]))
   it("keeps missing ratings last when ascending", () => expect(names("averageRating", "asc")).toEqual(["Bob", "Carl", "Alice"]))
