@@ -5,7 +5,9 @@
     @for (formation of formations(); track formation.label) {
     <button type="button" class="formation" [disabled]="disabled()" (click)="formationSelected.emit(formation.label)">
       <strong>{{ formation.label }}</strong>
-      <small>{{ formation.positions.length }} postes</small>
+      @if (name(formation.label); as formationTitle) {
+      <small>{{ formationTitle }}</small>
+      }
     </button>
     }
   </div>
