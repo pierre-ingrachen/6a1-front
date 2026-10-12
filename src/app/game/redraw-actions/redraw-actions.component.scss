@@ -1,0 +1,50 @@
+.redraws {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.quota {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4b5a85;
+
+  strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: #0a2260;
+    color: #f2cf72;
+
+    &.exhausted {
+      background: #9aa3bd;
+      color: #fff;
+    }
+  }
+}
+
+button {
+  padding: 0.55rem 1rem;
+  border: 2px solid #0a2260;
+  border-radius: 10px;
+  background: #fff;
+  color: #0a2260;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover:not(:disabled) {
+    background: #0a2260;
+    color: #f2cf72;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

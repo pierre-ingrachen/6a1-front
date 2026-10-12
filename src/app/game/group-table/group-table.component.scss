@@ -1,0 +1,38 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 0.55rem 0.6rem;
+  text-align: center;
+  border-bottom: 1px solid #e1e7f7;
+}
+
+th {
+  background: #0a2260;
+  color: #f2cf72;
+  font-size: 0.8rem;
+}
+
+.team {
+  text-align: left;
+
+  small {
+    margin-left: 0.4rem;
+    color: #6071a0;
+  }
+}
+
+.points {
+  font-weight: 800;
+}
+
+tr.player td {
+  background: rgba(242, 207, 114, 0.35);
+  font-weight: 700;
+}
