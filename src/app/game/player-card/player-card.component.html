@@ -1,0 +1,20 @@
+<article class="card" [class.unavailable]="!selectable()">
+  <div class="rating">{{ player().rating }}</div>
+  <div class="identity">
+    <strong>{{ player().name }}</strong>
+    @if (player().alreadyPicked) {
+    <small>Déjà dans ton équipe</small>
+    } @else if (!selectable()) {
+    <small>Aucun poste libre pour ce joueur</small>
+    } @else {
+    <small>Place-le au poste :</small>
+    }
+  </div>
+  <div class="choices">
+    @for (choice of choices(); track choice.slotIndex) {
+    <button type="button" [disabled]="disabled()" [attr.title]="name(choice.position)" (click)="pick(choice.slotIndex)">
+      {{ label(choice.position) }}
+    </button>
+    }
+  </div>
+</article>

@@ -1,0 +1,48 @@
+.match {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border-left: 5px solid #9aa3bd;
+  background: #fff;
+
+  &.win {
+    border-left-color: #1f9d55;
+  }
+
+  &.loss {
+    border-left-color: #d64545;
+  }
+}
+
+.opponent {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  strong {
+    color: #0a2260;
+  }
+
+  small {
+    color: #6071a0;
+  }
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0a2260;
+  white-space: nowrap;
+
+  small {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #6071a0;
+  }
+}

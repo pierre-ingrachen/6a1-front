@@ -10,6 +10,7 @@ export class NavbarComponent {
   links: Link[] = []
 
   constructor() {
+    this.links.push({ name: "Jouer", href: "jeu", icon: "sports_soccer" })
     this.links.push({ name: "Équipes & effectifs", href: "teams", icon: "groups" })
     this.links.push({ name: "Comparer", href: "compare", icon: "compare_arrows" })
   }
