@@ -37,6 +37,22 @@ const ROUND_LABELS: Record<Round, string> = {
   WINNER: "Vainqueur",
 }
 
-export const positionLabel = (position: string): string => POSITION_LABELS[position] ?? position
+const FORMATION_NAMES: Record<string, string> = {
+  "4-3-3": "Offensive",
+  "4-4-2": "Classique",
+  "4-2-3-1": "Moderne",
+  "3-5-2": "Pistons",
+  "5-3-2": "Défensive",
+  "4-1-2-1-2": "Losange",
+  "4-3-2-1": "Sapin",
+  "4-4-1-1": "Avec meneur",
+  "4-5-1": "Milieu renforcé",
+  "3-4-3": "Tout pour l'attaque",
+  "3-4-2-1": "Double meneur",
+  "5-4-1": "Verrou",
+}
+
+export const formationName = (formation: string): string => FORMATION_NAMES[formation] ?? ""
+export const positionLabel =(position: string): string => POSITION_LABELS[position] ?? position
 export const positionName = (position: string): string => POSITION_NAMES[position] ?? position
 export const roundLabel = (round: Round): string => ROUND_LABELS[round]
