@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http"
-import { TestBed } from "@angular/core/testing"
+import { fakeAsync, TestBed, tick } from "@angular/core/testing"
 import { of, throwError } from "rxjs"
 import { GamePageComponent } from "game/game-page/game-page.component"
 import { CompetitionResult } from "game/models/competition.model"
@@ -82,7 +82,7 @@ describe("GamePageComponent", () => {
     expect(fixture.nativeElement.querySelectorAll(".formation").length).toBe(1)
   })
 
-  it("starts a game with the chosen formation and shows the draw", () => {
+  it("shows a short loading state before revealing the first draw", fakeAsync(() => {
     api.createGame.and.returnValue(of(draftingGame))
     const fixture = create()
 
@@ -90,20 +90,73 @@ describe("GamePageComponent", () => {
     fixture.detectChanges()
 
     expect(api.createGame).toHaveBeenCalledWith("4-3-3")
+    expect(fixture.nativeElement.textContent).toContain("Lancer le tirage")
+    expect(fixture.nativeElement.textContent).not.toContain("Barcelona")
+
+    fixture.componentInstance.revealDraw()
+    fixture.detectChanges()
+    expect(fixture.nativeElement.textContent).toContain("Le tirage est en cours")
+    expect(fixture.nativeElement.textContent).not.toContain("Barcelona")
+
+    tick(700)
+    fixture.detectChanges()
+
     expect(fixture.nativeElement.textContent).toContain("Barcelona")
     expect(fixture.nativeElement.textContent).toContain("Victor Valdes")
-  })
+  }))
+
+  it("automatically reveals the next draw after a short loading state when picking a player", fakeAsync(() => {
+    api.createGame.and.returnValue(of(draftingGame))
+    api.pickPlayer.and.returnValue(of({ ...draftingGame, picksRemaining: 10 }))
+    const fixture = create()
+    fixture.componentInstance.startGame("4-3-3")
+    fixture.componentInstance.revealDraw()
+    fixture.detectChanges()
+    tick(700)
+    fixture.detectChanges()
+
+    fixture.componentInstance.pick({ playerId: 5, slotIndex: 0 })
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.textContent).toContain("Le tirage est en cours")
+    expect(fixture.nativeElement.textContent).not.toContain("Barcelona")
+
+    tick(700)
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.textContent).toContain("Barcelona")
+    expect(fixture.nativeElement.textContent).not.toContain("Lancer le tirage")
+  }))
 
   it("sends the pick for the current game", () => {
     api.createGame.and.returnValue(of(draftingGame))
     api.pickPlayer.and.returnValue(of({ ...draftingGame, picksRemaining: 10 }))
     const fixture = create()
     fixture.componentInstance.startGame("4-3-3")
-
-    fixture.componentInstance.pick({ playerId: 5, slotIndex: 0 })
+    fixture.componentInstance.selectDrawPlayer(draftingGame.draw!.players[0])
+    fixture.componentInstance.selectSlot(0)
 
     expect(api.pickPlayer).toHaveBeenCalledWith("game-1", { playerId: 5, slotIndex: 0 })
     expect(fixture.componentInstance.game()?.picksRemaining).toBe(10)
+  })
+
+  it("does not place a selected draw player in an incompatible slot", () => {
+    const gameWithDifferentSlot: Game = {
+      ...draftingGame,
+      slots: [
+        ...draftingGame.slots,
+        { index: 1, position: "ST", line: "ATTACKER", player: null },
+      ],
+    }
+    api.createGame.and.returnValue(of(gameWithDifferentSlot))
+    const fixture = create()
+    fixture.componentInstance.startGame("4-3-3")
+    fixture.componentInstance.selectDrawPlayer(draftingGame.draw!.players[0])
+
+    fixture.componentInstance.selectSlot(1)
+
+    expect(api.pickPlayer).not.toHaveBeenCalled()
+    expect(fixture.componentInstance.selectedDrawPlayer()?.playerId).toBe(5)
   })
 
   it("moves a player by selecting him then a target slot", () => {
