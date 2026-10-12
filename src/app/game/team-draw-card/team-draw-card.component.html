@@ -1,0 +1,12 @@
+<section class="draw">
+  <header>
+    <span class="kicker">Équipe tirée au sort</span>
+    <h2>{{ draw().teamName }}</h2>
+    <p>{{ draw().seasonLabel }} · {{ draw().country }}</p>
+  </header>
+  <div class="players">
+    @for (player of draw().players; track player.playerId) {
+    <player-card [player]="player" [slots]="slots()" [disabled]="disabled()" (picked)="picked.emit($event)" />
+    }
+  </div>
+</section>

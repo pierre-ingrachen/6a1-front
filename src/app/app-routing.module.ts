@@ -42,6 +42,10 @@ const routes: Routes = [
       studentsFromMajor: MajorStudentsResolver,
     },
   },
+  {
+    path: "jeu",
+    loadComponent: () => import("game/game-page/game-page.component").then((module) => module.GamePageComponent),
+  },
   { path: "teams", component: TeamListComponent },
   { path: "teams/:teamId", component: TeamDetailComponent },
 ]
