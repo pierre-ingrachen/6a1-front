@@ -1,0 +1,12 @@
+<section class="picker">
+  <h2>Choisis ta formation</h2>
+  <p>Elle détermine les 11 postes à remplir. Impossible de changer en cours de route.</p>
+  <div class="formations">
+    @for (formation of formations(); track formation.label) {
+    <button type="button" class="formation" [disabled]="disabled()" (click)="formationSelected.emit(formation.label)">
+      <strong>{{ formation.label }}</strong>
+      <small>{{ formation.positions.length }} postes</small>
+    </button>
+    }
+  </div>
+</section>
