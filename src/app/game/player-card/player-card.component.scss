@@ -1,5 +1,7 @@
 .card {
   display: grid;
+  width: 100%;
+  box-sizing: border-box;
   grid-template-columns: 54px minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.75rem;
@@ -7,15 +9,24 @@
   border-radius: 12px;
   border: 1px solid #c9d4f2;
   background: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   transition: box-shadow 0.15s, transform 0.15s;
 
-  &:hover:not(.unavailable) {
+  &:hover:not(:disabled) {
     box-shadow: 0 6px 18px rgba(10, 34, 96, 0.15);
     transform: translateY(-1px);
   }
 
-  &.unavailable {
+  &:disabled {
     opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.selected {
+    border-color: #0a2260;
+    box-shadow: 0 0 0 2px #f2cf72;
   }
 }
 
@@ -54,25 +65,13 @@
   justify-content: flex-end;
   gap: 0.35rem;
 
-  button {
+  span {
     min-width: 44px;
     padding: 0.35rem 0.6rem;
-    border: 0;
     border-radius: 8px;
     background: #f2cf72;
     color: #0a2260;
     font-weight: 800;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.15s;
-
-    &:hover:not(:disabled) {
-      background: #e9bd45;
-      transform: scale(1.06);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    text-align: center;
   }
 }

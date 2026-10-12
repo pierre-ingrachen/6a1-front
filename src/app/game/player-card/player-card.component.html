@@ -1,4 +1,12 @@
-<article class="card" [class.unavailable]="!selectable()">
+<button
+  type="button"
+  class="card"
+  [class.unavailable]="!selectable()"
+  [class.selected]="selected()"
+  [disabled]="disabled() || !selectable()"
+  [attr.aria-pressed]="selected()"
+  (click)="playerSelected.emit(player())"
+>
   <div class="rating">{{ player().rating }}</div>
   <div class="identity">
     <strong>{{ player().name }}</strong>
@@ -6,15 +14,15 @@
     <small>Déjà dans ton équipe</small>
     } @else if (!selectable()) {
     <small>Aucun poste libre pour ce joueur</small>
+    } @else if (selected()) {
+    <small>Choisis un poste compatible sur le terrain</small>
     } @else {
-    <small>Place-le au poste :</small>
+    <small>Clique pour choisir ce joueur</small>
     }
   </div>
-  <div class="choices">
+  <div class="choices" aria-hidden="true">
     @for (choice of choices(); track choice.slotIndex) {
-    <button type="button" [disabled]="disabled()" [attr.title]="name(choice.position)" (click)="pick(choice.slotIndex)">
-      {{ label(choice.position) }}
-    </button>
+    <span [attr.title]="name(choice.position)">{{ label(choice.position) }}</span>
     }
   </div>
-</article>
+</button>
