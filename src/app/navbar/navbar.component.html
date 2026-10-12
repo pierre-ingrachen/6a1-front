@@ -16,7 +16,10 @@
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: link.href === '' }"
       >
-        <span>{{ link.name }}</span>
+        <span class="nav-link-content">
+          <mat-icon>{{ link.icon }}</mat-icon>
+          <span>{{ link.name }}</span>
+        </span>
       </a>
       }
     </mat-nav-list>

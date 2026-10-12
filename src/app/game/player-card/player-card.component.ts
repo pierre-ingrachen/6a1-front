@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, input } from "@angular/core"
-import { DrawPlayer, Slot } from "game/models/game.model"
+import { DrawPlayer, PickCommand, Slot } from "game/models/game.model"
 import { positionLabel, positionName } from "game/utils/position-labels"
 import { slotChoicesOf } from "game/utils/slot-choices"
 
