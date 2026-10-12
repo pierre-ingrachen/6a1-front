@@ -54,6 +54,23 @@ describe("SquadBoardComponent", () => {
     expect(clicked).toEqual([1])
   })
 
+  it("places each token at the point defined by the formation", () => {
+    const fixture = TestBed.createComponent(SquadBoardComponent)
+    fixture.componentRef.setInput("slots", slots)
+    fixture.componentRef.setInput("formation", "4-3-3")
+    fixture.detectChanges()
+    const goalkeeper = fixture.nativeElement.querySelector(".slot") as HTMLElement
+
+    expect(goalkeeper.style.left).toBe("50%")
+    expect(goalkeeper.style.top).toBe("91%")
+  })
+
+  it("shows a question mark on empty slots", () => {
+    const empty = create().querySelector(".slot:not(.filled) .token") as HTMLElement
+
+    expect(empty.textContent?.trim()).toBe("?")
+  })
+
   it("marks the selected slot and its move targets", () => {
     const fixture = TestBed.createComponent(SquadBoardComponent)
     fixture.componentRef.setInput("slots", slots)

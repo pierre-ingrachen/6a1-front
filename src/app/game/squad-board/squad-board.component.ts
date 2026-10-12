@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, input } from "@angular/core"
 import { Slot } from "game/models/game.model"
+import { pitchPointsOf } from "game/utils/formation-layout"
 import { positionLabel, positionName } from "game/utils/position-labels"
-import { groupSlotsByLine } from "game/utils/slot-layout"
 
 @Component({
   selector: "squad-board",
@@ -12,14 +12,14 @@ import { groupSlotsByLine } from "game/utils/slot-layout"
 })
 export class SquadBoardComponent {
   readonly slots = input.required<Slot[]>()
+  readonly formation = input("")
   readonly highlightedSlots = input<number[]>([])
   readonly selectedSlot = input<number | null>(null)
   readonly moveTargets = input<number[]>([])
   @Output() readonly slotClicked = new EventEmitter<number>()
-  readonly rows = computed(() => groupSlotsByLine(this.slots()))
+  readonly points = computed(() => pitchPointsOf(this.formation(), this.slots()))
 
   readonly label = positionLabel
-  readonly name = positionName
 
   isTarget(slot: Slot): boolean {
     return this.moveTargets().includes(slot.index)
@@ -27,5 +27,10 @@ export class SquadBoardComponent {
 
   isHighlighted(slot: Slot): boolean {
     return this.highlightedSlots().includes(slot.index)
+  }
+
+  titleOf(slot: Slot): string {
+    const position = positionName(slot.position)
+    return slot.player ? `${position} : ${slot.player.name} (${slot.player.teamName} ${slot.player.seasonLabel})` : position
   }
 }

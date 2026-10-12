@@ -1,29 +1,45 @@
 <div class="pitch" role="list" aria-label="Ton équipe">
-  @for (row of rows(); track row.line) {
-  <div class="row">
-    @for (slot of row.slots; track slot.index) {
-    <button
-      type="button"
-      class="slot"
-      role="listitem"
-      [class.filled]="slot.player"
-      [class.highlighted]="isHighlighted(slot) && !slot.player && selectedSlot() === null"
-      [class.selected]="selectedSlot() === slot.index"
-      [class.target]="isTarget(slot)"
-      [disabled]="!slot.player && !isTarget(slot)"
-      [attr.title]="name(slot.position)"
-      (click)="slotClicked.emit(slot.index)"
-    >
-      <span class="position">{{ label(slot.position) }}</span>
+  <svg class="markings" viewBox="0 0 70 100" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="2" y="2" width="66" height="96" />
+    <line x1="2" y1="50" x2="68" y2="50" />
+    <circle cx="35" cy="50" r="9" />
+    <circle class="spot" cx="35" cy="50" r="0.6" />
+    <rect x="14.5" y="2" width="41" height="15.5" />
+    <rect x="25.5" y="2" width="19" height="5.5" />
+    <circle class="spot" cx="35" cy="12.5" r="0.6" />
+    <path d="M 27.5 17.5 A 9 9 0 0 0 42.5 17.5" />
+    <rect x="14.5" y="82.5" width="41" height="15.5" />
+    <rect x="25.5" y="92.5" width="19" height="5.5" />
+    <circle class="spot" cx="35" cy="87.5" r="0.6" />
+    <path d="M 27.5 82.5 A 9 9 0 0 1 42.5 82.5" />
+  </svg>
+
+  @for (slot of slots(); track slot.index; let index = $index) {
+  <button
+    type="button"
+    class="slot"
+    role="listitem"
+    [style.left.%]="points()[index].x"
+    [style.top.%]="points()[index].y"
+    [class.filled]="slot.player"
+    [class.highlighted]="isHighlighted(slot) && !slot.player && selectedSlot() === null"
+    [class.selected]="selectedSlot() === slot.index"
+    [class.target]="isTarget(slot)"
+    [disabled]="!slot.player && !isTarget(slot)"
+    [attr.title]="titleOf(slot)"
+    (click)="slotClicked.emit(slot.index)"
+  >
+    <span class="token">
       @if (slot.player; as player) {
       <strong class="rating">{{ player.rating }}</strong>
-      <span class="player-name">{{ player.name }}</span>
-      <small>{{ player.teamName }} {{ player.seasonLabel }}</small>
       } @else {
       <span class="empty">?</span>
       }
-    </button>
+    </span>
+    <span class="position">{{ label(slot.position) }}</span>
+    @if (slot.player; as player) {
+    <span class="player-name">{{ player.name }}</span>
     }
-  </div>
+  </button>
   }
 </div>
