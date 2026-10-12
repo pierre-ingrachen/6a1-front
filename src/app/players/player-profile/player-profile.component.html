@@ -1,0 +1,67 @@
+<main class="profile-page">
+  <button class="back-link" mat-button type="button" (click)="back()">← Retour</button>
+  <div class="controls">
+    <div>
+      <label for="season" class="form-label">Saison</label>
+      <select id="season" class="form-select" [ngModel]="season$ | async" (ngModelChange)="selectSeason($event)">
+        @for (season of seasons$ | async; track season.startYear) {
+        <option [ngValue]="season.startYear">{{ season.label }}</option>
+        }
+      </select>
+    </div>
+    <div>
+      <label for="mode" class="form-label">Affichage</label>
+      <select id="mode" class="form-select" [(ngModel)]="mode">
+        <option value="total">Totaux</option>
+        <option value="per90">Par 90 min</option>
+      </select>
+    </div>
+  </div>
+
+  @if (player$ | async; as player) {
+  @if (player === "missing") {
+  <p class="empty-state">Ce joueur n’a pas de stats sur cette saison.</p>
+  } @else {
+  <header class="profile-header">
+    <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
+    <div class="identity">
+      <h1>{{ player.name }}</h1>
+      <p>{{ positionLabels[player.position] ?? player.position }} · {{ player.teamName }}</p>
+      @if (player.teamEstimated) {
+      <p class="estimated">Équipe estimée : le joueur a joué pour 2 clubs cette saison et l’ordre n’est pas connu en base.</p>
+      }
+    </div>
+    <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne WhoScored">{{ player.averageRating !== null ? (player.averageRating | number: "1.2-2") : "—" }}</span>
+  </header>
+
+  <dl class="bio">
+    <div><dt>Taille</dt><dd>{{ player.heightCm !== null ? player.heightCm + " cm" : "—" }}</dd></div>
+    <div><dt>Poids</dt><dd>{{ player.weightKg !== null ? player.weightKg + " kg" : "—" }}</dd></div>
+    <div><dt>Note</dt><dd>{{ player.rating !== null ? player.rating + "/99" : "—" }}</dd></div>
+    <div><dt>Minutes</dt><dd>{{ player.minutes }}</dd></div>
+  </dl>
+
+  <p class="legend">Barre = percentile parmi les joueurs de la saison ayant au moins 450 minutes (gardiens entre eux pour les stats de gardien).</p>
+
+  @for (category of player.categories; track category.key) {
+  @if (hasValues(category.stats)) {
+  <section class="category">
+    <h2>{{ category.label }}</h2>
+    @for (stat of category.stats; track stat.key) {
+    <div class="stat" [class.detail]="stat.detail">
+      <span class="label">{{ stat.label }}</span>
+      <span class="value">{{ stat[mode].value !== null ? (stat[mode].value | number: "1.0-2") : "—" }}</span>
+      @if (stat[mode].percentile !== null) {
+      <div class="bar" role="meter" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="stat[mode].percentile" [attr.aria-label]="'Percentile ' + stat[mode].percentile">
+        <div class="fill" [style.width.%]="stat[mode].percentile"></div>
+      </div>
+      <span class="rank">Top {{ stat[mode].topPercent }} %</span>
+      }
+    </div>
+    }
+  </section>
+  }
+  }
+  }
+  }
+</main>

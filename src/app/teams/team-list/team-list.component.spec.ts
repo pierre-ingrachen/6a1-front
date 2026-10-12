@@ -1,6 +1,7 @@
 import { FormsModule } from "@angular/forms"
 import { TestBed } from "@angular/core/testing"
 import { of } from "rxjs"
+import { provideRouter, RouterLink } from "@angular/router"
 import { TeamListComponent } from "teams/team-list/team-list.component"
 import { TeamService } from "services/team.service"
 
@@ -31,16 +32,19 @@ describe("TeamListComponent", () => {
           id: 1,
           name: "Alex Martin",
           position: "Attaquant",
-          heightCm: 180,
-          weightKg: 75,
+          goals: 4,
+          assists: 1,
+          averageRating: 6.72,
+          rating: 85,
+          matchesPlayed: 8,
         },
       ]),
     )
 
     TestBed.configureTestingModule({
       declarations: [TeamListComponent],
-      imports: [FormsModule],
-      providers: [{ provide: TeamService, useValue: teamService }],
+      imports: [FormsModule, RouterLink],
+      providers: [provideRouter([]), { provide: TeamService, useValue: teamService }],
     })
   })
 
