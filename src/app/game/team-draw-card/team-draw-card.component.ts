@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, input } from "@angular/core"
-import { Draw, PickCommand, Slot } from "game/models/game.model"
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, input } from "@angular/core"
+import { Draw, DrawPlayer, Line, Slot } from "game/models/game.model"
 import { PlayerCardComponent } from "game/player-card/player-card.component"
 
 @Component({
@@ -14,5 +14,16 @@ export class TeamDrawCardComponent {
   readonly draw = input.required<Draw>()
   readonly slots = input.required<Slot[]>()
   readonly disabled = input(false)
-  @Output() readonly picked = new EventEmitter<PickCommand>()
+  @Output() readonly playerSelected = new EventEmitter<DrawPlayer>()
+
+  private readonly lineOrder: Record<Line, number> = {
+    ATTACKER: 0,
+    MIDFIELDER: 1,
+    DEFENDER: 2,
+    GOALKEEPER: 3,
+  }
+
+  readonly players = computed(() =>
+    [...this.draw().players].sort((first, second) => this.lineOrder[first.line] - this.lineOrder[second.line]),
+  )
 }

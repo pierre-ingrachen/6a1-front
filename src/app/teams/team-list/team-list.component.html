@@ -1,6 +1,6 @@
 <main class="teams-page">
   <header class="page-heading">
-    <span class="eyebrow"><mat-icon>sports_soccer</mat-icon> Effectifs &amp; saisons</span>
+    <span class="eyebrow">Effectifs & saisons</span>
     <h1>Les équipes</h1>
     <p>Choisissez une équipe et une saison pour parcourir son effectif.</p>
   </header>
@@ -62,21 +62,6 @@
         }
       </select>
     </div>
-
-    <div class="filter-field">
-      <label for="sort">Trier par</label>
-      <div class="sort-field">
-      <select id="sort" class="form-select" [ngModel]="sortKey" (ngModelChange)="selectSortKey($event)">
-        @for (option of sortOptions; track option.key) {
-        <option [ngValue]="option.key">{{ option.label }}</option>
-        }
-      </select>
-      <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [(ngModel)]="sortDirection">
-        <option value="asc">Croissant</option>
-        <option value="desc">Décroissant</option>
-      </select>
-      </div>
-    </div>
   </section>
 
   @if (isLoadingTeams) {
@@ -103,35 +88,27 @@
   <p class="status-message">Chargement des joueurs…</p>
   } @else if (selectedSeason !== null && players.length > 0) {
   <section class="player-grid" aria-label="Joueurs de l’équipe sélectionnée">
-    @for (player of sorted(players); track player.id) {
-    <a class="player-card" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season: selectedSeason }">
+    @for (player of players; track player.id) {
+    <article class="player-card">
       <div class="player-card-header">
         <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
         <div class="player-heading">
           <h2>{{ player.name }}</h2>
           <span class="position">{{ player.position }}</span>
         </div>
-        <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne">{{ player.averageRating !== null ? (player.averageRating | number: "1.2-2") : "—" }}</span>
+        <span class="ball-mark" aria-hidden="true">⚽</span>
       </div>
       <div class="player-details">
         <div class="player-detail">
-          <span class="detail-label">Matchs joués</span>
-          <strong>{{ player.matchesPlayed }}</strong>
+          <span class="detail-label">Taille</span>
+          <strong>{{ player.heightCm ?? "—" }}<small>{{ player.heightCm !== null ? " cm" : "" }}</small></strong>
         </div>
         <div class="player-detail">
-          <span class="detail-label">Rating</span>
-          <strong>@if (player.rating !== null) {{{ player.rating }}/99} @else {—}</strong>
-        </div>
-        <div class="player-detail">
-          <span class="detail-label">Buts</span>
-          <strong>{{ player.goals ?? "—" }}</strong>
-        </div>
-        <div class="player-detail">
-          <span class="detail-label">Passes décisives</span>
-          <strong>{{ player.assists ?? "—" }}</strong>
+          <span class="detail-label">Poids</span>
+          <strong>{{ player.weightKg ?? "—" }}<small>{{ player.weightKg !== null ? " kg" : "" }}</small></strong>
         </div>
       </div>
-    </a>
+    </article>
     }
   </section>
   } @else if (selectedSeason !== null && !errorMessage && !isLoadingPlayers) {

@@ -3,8 +3,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop"
 import { BehaviorSubject, combineLatest, of, Subject } from "rxjs"
 import { catchError, startWith, switchMap, tap } from "rxjs/operators"
 import { Player } from "models/player.model"
-import { defaultSortDirection, PLAYER_SORT_OPTIONS, PlayerSortKey, SortDirection, sortPlayers } from "utils/player-sort"
-import { ratingLevel } from "utils/rating"
 import { Season } from "models/season.model"
 import { Team } from "models/team.model"
 import { TeamService } from "services/team.service"
@@ -15,10 +13,6 @@ import { TeamService } from "services/team.service"
   styleUrls: ["./team-list.component.scss"],
 })
 export class TeamListComponent implements OnInit {
-  readonly ratingLevel = ratingLevel
-  readonly sortOptions = PLAYER_SORT_OPTIONS
-  sortKey: PlayerSortKey = "averageRating"
-  sortDirection: SortDirection = "desc"
   teams: Team[] = []
   seasons: Season[] = []
   players: Player[] = []
@@ -165,14 +159,5 @@ export class TeamListComponent implements OnInit {
     this.players = []
     this.errorMessage = null
     this.seasonSelection$.next(season)
-  }
-
-  selectSortKey(key: PlayerSortKey): void {
-    this.sortKey = key
-    this.sortDirection = defaultSortDirection(key)
-  }
-
-  sorted(players: Player[]): Player[] {
-    return sortPlayers(players, this.sortKey, this.sortDirection)
   }
 }

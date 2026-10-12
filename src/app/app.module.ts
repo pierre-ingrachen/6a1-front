@@ -17,7 +17,6 @@ import { MajorStudentsComponent } from "majors/major-students/major-students.com
 import { HttpClientModule } from "@angular/common/http"
 import { TeamListComponent } from "teams/team-list/team-list.component"
 import { TeamDetailComponent } from "teams/team-detail/team-detail.component"
-import { PlayerProfileComponent } from "players/player-profile/player-profile.component"
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import { PlayerProfileComponent } from "players/player-profile/player-profile.co
     MajorStudentsComponent,
     TeamListComponent,
     TeamDetailComponent,
-    PlayerProfileComponent,
   ],
   imports: [
     BrowserModule,

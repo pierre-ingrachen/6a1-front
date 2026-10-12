@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, input } from "@angular/core"
-import { DrawPlayer, PickCommand, Slot } from "game/models/game.model"
+import { DrawPlayer, Slot } from "game/models/game.model"
 import { positionLabel, positionName } from "game/utils/position-labels"
 import { slotChoicesOf } from "game/utils/slot-choices"
 
@@ -14,15 +14,12 @@ export class PlayerCardComponent {
   readonly player = input.required<DrawPlayer>()
   readonly slots = input.required<Slot[]>()
   readonly disabled = input(false)
-  @Output() readonly picked = new EventEmitter<PickCommand>()
+  readonly selected = input(false)
+  @Output() readonly playerSelected = new EventEmitter<DrawPlayer>()
 
   readonly choices = computed(() => slotChoicesOf(this.player(), this.slots()))
-  readonly selectable = computed(() => this.choices().length > 0)
+  readonly selectable = computed(() => !this.player().alreadyPicked && this.choices().length > 0)
 
-  readonly label = positionLabel
   readonly name = positionName
-
-  pick(slotIndex: number): void {
-    this.picked.emit({ playerId: this.player().playerId, slotIndex })
-  }
+  readonly label = positionLabel
 }
