@@ -6,8 +6,8 @@ export interface SlotRow {
 }
 
 const LINES_FROM_ATTACK: Line[] = ["ATTACKER", "MIDFIELDER", "DEFENDER", "GOALKEEPER"]
-const LEFT_POSITIONS = ["LB", "LWB", "LW"]
-const RIGHT_POSITIONS = ["RB", "RWB", "RW"]
+const LEFT_POSITIONS = ["LB", "LM", "LW"]
+const RIGHT_POSITIONS = ["RB", "RM", "RW"]
 
 const lateralRank = (position: string): number => {
   if (LEFT_POSITIONS.includes(position)) return 0

@@ -11,6 +11,7 @@ import { formationName } from "game/utils/position-labels"
 })
 export class FormationPickerComponent {
   readonly formations = input.required<Formation[]>()
+  readonly selected = input<string | null>(null)
   readonly disabled = input(false)
   @Output() readonly formationSelected = new EventEmitter<string>()
 

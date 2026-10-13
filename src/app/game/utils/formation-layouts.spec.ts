@@ -7,37 +7,50 @@ const slotsOf = (positions: string[]): Slot[] =>
 const positionsByRow = (rows: Slot[][] | null) => rows?.map((row) => row.map((slot) => slot.position))
 
 describe("layoutRowsOf", () => {
-  it("puts the attacking midfielder above the two central midfielders in a 4-2-3-1", () => {
-    const slots = slotsOf(["GK", "LB", "CB", "CB", "RB", "CM", "CM", "LW", "AM", "RW", "ST"])
+  it("puts the attacking midfielder above the two defensive midfielders in a 4-2-3-1", () => {
+    const slots = slotsOf(["GK", "LB", "CB", "CB", "RB", "DM", "DM", "LW", "AM", "RW", "ST"])
 
     expect(positionsByRow(layoutRowsOf("4-2-3-1", slots))).toEqual([
       ["ST"],
       ["LW", "AM", "RW"],
-      ["CM", "CM"],
+      ["DM", "DM"],
       ["LB", "CB", "CB", "RB"],
       ["GK"],
     ])
   })
 
-  it("puts the wing backs on the midfield row in a 3-5-2", () => {
-    const slots = slotsOf(["GK", "CB", "CB", "CB", "LWB", "RWB", "CM", "CM", "CM", "ST", "ST"])
+  it("puts the wide midfielders on the midfield row in a 3-5-2", () => {
+    const slots = slotsOf(["GK", "CB", "CB", "CB", "LM", "RM", "CM", "CM", "CM", "ST", "ST"])
 
     expect(positionsByRow(layoutRowsOf("3-5-2", slots))).toEqual([
       ["ST", "ST"],
-      ["LWB", "CM", "CM", "CM", "RWB"],
+      ["LM", "CM", "CM", "CM", "RM"],
       ["CB", "CB", "CB"],
       ["GK"],
     ])
   })
 
-  it("puts the wingers on the midfield row in a 4-4-2", () => {
-    const slots = slotsOf(["GK", "LB", "CB", "CB", "RB", "LW", "CM", "CM", "RW", "ST", "ST"])
+  it("puts the wide midfielders on the midfield row in a 4-4-2", () => {
+    const slots = slotsOf(["GK", "LB", "CB", "CB", "RB", "LM", "CM", "CM", "RM", "ST", "ST"])
 
-    expect(positionsByRow(layoutRowsOf("4-4-2", slots))?.[1]).toEqual(["LW", "CM", "CM", "RW"])
+    expect(positionsByRow(layoutRowsOf("4-4-2", slots))?.[1]).toEqual(["LM", "CM", "CM", "RM"])
+  })
+
+  it("puts the attacking midfielder between the strikers and the central midfielders in a 4-1-2-1-2", () => {
+    const slots = slotsOf(["GK", "LB", "CB", "CB", "RB", "DM", "CM", "CM", "AM", "ST", "ST"])
+
+    expect(positionsByRow(layoutRowsOf("4-1-2-1-2", slots))).toEqual([
+      ["ST", "ST"],
+      ["AM"],
+      ["CM", "CM"],
+      ["DM"],
+      ["LB", "CB", "CB", "RB"],
+      ["GK"],
+    ])
   })
 
   it("returns null for an unknown formation", () => {
-    expect(layoutRowsOf("4-1-2-1-2", slotsOf(["GK"]))).toBeNull()
+    expect(layoutRowsOf("9-0-1", slotsOf(["GK"]))).toBeNull()
   })
 
   it("returns null when the slots do not match the formation", () => {

@@ -1,14 +1,20 @@
 <section class="picker">
   <h2>Choisis ta formation</h2>
-  <p>Elle détermine les 11 postes à remplir. Impossible de changer en cours de route.</p>
+  <p>Clique sur une formation pour la voir sur le terrain.</p>
   <div class="formations">
     @for (formation of formations(); track formation.label) {
-    <button type="button" class="formation" [disabled]="disabled()" (click)="formationSelected.emit(formation.label)">
+    <button
+      type="button"
+      class="formation"
+      [class.selected]="formation.label === selected()"
+      [attr.aria-pressed]="formation.label === selected()"
+      [disabled]="disabled()"
+      (click)="formationSelected.emit(formation.label)"
+    >
       <strong>{{ formation.label }}</strong>
       @if (name(formation.label); as formationTitle) {
-      <small>{{ formationTitle }}</small>
+      <small class="nickname">{{ formationTitle }}</small>
       }
-      <small>{{ formation.positions.length }} postes</small>
     </button>
     }
   </div>

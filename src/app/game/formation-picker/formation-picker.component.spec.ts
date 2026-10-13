@@ -23,8 +23,8 @@ describe("FormationPickerComponent", () => {
   it("shows the nickname of known formations only", () => {
     const buttons = create().querySelectorAll(".formation")
 
-    expect(buttons[0].querySelector("small")?.textContent?.trim()).toBe("Losange")
-    expect(buttons[1].querySelector("small")).toBeNull()
+    expect(buttons[0].querySelector(".nickname")?.textContent?.trim()).toBe("Losange")
+    expect(buttons[1].querySelector(".nickname")).toBeNull()
   })
 
   it("emits the label of the chosen formation", () => {
@@ -35,6 +35,18 @@ describe("FormationPickerComponent", () => {
     ;(element.querySelector(".formation") as HTMLButtonElement).click()
 
     expect(emitted).toEqual(["4-1-2-1-2"])
+  })
+
+  it("marks the selected formation as pressed", () => {
+    create()
+    fixture.componentRef.setInput("selected", "9-0-1")
+    fixture.detectChanges()
+
+    const pressed = Array.from(fixture.nativeElement.querySelectorAll(".formation")).map((button) =>
+      (button as HTMLElement).getAttribute("aria-pressed"),
+    )
+
+    expect(pressed).toEqual(["false", "true"])
   })
 
   it("disables every formation while a request is running", () => {

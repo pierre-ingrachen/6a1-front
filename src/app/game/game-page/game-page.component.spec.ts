@@ -72,14 +72,47 @@ describe("GamePageComponent", () => {
       "movePlayer",
       "simulateCompetition",
     ])
-    api.findFormations.and.returnValue(of([{ label: "4-3-3", positions: ["GK"] }]))
+    api.findFormations.and.returnValue(
+      of([
+        { label: "4-3-3", positions: ["GK"] },
+        { label: "4-4-2", positions: ["GK", "ST"] },
+      ]),
+    )
     TestBed.configureTestingModule({ imports: [GamePageComponent], providers: [{ provide: GameApiService, useValue: api }] })
   })
 
   it("offers the formations before the game starts", () => {
     const fixture = create()
 
-    expect(fixture.nativeElement.querySelectorAll(".formation").length).toBe(1)
+    expect(fixture.nativeElement.querySelectorAll(".formation").length).toBe(2)
+  })
+
+  it("shows the pitch of the default formation before any choice", () => {
+    const fixture = create()
+
+    expect(fixture.nativeElement.querySelectorAll(".slot").length).toBe(1)
+    expect(fixture.nativeElement.querySelector(".confirm").textContent).toContain("4-3-3")
+  })
+
+  it("updates the pitch when another formation is previewed", () => {
+    const fixture = create()
+
+    ;(fixture.nativeElement.querySelectorAll(".formation")[1] as HTMLButtonElement).click()
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelectorAll(".slot").length).toBe(2)
+    expect(api.createGame).not.toHaveBeenCalled()
+  })
+
+  it("starts the game with the previewed formation once confirmed", () => {
+    api.createGame.and.returnValue(of(draftingGame))
+    const fixture = create()
+
+    ;(fixture.nativeElement.querySelectorAll(".formation")[1] as HTMLButtonElement).click()
+    fixture.detectChanges()
+    ;(fixture.nativeElement.querySelector(".confirm") as HTMLButtonElement).click()
+
+    expect(api.createGame).toHaveBeenCalledWith("4-4-2")
   })
 
   it("shows a short loading state before revealing the first draw", fakeAsync(() => {
@@ -228,6 +261,6 @@ describe("GamePageComponent", () => {
     fixture.detectChanges()
 
     expect(fixture.componentInstance.game()).toBeNull()
-    expect(fixture.nativeElement.querySelectorAll(".formation").length).toBe(1)
+    expect(fixture.nativeElement.querySelectorAll(".formation").length).toBe(2)
   })
 })
