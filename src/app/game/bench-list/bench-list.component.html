@@ -1,0 +1,21 @@
+<app-ucl-backdrop [stadium]="stadium()">
+  <ul role="list" class="bench">
+    @for (row of rows(); track row.player.playerId) {
+    <li>
+      <button
+        type="button"
+        class="row"
+        [class.selected]="row.player.playerId === selectedPlayerId()"
+        [attr.aria-pressed]="row.player.playerId === selectedPlayerId()"
+        [disabled]="disabled() || !row.selectable"
+        [attr.title]="row.player.name"
+        (click)="playerSelected.emit(row.player)"
+      >
+        <span class="name">{{ row.surname }}</span>
+        <span class="positions" [attr.aria-label]="row.positionNames">{{ row.positions }}</span>
+        <span class="rating" aria-label="Note">{{ row.player.rating }}</span>
+      </button>
+    </li>
+    }
+  </ul>
+</app-ucl-backdrop>

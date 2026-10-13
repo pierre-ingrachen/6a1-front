@@ -1,5 +1,7 @@
 <main class="game">
+  @if (result() || !game()) {
   <h1>Compose ton onze de légende</h1>
+  }
 
   @if (errorMessage(); as message) {
   <p class="error" role="alert">{{ message }}</p>
@@ -9,14 +11,25 @@
   <competition-result [result]="competitionResult" (replayRequested)="restart()" />
   } @else {
   @if (game(); as currentGame) {
-  <div class="draft">
+  <div class="draft draft--playing">
     <aside>
-      <div class="summary">
-        <span>Formation <strong>{{ currentGame.formation }}</strong></span>
-        <span>Choix restants <strong>{{ currentGame.picksRemaining }}</strong></span>
-        @if (currentGame.squadAverageRating !== null) {
-        <span>Note moyenne <strong>{{ currentGame.squadAverageRating.toFixed(1) }}</strong></span>
-        }
+      <div class="intro">
+        <h1>Compose ton onze de légende</h1>
+        <div class="summary">
+          <span>Formation <strong>{{ currentGame.formation }}</strong></span>
+          <span>Choix restants <strong>{{ currentGame.picksRemaining }}</strong></span>
+          @if (currentGame.squadAverageRating !== null) {
+          <span>Note moyenne <strong>{{ currentGame.squadAverageRating.toFixed(1) }}</strong></span>
+          }
+        </div>
+        <p class="hint">
+          @if (selectedDrawPlayer(); as player) {
+          Choisis un poste en surbrillance pour placer {{ player.name }}.
+          } @else {
+          Clique sur un joueur tiré au sort, puis sur un poste compatible du terrain pour le placer. Tu peux aussi déplacer
+          un joueur déjà dans ton équipe en le sélectionnant sur le terrain.
+          }
+        </p>
       </div>
       <squad-board
         [slots]="currentGame.slots"
@@ -28,14 +41,6 @@
         [selectingDrawPlayer]="selectedDrawPlayer() !== null"
         (slotClicked)="selectSlot($event)"
       />
-      <p class="hint">
-        @if (selectedDrawPlayer(); as player) {
-        Choisis un poste en surbrillance pour placer {{ player.name }}.
-        } @else {
-        Clique sur un joueur tiré au sort, puis sur un poste compatible du terrain pour le placer. Tu peux aussi déplacer
-        un joueur déjà dans ton équipe en le sélectionnant sur le terrain.
-        }
-      </p>
     </aside>
 
     <section class="actions">
@@ -45,6 +50,7 @@
         [draw]="draw"
         [slots]="currentGame.slots"
         [disabled]="loading()"
+        [selectedPlayerId]="selectedDrawPlayer()?.playerId ?? null"
         (playerSelected)="selectDrawPlayer($event)"
       >
         <redraw-actions

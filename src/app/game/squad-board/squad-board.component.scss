@@ -1,9 +1,11 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .pitch {
   position: relative;
+  flex: 1;
   width: 100%;
   aspect-ratio: 5 / 4;
   container-type: size;

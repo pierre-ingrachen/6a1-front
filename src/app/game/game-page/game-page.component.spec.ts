@@ -135,7 +135,7 @@ describe("GamePageComponent", () => {
     fixture.detectChanges()
 
     expect(fixture.nativeElement.textContent).toContain("Barcelona")
-    expect(fixture.nativeElement.textContent).toContain("Victor Valdes")
+    expect(fixture.nativeElement.textContent).toContain("Valdes")
   }))
 
   it("automatically reveals the next draw after a short loading state when picking a player", fakeAsync(() => {

@@ -1,0 +1,12 @@
+@if (stadium(); as url) {
+<div class="stadium" [style.background-image]="'url(' + url + ')'"></div>
+}
+@if (decor()) {
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+  <path class="swoosh" d="M 0 28 C 25 40, 55 62, 62 100" />
+  <path class="swoosh swoosh--soft" d="M 100 78 C 90 88, 82 94, 76 100" />
+</svg>
+}
+<div class="content">
+  <ng-content />
+</div>
