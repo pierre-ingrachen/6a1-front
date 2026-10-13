@@ -21,8 +21,8 @@ interface PlacedPlayer {
 export class LineupComponent {
   readonly players = input.required<Player[]>()
   readonly formation = input<FormationId>("reference")
-  readonly teamColor = input("#1b2e5c")
-  readonly numberColor = input("#e8453c")
+  readonly teamColor = input("#ffffff")
+  readonly numberColor = input("#1b2e5c")
 
   protected readonly placedPlayers = computed<PlacedPlayer[]>(() => {
     const slots = FORMATIONS[this.formation()]

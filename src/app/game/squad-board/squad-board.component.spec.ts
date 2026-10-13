@@ -35,10 +35,10 @@ describe("SquadBoardComponent", () => {
     expect(filled.textContent).toContain("9")
   })
 
-  it("numbers the goalkeeper 1 even when empty", () => {
-    const goalkeeper = Array.from(create().querySelectorAll(".slot")).pop() as HTMLElement
+  it("shows a blank jersey without number on empty slots", () => {
+    const empty = create().querySelector(".slot:not(.filled)") as HTMLElement
 
-    expect(goalkeeper.querySelector("text")?.textContent?.trim()).toBe("1")
+    expect(empty.querySelector("text")?.textContent?.trim()).toBe("")
   })
 
   it("highlights only empty eligible slots", () => {

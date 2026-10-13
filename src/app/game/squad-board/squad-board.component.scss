@@ -44,10 +44,6 @@
     text-shadow: 0 0.1cqw 0.4cqw rgba(0, 0, 40, 0.35);
   }
 
-  &:not(.filled) .jersey {
-    opacity: 0.35;
-  }
-
   &.filled:not(:disabled),
   &.target {
     cursor: pointer;
