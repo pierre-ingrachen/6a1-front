@@ -1,0 +1,51 @@
+:host {
+  --ucl-blue-1: #2b2fc7;
+  --ucl-blue-2: #3a3fd8;
+  --ucl-cyan: #2ec4f0;
+  --ucl-line: #3fa9f5;
+  --ucl-navy: #1b2e5c;
+  --ucl-red: #e8453c;
+  --ucl-text: #fff;
+
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: var(--ucl-text);
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 50%, rgba(80, 90, 240, 0.55), transparent 75%),
+    linear-gradient(160deg, var(--ucl-blue-1) 0%, var(--ucl-blue-2) 100%);
+}
+
+.stadium {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.35;
+}
+
+svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 0 0.6cqw rgba(46, 196, 240, 0.5));
+}
+
+.swoosh {
+  fill: none;
+  stroke: var(--ucl-cyan);
+  stroke-width: 1.2;
+  stroke-opacity: 0.35;
+  vector-effect: non-scaling-stroke;
+
+  &--soft {
+    stroke-opacity: 0.2;
+  }
+}
+
+.content {
+  position: relative;
+  height: 100%;
+}

@@ -6,18 +6,12 @@
     <ng-content />
   </header>
   <div class="players">
-    @for (group of groups(); track group.line) {
-    <div class="group" [attr.data-line]="group.line">
-      <h3>{{ group.label }}</h3>
-      @for (player of group.players; track player.playerId) {
-      <player-card
-        [player]="player"
-        [slots]="slots()"
-        [disabled]="disabled()"
-        (playerSelected)="playerSelected.emit($event)"
-      />
-      }
-    </div>
-    }
+    <app-bench-list
+      [players]="orderedPlayers()"
+      [slots]="slots()"
+      [disabled]="disabled()"
+      [selectedPlayerId]="selectedPlayerId()"
+      (playerSelected)="playerSelected.emit($event)"
+    />
   </div>
 </section>

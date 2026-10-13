@@ -15,14 +15,32 @@ const draw: Draw = {
   ],
 }
 
+const namesOf = (fixture: { nativeElement: HTMLElement }) =>
+  Array.from(fixture.nativeElement.querySelectorAll(".name"), (element) => element.textContent?.trim())
+
 describe("TeamDrawCardComponent", () => {
+  it("sorts players of the same line by surname, ignoring accents and rating", () => {
+    const fixture = TestBed.createComponent(TeamDrawCardComponent)
+    const midfielder = (playerId: number, name: string, rating: number) => ({
+      playerId, name, rating, line: "MIDFIELDER" as const, positions: ["CM"], eligibleSlots: [1], alreadyPicked: false,
+    })
+    fixture.componentRef.setInput("draw", {
+      ...draw,
+      players: [midfielder(1, "Xavi Hernández", 99), midfielder(2, "Álvaro Zidane", 50), midfielder(3, "Sergio Busquets", 70)],
+    })
+    fixture.componentRef.setInput("slots", [])
+    fixture.detectChanges()
+
+    expect(namesOf(fixture)).toEqual(["Busquets", "Hernández", "Zidane"])
+  })
+
   it("lists goalkeepers first and attackers last, regardless of rating", () => {
     const fixture = TestBed.createComponent(TeamDrawCardComponent)
     fixture.componentRef.setInput("draw", draw)
     fixture.componentRef.setInput("slots", [])
     fixture.detectChanges()
 
-    const names = Array.from(fixture.nativeElement.querySelectorAll(".identity strong"), (element: Element) =>
+    const names = Array.from(fixture.nativeElement.querySelectorAll(".name"), (element: Element) =>
       element.textContent?.trim(),
     )
 
