@@ -11,8 +11,8 @@ let nextJerseyId = 0
 })
 export class JerseyComponent {
   readonly number = input.required<number | string>()
-  readonly color = input("#1b2e5c")
-  readonly numberColor = input("#e8453c")
+  readonly color = input("#ffffff")
+  readonly numberColor = input("#1b2e5c")
   readonly goalkeeper = input(false)
 
   private readonly id = nextJerseyId++
@@ -21,5 +21,5 @@ export class JerseyComponent {
   protected readonly textureId = computed(() => `jersey-texture-${this.id}`)
   protected readonly fill = computed(() => (this.goalkeeper() ? "#3aa84a" : this.color()))
   protected readonly textColor = computed(() => (this.goalkeeper() ? "#ffffff" : this.numberColor()))
-  protected readonly textOutline = computed(() => (this.goalkeeper() ? "#1d6b2a" : "#0b1630"))
+  protected readonly textOutline = computed(() => (this.goalkeeper() ? "#1d6b2a" : "#ffffff"))
 }
