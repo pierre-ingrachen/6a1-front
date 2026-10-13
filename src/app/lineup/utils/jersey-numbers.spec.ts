@@ -14,7 +14,7 @@ describe("assignJerseyNumbers", () => {
   })
 
   it("never repeats a number", () => {
-    const numbers = assignJerseyNumbers(["RB", "RWB", "LB", "LWB", "CM", "CM", "CM", "CM", "AM", "AM", "ST"])
+    const numbers = assignJerseyNumbers(["RB", "RM", "LB", "LM", "CM", "CM", "CM", "CM", "AM", "AM", "ST"])
 
     expect(new Set(numbers).size).toBe(numbers.length)
   })

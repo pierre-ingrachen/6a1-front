@@ -1,47 +1,51 @@
 .picker {
-  text-align: center;
-
   h2 {
     margin: 0 0 0.5rem;
     color: #0a2260;
   }
 
   p {
-    margin: 0 0 1.5rem;
+    margin: 0 0 1rem;
     color: #4b5a85;
   }
 }
 
 .formations {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.6rem;
 }
 
 .formation {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  min-width: 140px;
-  padding: 1.1rem 1.5rem;
+  gap: 0.15rem;
+  padding: 0.7rem 0.5rem;
   border: 2px solid #0a2260;
-  border-radius: 14px;
+  border-radius: 12px;
   background: #fff;
   color: #0a2260;
   cursor: pointer;
   transition: transform 0.15s, background 0.15s, color 0.15s;
 
   strong {
-    font-size: 1.6rem;
+    font-size: 1.25rem;
     letter-spacing: 0.04em;
   }
 
-  &:hover:not(:disabled) {
-    transform: translateY(-3px);
+  small {
+    font-size: 0.75rem;
+  }
+
+  &:hover:not(:disabled),
+  &.selected {
     background: #0a2260;
     color: #f2cf72;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
   }
 
   &:disabled {

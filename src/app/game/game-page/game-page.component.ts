@@ -5,12 +5,15 @@ import { Observable, timer } from "rxjs"
 import { CompetitionResultComponent } from "game/competition-result/competition-result.component"
 import { FormationPickerComponent } from "game/formation-picker/formation-picker.component"
 import { CompetitionResult } from "game/models/competition.model"
-import { DrawPlayer, Game, PickCommand, RedrawType } from "game/models/game.model"
+import { DrawPlayer, Formation, Game, PickCommand, RedrawType } from "game/models/game.model"
 import { RedrawActionsComponent } from "game/redraw-actions/redraw-actions.component"
 import { GameApiService } from "game/services/game-api.service"
 import { moveTargetsOf } from "game/utils/move-targets"
+import { previewSlotsOf } from "game/utils/preview-slots"
 import { SquadBoardComponent } from "game/squad-board/squad-board.component"
 import { TeamDrawCardComponent } from "game/team-draw-card/team-draw-card.component"
+
+const DEFAULT_FORMATION = "4-3-3"
 
 @Component({
   selector: "game-page",
@@ -31,6 +34,15 @@ export class GamePageComponent {
   private readonly destroyRef = inject(DestroyRef)
 
   readonly formations = toSignal(this.api.findFormations(), { initialValue: [] })
+  readonly previewedLabel = signal<string | null>(null)
+  readonly previewedFormation = computed<Formation | null>(
+    () =>
+      this.formations().find((formation) => formation.label === this.previewedLabel()) ??
+      this.formations().find((formation) => formation.label === DEFAULT_FORMATION) ??
+      this.formations()[0] ??
+      null,
+  )
+  readonly previewSlots = computed(() => previewSlotsOf(this.previewedFormation()?.positions ?? []))
   readonly game = signal<Game | null>(null)
   readonly result = signal<CompetitionResult | null>(null)
   readonly loading = signal(false)
@@ -56,6 +68,17 @@ export class GamePageComponent {
   readonly selectedSlot = signal<number | null>(null)
   readonly moveTargets = computed(() => moveTargetsOf(this.game()?.slots ?? [], this.selectedSlot()))
   readonly readyToSimulate = computed(() => this.game()?.status === "READY_TO_SIMULATE")
+
+  previewFormation(label: string): void {
+    this.previewedLabel.set(label)
+  }
+
+  confirmFormation(): void {
+    const formation = this.previewedFormation()
+    if (formation) {
+      this.startGame(formation.label)
+    }
+  }
 
   startGame(formation: string): void {
     this.run(this.api.createGame(formation), (game) => {

@@ -75,7 +75,26 @@
     </section>
   </div>
   } @else {
-  <formation-picker [formations]="formations()" [disabled]="loading()" (formationSelected)="startGame($event)" />
+  <div class="draft">
+    <aside>
+      <squad-board [slots]="previewSlots()" [formation]="previewedFormation()?.label ?? ''" />
+      <p class="hint">Aperçu de la formation. Tu pourras placer tes joueurs une fois la formation choisie.</p>
+    </aside>
+
+    <section class="actions">
+      <formation-picker
+        [formations]="formations()"
+        [selected]="previewedFormation()?.label ?? null"
+        [disabled]="loading()"
+        (formationSelected)="previewFormation($event)"
+      />
+      @if (previewedFormation(); as previewed) {
+      <button type="button" class="confirm" [disabled]="loading()" (click)="confirmFormation()">
+        Choisir le {{ previewed.label }} et commencer le tirage
+      </button>
+      }
+    </section>
+  </div>
   }
   }
 </main>

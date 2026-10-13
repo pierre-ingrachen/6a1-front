@@ -82,6 +82,25 @@
   }
 }
 
+.confirm {
+  padding: 0.9rem 1.6rem;
+  border: 0;
+  border-radius: 12px;
+  background: #f2cf72;
+  color: #0a2260;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #e9bd45;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
 .draw-loading {
   .spinner {
     display: inline-block;
