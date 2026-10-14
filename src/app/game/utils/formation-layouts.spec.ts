@@ -49,6 +49,51 @@ describe("layoutRowsOf", () => {
     ])
   })
 
+  it("lays out the defensive and offensive variants with their midfielders on separate rows", () => {
+    const variants: Record<string, string[]> = {
+      "4-1-2-3": ["GK", "LB", "CB", "CB", "RB", "DM", "CM", "CM", "LW", "ST", "RW"],
+      "4-2-1-3": ["GK", "LB", "CB", "CB", "RB", "CM", "CM", "AM", "LW", "ST", "RW"],
+      "4-2-2-2": ["GK", "LB", "CB", "CB", "RB", "DM", "DM", "LM", "RM", "ST", "ST"],
+      "4-1-3-2": ["GK", "LB", "CB", "CB", "RB", "DM", "LM", "AM", "RM", "ST", "ST"],
+      "3-2-2-3": ["GK", "CB", "CB", "CB", "DM", "DM", "LM", "RM", "LW", "ST", "RW"],
+      "3-1-4-2": ["GK", "CB", "CB", "CB", "DM", "LM", "CM", "CM", "RM", "ST", "ST"],
+      "3-4-1-2": ["GK", "CB", "CB", "CB", "LM", "CM", "CM", "RM", "AM", "ST", "ST"],
+      "5-1-2-2": ["GK", "LB", "CB", "CB", "CB", "RB", "DM", "CM", "CM", "ST", "ST"],
+      "5-2-1-2": ["GK", "LB", "CB", "CB", "CB", "RB", "CM", "CM", "AM", "ST", "ST"],
+    }
+
+    Object.entries(variants).forEach(([formation, positions]) => {
+      const rows = layoutRowsOf(formation, slotsOf(positions))
+
+      expect(rows?.flat().length).withContext(formation).toBe(11)
+    })
+  })
+
+  it("puts the wide midfielders on the same row as the attacking midfielder in a 3-4-1-2", () => {
+    const slots = slotsOf(["GK", "CB", "CB", "CB", "LM", "CM", "CM", "RM", "AM", "ST", "ST"])
+
+    expect(positionsByRow(layoutRowsOf("3-4-1-2", slots))).toEqual([
+      ["ST", "ST"],
+      ["LM", "AM", "RM"],
+      ["CM", "CM"],
+      ["CB", "CB", "CB"],
+      ["GK"],
+    ])
+  })
+
+  it("puts the central midfielders between the wide midfielders and the defensive midfielder in a 3-1-4-2", () => {
+    const slots = slotsOf(["GK", "CB", "CB", "CB", "DM", "LM", "CM", "CM", "RM", "ST", "ST"])
+
+    expect(positionsByRow(layoutRowsOf("3-1-4-2", slots))).toEqual([
+      ["ST", "ST"],
+      ["LM", "RM"],
+      ["CM", "CM"],
+      ["DM"],
+      ["CB", "CB", "CB"],
+      ["GK"],
+    ])
+  })
+
   it("returns null for an unknown formation", () => {
     expect(layoutRowsOf("9-0-1", slotsOf(["GK"]))).toBeNull()
   })

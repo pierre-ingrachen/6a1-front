@@ -26,7 +26,7 @@
         <div class="summary">
           <div class="stat">
             <span class="stat-label">Formation</span>
-            <strong class="stat-value">{{ currentGame.formation }}</strong>
+            <strong class="stat-value">{{ formationDisplayName(currentGame.formation) }}</strong>
           </div>
           <div class="stat">
             <span class="stat-label">Choix restants</span>
@@ -99,7 +99,7 @@
       />
       @if (previewedFormation(); as previewed) {
       <button type="button" class="confirm" [disabled]="loading()" (click)="confirmFormation()">
-        Choisir le {{ previewed.label }} et commencer le tirage
+        Choisir le {{ formationDisplayName(previewed.label) }} et commencer le tirage
       </button>
       }
     </section>

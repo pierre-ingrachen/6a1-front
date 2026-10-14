@@ -1,13 +1,33 @@
-import { formationName } from "game/utils/position-labels"
+import { formationDisplayName, formationTitle, formationVariant } from "game/utils/position-labels"
 
-describe("formationName", () => {
-  it("names every formation offered by the game", () => {
-    const labels = ["4-3-3", "4-4-2", "4-2-3-1", "3-5-2", "5-3-2", "4-1-2-1-2", "4-3-2-1", "4-4-1-1", "4-5-1", "3-4-3", "3-4-2-1", "5-4-1"]
-
-    expect(labels.every((label) => formationName(label).length > 0)).toBeTrue()
+describe("formation display", () => {
+  it("shows the family title and the variant of a tactical variant", () => {
+    expect(formationTitle("4-1-2-3")).toBe("4-3-3")
+    expect(formationVariant("4-1-2-3")).toBe("Défensif")
+    expect(formationVariant("5-2-1-2")).toBe("Offensif")
   })
 
-  it("returns an empty name for an unknown formation", () => {
-    expect(formationName("9-0-1")).toBe("")
+  it("gives a single word to every formation", () => {
+    expect(formationTitle("4-2-3-1")).toBe("4-2-3-1")
+    expect(formationVariant("4-2-3-1")).toBe("Moderne")
+  })
+
+  it("builds a readable full name", () => {
+    expect(formationDisplayName("3-1-4-2")).toBe("3-5-2 défensif")
+    expect(formationDisplayName("4-2-3-1")).toBe("4-2-3-1")
+    expect(formationDisplayName("4-3-3")).toBe("4-3-3 équilibré")
+  })
+
+  it("gives a word to every formation offered by the game", () => {
+    const labels = ["4-3-3", "4-1-2-3", "4-2-1-3", "4-4-2", "4-2-2-2", "4-2-3-1", "4-1-4-1", "4-2-4", "3-4-3", "3-2-2-3", "4-1-2-1-2", "4-1-3-2", "3-5-2", "3-1-4-2", "3-4-1-2", "3-4-2-1", "5-3-2", "5-1-2-2", "5-2-1-2", "5-2-3", "5-4-1"]
+
+    expect(labels.every((label) => formationVariant(label).length > 0)).toBeTrue()
+  })
+
+  it("never shows the same title and variant twice", () => {
+    const labels = ["4-3-3", "4-1-2-3", "4-2-1-3", "4-4-2", "4-2-2-2", "4-1-2-1-2", "4-1-3-2", "3-2-2-3", "3-5-2", "3-1-4-2", "3-4-1-2", "5-3-2", "5-1-2-2", "5-2-1-2"]
+    const names = labels.map(formationDisplayName)
+
+    expect(new Set(names).size).toBe(labels.length)
   })
 })

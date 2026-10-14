@@ -1,55 +1,69 @@
 .picker {
   h2 {
-    margin: 0 0 0.5rem;
-    color: #0a2260;
-  }
-
-  p {
     margin: 0 0 1rem;
-    color: #4b5a85;
+    text-align: center;
+    color: #0a2260;
   }
 }
 
 .formations {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 0.6rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
 }
 
 .formation {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
-  padding: 0.7rem 0.5rem;
-  border: 2px solid #0a2260;
-  border-radius: 12px;
-  background: #fff;
-  color: #0a2260;
+  gap: 0.3rem;
+  padding: 1rem 0.75rem;
+  border: 0;
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 55%, rgba(80, 90, 240, 0.55), transparent 75%),
+    linear-gradient(160deg, #2b2fc7 0%, #3338d0 50%, #2a2ec2 100%);
+  color: #fff;
   cursor: pointer;
-  transition: transform 0.15s, background 0.15s, color 0.15s;
+  transition: transform 0.15s, box-shadow 0.3s ease, opacity 0.15s;
 
   strong {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
+    font-weight: 800;
     letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
   }
 
   small {
-    font-size: 0.75rem;
-  }
-
-  &:hover:not(:disabled),
-  &.selected {
-    background: #0a2260;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: #f2cf72;
   }
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(43, 47, 199, 0.4);
+  }
+
+  &:focus-visible {
+    outline: 3px solid #f2cf72;
+    outline-offset: 2px;
+  }
+
+  &.selected {
+    box-shadow: 0 0 0 3px #f2cf72, 0 0 32px rgba(242, 207, 114, 0.55);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .formation {
+    transition: none;
   }
 }

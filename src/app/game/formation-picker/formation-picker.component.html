@@ -1,6 +1,5 @@
 <section class="picker">
   <h2>Choisis ta formation</h2>
-  <p>Clique sur une formation pour la voir sur le terrain.</p>
   <div class="formations">
     @for (formation of formations(); track formation.label) {
     <button
@@ -11,9 +10,9 @@
       [disabled]="disabled()"
       (click)="formationSelected.emit(formation.label)"
     >
-      <strong>{{ formation.label }}</strong>
-      @if (name(formation.label); as formationTitle) {
-      <small class="nickname">{{ formationTitle }}</small>
+      <strong>{{ title(formation.label) }}</strong>
+      @if (variant(formation.label); as formationVariant) {
+      <small class="nickname">{{ formationVariant }}</small>
       }
     </button>
     }

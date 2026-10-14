@@ -2,9 +2,18 @@ import { Slot } from "game/models/game.model"
 
 const FORMATION_ROWS_FROM_ATTACK: Record<string, string[][]> = {
   "4-3-3": [["LW", "ST", "RW"], ["CM", "CM", "CM"], ["LB", "CB", "CB", "RB"]],
+  "4-1-2-3": [["LW", "ST", "RW"], ["CM", "CM"], ["DM"], ["LB", "CB", "CB", "RB"]],
+  "4-2-1-3": [["LW", "ST", "RW"], ["AM"], ["CM", "CM"], ["LB", "CB", "CB", "RB"]],
   "4-4-2": [["ST", "ST"], ["LM", "CM", "CM", "RM"], ["LB", "CB", "CB", "RB"]],
   "4-2-3-1": [["ST"], ["LW", "AM", "RW"], ["DM", "DM"], ["LB", "CB", "CB", "RB"]],
+  "4-2-2-2": [["ST", "ST"], ["LM", "RM"], ["DM", "DM"], ["LB", "CB", "CB", "RB"]],
+  "4-1-3-2": [["ST", "ST"], ["AM"], ["LM", "RM"], ["DM"], ["LB", "CB", "CB", "RB"]],
+  "3-2-2-3": [["LW", "ST", "RW"], ["LM", "DM", "DM", "RM"], ["CB", "CB", "CB"]],
   "3-5-2": [["ST", "ST"], ["LM", "CM", "CM", "CM", "RM"], ["CB", "CB", "CB"]],
+  "3-1-4-2": [["ST", "ST"], ["LM", "RM"], ["CM", "CM"], ["DM"], ["CB", "CB", "CB"]],
+  "3-4-1-2": [["ST", "ST"], ["LM", "AM", "RM"], ["CM", "CM"], ["CB", "CB", "CB"]],
+  "5-1-2-2": [["ST", "ST"], ["CM", "CM"], ["DM"], ["LB", "CB", "CB", "CB", "RB"]],
+  "5-2-1-2": [["ST", "ST"], ["AM"], ["CM", "CM"], ["LB", "CB", "CB", "CB", "RB"]],
   "5-3-2": [["ST", "ST"], ["CM", "CM", "CM"], ["LB", "CB", "CB", "CB", "RB"]],
   "4-1-4-1": [["ST"], ["LM", "CM", "CM", "RM"], ["DM"], ["LB", "CB", "CB", "RB"]],
   "4-2-4": [["LW", "ST", "ST", "RW"], ["CM", "CM"], ["LB", "CB", "CB", "RB"]],
