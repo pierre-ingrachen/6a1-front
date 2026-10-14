@@ -1,0 +1,18 @@
+<div class="goals">
+  <ul class="side">
+    @for (goal of goalsFor(); track $index) {
+    <li>
+      <span class="minute">{{ goal.minute }}'</span>
+      <span>⚽ {{ goal.scorerName }}</span>
+    </li>
+    }
+  </ul>
+  <ul class="side against">
+    @for (goal of goalsAgainst(); track $index) {
+    <li>
+      <span>⚽ {{ goal.scorerName ?? opponentName() }}</span>
+      <span class="minute">{{ goal.minute }}'</span>
+    </li>
+    }
+  </ul>
+</div>

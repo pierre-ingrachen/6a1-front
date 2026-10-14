@@ -2,8 +2,11 @@
   @if (currentStep(); as step) {
   <div class="live">
     @for (displayed of [stepIndex()]; track displayed) {
-    <match-card class="slide" [step]="step" [minute]="minute()" />
+    <match-card class="slide" [step]="step" [minute]="minute()" [kicksRevealed]="kicksRevealed()" />
     }
+
+    <top-scorer-card [scorer]="topScorer()" />
+
     <div class="controls">
       @if (currentMatchFinished()) {
       <button type="button" (click)="goToNextMatch()">
@@ -11,38 +14,30 @@
       </button>
       } @else {
       <button type="button" class="secondary" (click)="skipClock()">Passer le match</button>
+      } @if (canSkipGroupStage()) {
+      <button type="button" class="secondary" (click)="skipGroupStage()">Passer la phase de poules</button>
       }
       <button type="button" class="secondary" (click)="skipAll()">Voir les résultats</button>
+    </div>
+
+    <div class="speeds" role="group" aria-label="Vitesse de simulation">
+      @for (option of speeds; track option.id) {
+      <button
+        type="button"
+        [class.active]="option.id === speed().id"
+        [attr.aria-pressed]="option.id === speed().id"
+        (click)="selectSpeed(option)"
+      >
+        {{ option.label }}
+      </button>
+      }
     </div>
   </div>
   }
 
-  <div class="columns">
-    <article>
-      <h3>
-        Phase de groupes @if (groupStageOver()) { · {{ result().groupStage.rank }}<sup>e</sup>
-        }
-      </h3>
-      @if (groupStageOver()) {
-      <group-table [standings]="result().groupStage.standings" />
-      }
-      <div class="matches">
-        @for (match of playedGroupMatches(); track $index) {
-        <match-row [match]="match" />
-        }
-      </div>
-    </article>
-
-    <article>
-      <h3>Phase finale</h3>
-      <div class="matches">
-        @for (match of playedKnockoutMatches(); track match.round) {
-        <div class="round">
-          <span>{{ roundLabel(match.round) }}</span>
-          <match-row [match]="match" />
-        </div>
-        }
-      </div>
-    </article>
-  </div>
+  <competition-recap
+    [groupMatches]="playedGroupSteps()"
+    [knockoutMatches]="playedKnockoutSteps()"
+    [groupStage]="groupStage()"
+  />
 </section>

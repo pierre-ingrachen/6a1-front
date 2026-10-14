@@ -6,9 +6,11 @@ import { CompetitionResultComponent } from "game/competition-result/competition-
 import { CompetitionSimulationComponent } from "game/competition-simulation/competition-simulation.component"
 import { FormationPickerComponent } from "game/formation-picker/formation-picker.component"
 import { CompetitionResult } from "game/models/competition.model"
+import { MatchStep } from "game/models/simulation.model"
 import { DrawPlayer, Formation, Game, PickCommand, RedrawType } from "game/models/game.model"
 import { RedrawActionsComponent } from "game/redraw-actions/redraw-actions.component"
 import { GameApiService } from "game/services/game-api.service"
+import { buildSimulationSteps } from "game/utils/simulation-steps"
 import { moveTargetsOf } from "game/utils/move-targets"
 import { previewSlotsOf } from "game/utils/preview-slots"
 import { SquadBoardComponent } from "game/squad-board/squad-board.component"
@@ -47,6 +49,7 @@ export class GamePageComponent {
   readonly previewSlots = computed(() => previewSlotsOf(this.previewedFormation()?.positions ?? []))
   readonly game = signal<Game | null>(null)
   readonly result = signal<CompetitionResult | null>(null)
+  readonly steps = signal<MatchStep[]>([])
   readonly simulationFinished = signal(false)
   readonly loading = signal(false)
   readonly errorMessage = signal<string | null>(null)
@@ -181,6 +184,7 @@ export class GamePageComponent {
   simulate(): void {
     this.withGame((game) =>
       this.run(this.api.simulateCompetition(game.id), (result) => {
+        this.steps.set(buildSimulationSteps(result, game.slots))
         this.simulationFinished.set(false)
         this.result.set(result)
       }),
@@ -194,6 +198,7 @@ export class GamePageComponent {
     this.selectedDrawPlayer.set(null)
     this.selectedSlot.set(null)
     this.result.set(null)
+    this.steps.set([])
     this.simulationFinished.set(false)
     this.errorMessage.set(null)
   }

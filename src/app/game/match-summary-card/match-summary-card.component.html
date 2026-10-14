@@ -1,0 +1,35 @@
+<article class="summary" [class.win]="verdict() === 'win'" [class.loss]="verdict() === 'loss'">
+  <button type="button" class="head" [attr.aria-expanded]="expanded()" (click)="toggle()">
+    <span class="label">{{ step().label }}</span>
+    <span class="line">
+      <strong>Ton équipe</strong>
+      <span class="score">
+        {{ step().match.goalsFor }} - {{ step().match.goalsAgainst }}
+        @if (step().match.extraTime) {
+        <small>{{ hasShootout() ? "t.a.b. " + step().match.penaltiesFor + "-" + step().match.penaltiesAgainst : "a.p." }}</small>
+        }
+      </span>
+      <span class="opponent">
+        <strong>{{ step().match.opponent.teamName }}</strong>
+        <small>{{ step().match.opponent.seasonLabel }} · note {{ step().match.opponent.rating }}</small>
+      </span>
+    </span>
+    <span class="hint">{{ expanded() ? "Masquer les buteurs" : "Voir les buteurs" }}</span>
+  </button>
+
+  @if (expanded()) {
+  <div class="details">
+    @if (step().goals.length > 0) {
+    <goal-list [goals]="step().goals" [opponentName]="step().match.opponent.teamName" />
+    } @else {
+    <p class="empty">Aucun but dans ce match.</p>
+    } @if (hasShootout()) {
+    <shootout-panel
+      [kicks]="step().shootout"
+      [revealed]="step().shootout.length"
+      [opponentName]="step().match.opponent.teamName"
+    />
+    }
+  </div>
+  }
+</article>

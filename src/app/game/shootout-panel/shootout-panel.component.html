@@ -1,0 +1,20 @@
+<section class="shootout">
+  <h4>Tirs au but · {{ scoreFor() }} - {{ scoreAgainst() }}</h4>
+
+  <div class="columns">
+    <ul>
+      @for (kick of ourKicks(); track $index) {
+      <li [class.missed]="!kick.scored">{{ kick.scored ? "✅" : "❌" }} {{ kick.takerName }}</li>
+      }
+    </ul>
+    <ul class="against">
+      @for (kick of theirKicks(); track $index) {
+      <li [class.missed]="!kick.scored">{{ kick.takerName ?? opponentName() }} {{ kick.scored ? "✅" : "❌" }}</li>
+      }
+    </ul>
+  </div>
+
+  @if (nextTaker(); as taker) {
+  <p class="next" role="status">{{ taker }} s'élance…</p>
+  }
+</section>

@@ -1,0 +1,30 @@
+.top-scorer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  align-self: center;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid #f2cf72;
+  color: #0a2260;
+}
+
+.title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6071a0;
+}
+
+.goals {
+  font-weight: 800;
+  color: #86610c;
+}
+
+.empty {
+  font-style: italic;
+  color: #6071a0;
+}

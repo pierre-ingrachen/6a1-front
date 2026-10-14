@@ -80,52 +80,6 @@ header {
   font-variant-numeric: tabular-nums;
 }
 
-.penalties {
-  margin: 0;
-  text-align: center;
-  font-weight: 700;
-  color: #f2cf72;
-}
-
-.goals {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  min-height: 3rem;
-}
-
-.side {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  li {
-    display: flex;
-    gap: 0.6rem;
-    animation: goal-in 0.45s ease-out;
-  }
-
-  &.against li {
-    justify-content: flex-end;
-  }
-}
-
-.minute {
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  color: #f2cf72;
-}
-
-@keyframes goal-in {
-  from {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-}
-
 @keyframes blink {
   50% {
     opacity: 0.2;
@@ -133,7 +87,6 @@ header {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .side li,
   .clock.live::before {
     animation: none;
   }

@@ -2,6 +2,7 @@ import { CompetitionResult, MatchResult } from "game/models/competition.model"
 import { Slot } from "game/models/game.model"
 import { MatchStep } from "game/models/simulation.model"
 import { buildGoals, matchDuration } from "game/utils/match-timeline"
+import { buildShootout } from "game/utils/penalty-shootout"
 import { roundLabel } from "game/utils/position-labels"
 import { Random } from "game/utils/scorer-picker"
 
@@ -9,6 +10,7 @@ const matchStepOf = (label: string, match: MatchResult, squad: Slot[], random: R
   label,
   match,
   goals: buildGoals(match, squad, random),
+  shootout: buildShootout(match, squad, random),
   duration: matchDuration(match),
 })
 

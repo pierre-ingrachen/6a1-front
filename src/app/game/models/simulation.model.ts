@@ -8,10 +8,17 @@ export interface GoalEvent {
   scorerName: string | null
 }
 
+export interface PenaltyKick {
+  side: GoalSide
+  takerName: string | null
+  scored: boolean
+}
+
 export interface MatchStep {
   label: string
   match: MatchResult
   goals: GoalEvent[]
+  shootout: PenaltyKick[]
   duration: number
 }
 

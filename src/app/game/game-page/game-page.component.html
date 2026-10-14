@@ -9,11 +9,11 @@
 
   @if (result(); as competitionResult) {
   @if (simulationFinished()) {
-  <competition-result [result]="competitionResult" (replayRequested)="restart()" />
+  <competition-result [result]="competitionResult" [steps]="steps()" (replayRequested)="restart()" />
   } @else {
   <competition-simulation
     [result]="competitionResult"
-    [squad]="game()?.slots ?? []"
+    [steps]="steps()"
     (finished)="simulationFinished.set(true)"
   />
   }

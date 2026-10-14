@@ -2,7 +2,7 @@
   <header>
     <span class="label">{{ step().label }}</span>
     <span class="clock" [class.live]="!finished()">
-      @if (finished()) { Terminé } @else {
+      @if (finished()) { Terminé } @else if (shootoutStarted()) { Tirs au but } @else {
       {{ displayedMinute() }}'
       @if (inExtraTime()) {
       <small>prolongations</small>
@@ -19,26 +19,13 @@
     </span>
   </div>
 
-  @if (finished() && hasPenalties()) {
-  <p class="penalties">Tirs au but : {{ step().match.penaltiesFor }} - {{ step().match.penaltiesAgainst }}</p>
-  }
+  <goal-list [goals]="visibleGoals()" [opponentName]="step().match.opponent.teamName" />
 
-  <div class="goals">
-    <ul class="side">
-      @for (goal of goalsOf("FOR"); track $index) {
-      <li>
-        <span class="minute">{{ goal.minute }}'</span>
-        <span>⚽ {{ goal.scorerName }}</span>
-      </li>
-      }
-    </ul>
-    <ul class="side against">
-      @for (goal of goalsOf("AGAINST"); track $index) {
-      <li>
-        <span>⚽ {{ goal.scorerName ?? step().match.opponent.teamName }}</span>
-        <span class="minute">{{ goal.minute }}'</span>
-      </li>
-      }
-    </ul>
-  </div>
+  @if (shootoutStarted()) {
+  <shootout-panel
+    [kicks]="step().shootout"
+    [revealed]="kicksRevealed()"
+    [opponentName]="step().match.opponent.teamName"
+  />
+  }
 </article>
