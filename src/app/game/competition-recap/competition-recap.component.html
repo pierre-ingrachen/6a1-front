@@ -1,0 +1,25 @@
+<div class="columns">
+  <article>
+    <h3>
+      Phase de groupes @if (groupStage(); as stage) { · {{ stage.rank }}<sup>e</sup>
+      }
+    </h3>
+    @if (groupStage(); as stage) {
+    <group-table [standings]="stage.standings" />
+    }
+    <div class="matches">
+      @for (step of groupMatches(); track $index) {
+      <match-summary-card [step]="step" />
+      }
+    </div>
+  </article>
+
+  <article>
+    <h3>Phase finale</h3>
+    <div class="matches">
+      @for (step of knockoutMatches(); track step.match.round) {
+      <match-summary-card [step]="step" />
+      }
+    </div>
+  </article>
+</div>

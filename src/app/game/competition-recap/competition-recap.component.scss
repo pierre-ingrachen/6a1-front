@@ -1,0 +1,17 @@
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+
+  h3 {
+    margin: 0 0 0.75rem;
+    color: #0a2260;
+  }
+}
+
+.matches {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}

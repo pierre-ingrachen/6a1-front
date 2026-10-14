@@ -7,29 +7,11 @@
     </small>
   </header>
 
-  <div class="columns">
-    <article>
-      <h3>Phase de groupes · {{ result().groupStage.rank }}<sup>e</sup></h3>
-      <group-table [standings]="result().groupStage.standings" />
-      <div class="matches">
-        @for (match of result().groupStage.matches; track $index) {
-        <match-row [match]="match" />
-        }
-      </div>
-    </article>
-
-    <article>
-      <h3>Phase finale</h3>
-      <div class="matches">
-        @for (match of result().knockoutMatches; track match.round) {
-        <div class="round">
-          <span>{{ roundLabel(match.round) }}</span>
-          <match-row [match]="match" />
-        </div>
-        }
-      </div>
-    </article>
-  </div>
+  <competition-recap
+    [groupMatches]="groupSteps()"
+    [knockoutMatches]="knockoutSteps()"
+    [groupStage]="result().groupStage"
+  />
 
   <button type="button" class="replay" (click)="replayRequested.emit()">Rejouer</button>
 </section>

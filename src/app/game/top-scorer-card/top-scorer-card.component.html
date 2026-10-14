@@ -1,0 +1,9 @@
+<aside class="top-scorer" aria-live="polite">
+  <span class="title">👑 Meilleur buteur</span>
+  @if (scorer(); as top) {
+  <strong>{{ top.name }}</strong>
+  <span class="goals">{{ top.goals }} {{ top.goals > 1 ? "buts" : "but" }}</span>
+  } @else {
+  <span class="empty">Personne n'a encore marqué</span>
+  }
+</aside>

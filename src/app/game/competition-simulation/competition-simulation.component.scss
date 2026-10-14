@@ -48,35 +48,28 @@
   }
 }
 
-.columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
+.controls {
+  flex-wrap: wrap;
+}
 
-  h3 {
-    margin: 0 0 0.75rem;
+.speeds {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+
+  button {
+    padding: 0.3rem 0.9rem;
+    border: 2px solid #0a2260;
+    border-radius: 999px;
+    background: transparent;
     color: #0a2260;
-  }
-}
-
-.matches {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.round {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-
-  span {
-    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #6071a0;
+    cursor: pointer;
+
+    &.active {
+      background: #0a2260;
+      color: #fff;
+    }
   }
 }
 

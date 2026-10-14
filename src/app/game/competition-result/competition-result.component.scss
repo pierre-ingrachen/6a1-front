@@ -35,38 +35,6 @@
   }
 }
 
-.columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-
-  h3 {
-    margin: 0 0 0.75rem;
-    color: #0a2260;
-  }
-}
-
-.matches {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.round {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-
-  span {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #6071a0;
-  }
-}
-
 .replay {
   align-self: center;
   padding: 0.8rem 2.2rem;
