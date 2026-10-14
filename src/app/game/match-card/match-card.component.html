@@ -1,0 +1,44 @@
+<article class="card" [class.goal]="goalJustScored()" [class.finished]="finished()">
+  <header>
+    <span class="label">{{ step().label }}</span>
+    <span class="clock" [class.live]="!finished()">
+      @if (finished()) { Terminé } @else {
+      {{ displayedMinute() }}'
+      @if (inExtraTime()) {
+      <small>prolongations</small>
+      } }
+    </span>
+  </header>
+
+  <div class="scoreboard">
+    <strong class="team">Ton équipe</strong>
+    <span class="score">{{ goalsFor() }} - {{ goalsAgainst() }}</span>
+    <span class="team opponent">
+      <strong>{{ step().match.opponent.teamName }}</strong>
+      <small>{{ step().match.opponent.seasonLabel }} · note {{ step().match.opponent.rating }}</small>
+    </span>
+  </div>
+
+  @if (finished() && hasPenalties()) {
+  <p class="penalties">Tirs au but : {{ step().match.penaltiesFor }} - {{ step().match.penaltiesAgainst }}</p>
+  }
+
+  <div class="goals">
+    <ul class="side">
+      @for (goal of goalsOf("FOR"); track $index) {
+      <li>
+        <span class="minute">{{ goal.minute }}'</span>
+        <span>⚽ {{ goal.scorerName }}</span>
+      </li>
+      }
+    </ul>
+    <ul class="side against">
+      @for (goal of goalsOf("AGAINST"); track $index) {
+      <li>
+        <span>⚽ {{ goal.scorerName ?? step().match.opponent.teamName }}</span>
+        <span class="minute">{{ goal.minute }}'</span>
+      </li>
+      }
+    </ul>
+  </div>
+</article>

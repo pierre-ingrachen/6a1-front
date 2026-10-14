@@ -1,0 +1,48 @@
+<section class="simulation">
+  @if (currentStep(); as step) {
+  <div class="live">
+    @for (displayed of [stepIndex()]; track displayed) {
+    <match-card class="slide" [step]="step" [minute]="minute()" />
+    }
+    <div class="controls">
+      @if (currentMatchFinished()) {
+      <button type="button" (click)="goToNextMatch()">
+        {{ lastMatch() ? "Voir le bilan" : "Match suivant" }}
+      </button>
+      } @else {
+      <button type="button" class="secondary" (click)="skipClock()">Passer le match</button>
+      }
+      <button type="button" class="secondary" (click)="skipAll()">Voir les résultats</button>
+    </div>
+  </div>
+  }
+
+  <div class="columns">
+    <article>
+      <h3>
+        Phase de groupes @if (groupStageOver()) { · {{ result().groupStage.rank }}<sup>e</sup>
+        }
+      </h3>
+      @if (groupStageOver()) {
+      <group-table [standings]="result().groupStage.standings" />
+      }
+      <div class="matches">
+        @for (match of playedGroupMatches(); track $index) {
+        <match-row [match]="match" />
+        }
+      </div>
+    </article>
+
+    <article>
+      <h3>Phase finale</h3>
+      <div class="matches">
+        @for (match of playedKnockoutMatches(); track match.round) {
+        <div class="round">
+          <span>{{ roundLabel(match.round) }}</span>
+          <match-row [match]="match" />
+        </div>
+        }
+      </div>
+    </article>
+  </div>
+</section>

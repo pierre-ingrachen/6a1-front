@@ -48,7 +48,22 @@ const movableGame: Game = {
 
 const result: CompetitionResult = {
   squadStrength: { attack: 80, defense: 78 },
-  groupStage: { matches: [], standings: [], rank: 1 },
+  groupStage: {
+    matches: [
+      {
+        round: "GROUP_STAGE",
+        opponent: { teamId: 1, teamName: "Rival", seasonLabel: "2020/2021", rating: 80, players: [] },
+        goalsFor: 1,
+        goalsAgainst: 0,
+        extraTime: false,
+        penaltiesFor: null,
+        penaltiesAgainst: null,
+        won: true,
+      },
+    ],
+    standings: [],
+    rank: 1,
+  },
   knockoutMatches: [],
   outcome: "WINNER",
   champion: true,
@@ -227,13 +242,27 @@ describe("GamePageComponent", () => {
     expect(fixture.nativeElement.querySelector(".ready button")).not.toBeNull()
   })
 
-  it("shows the competition result after the simulation", () => {
+  it("plays the simulation before showing the competition result", () => {
     api.createGame.and.returnValue(of({ ...draftingGame, status: "READY_TO_SIMULATE", draw: null }))
     api.simulateCompetition.and.returnValue(of(result))
     const fixture = create()
     fixture.componentInstance.startGame("4-3-3")
 
     fixture.componentInstance.simulate()
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector("competition-simulation")).not.toBeNull()
+    expect(fixture.nativeElement.textContent).not.toContain("Champion d'Europe")
+  })
+
+  it("shows the competition result once the simulation is finished", () => {
+    api.createGame.and.returnValue(of({ ...draftingGame, status: "READY_TO_SIMULATE", draw: null }))
+    api.simulateCompetition.and.returnValue(of(result))
+    const fixture = create()
+    fixture.componentInstance.startGame("4-3-3")
+
+    fixture.componentInstance.simulate()
+    fixture.componentInstance.simulationFinished.set(true)
     fixture.detectChanges()
 
     expect(fixture.nativeElement.textContent).toContain("Champion d'Europe")
