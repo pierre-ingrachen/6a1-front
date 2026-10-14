@@ -73,6 +73,28 @@ describe("placeSlots", () => {
     expect(heightOf("LB")).toBe(heightOf("CB"))
   })
 
+  it("lowers the wide midfielders slightly in a 3-1-4-2 without passing the central midfielders", () => {
+    const slots3142 = [
+      slot(0, "GK", "GOALKEEPER"),
+      slot(1, "CB", "DEFENDER"),
+      slot(2, "CB", "DEFENDER"),
+      slot(3, "CB", "DEFENDER"),
+      slot(4, "DM", "MIDFIELDER"),
+      slot(5, "LM", "MIDFIELDER"),
+      slot(6, "CM", "MIDFIELDER"),
+      slot(7, "CM", "MIDFIELDER"),
+      slot(8, "RM", "MIDFIELDER"),
+      slot(9, "ST", "ATTACKER"),
+      slot(10, "ST", "ATTACKER"),
+    ]
+    const heightOf = (formation: string, position: string) =>
+      placeSlots(slots3142, formation).find((entry) => entry.slot.position === position)!.y
+
+    expect(heightOf("3-1-4-2", "LM")).toBeCloseTo(33.5, 1)
+    expect(heightOf("3-1-4-2", "LM")).toBeLessThan(heightOf("3-1-4-2", "CM"))
+    expect(heightOf("3-1-4-2", "RM")).toBe(heightOf("3-1-4-2", "LM"))
+  })
+
   it("keeps every slot", () => {
     expect(placeSlots(slots).length).toBe(slots.length)
   })

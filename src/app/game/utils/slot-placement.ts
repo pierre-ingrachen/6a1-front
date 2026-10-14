@@ -17,6 +17,9 @@ const RIGHT_MARGIN = 83.5
 const WING_BACK_LIFT = 4
 const WING_BACKS = ["LB", "RB"]
 const FIVE_BACK_CENTER_BACKS = 3
+const HEIGHT_TWEAKS: Record<string, Record<string, number>> = {
+  "3-1-4-2": { LM: 6, RM: 6 },
+}
 
 const isWideRow = (row: Slot[]): boolean =>
   row.length === 2 && LEFT_POSITIONS.includes(row[0].position) && RIGHT_POSITIONS.includes(row[1].position)
@@ -51,7 +54,7 @@ export const placeSlots = (slots: Slot[], formation = ""): PlacedSlot[] => {
     return row.map((slot, index) => ({
       slot,
       x: abscissas[index],
-      y: heights[rowIndex] - (isLiftedWingBack(slot, row) ? WING_BACK_LIFT : 0),
+      y: heights[rowIndex] - (isLiftedWingBack(slot, row) ? WING_BACK_LIFT : 0) + (HEIGHT_TWEAKS[formation]?.[slot.position] ?? 0),
     }))
   })
 }
