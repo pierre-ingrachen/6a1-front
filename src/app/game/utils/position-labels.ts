@@ -39,25 +39,44 @@ const ROUND_LABELS: Record<Round, string> = {
   WINNER: "Vainqueur",
 }
 
-const FORMATION_NAMES: Record<string, string> = {
-  "4-3-3": "Offensive",
-  "4-4-2": "Classique",
-  "4-2-3-1": "Moderne",
-  "3-5-2": "Pistons",
-  "5-3-2": "Défensive",
-  "4-1-2-1-2": "Losange",
-  "4-1-4-1": "Pivot solitaire",
-  "4-2-4": "Tout offensif",
-  "5-2-3": "Contre-attaque",
-  "4-3-2-1": "Sapin",
-  "4-4-1-1": "Avec meneur",
-  "4-5-1": "Milieu renforcé",
-  "3-4-3": "Tout pour l'attaque",
-  "3-4-2-1": "Double meneur",
-  "5-4-1": "Verrou",
+interface FormationDisplay {
+  title: string
+  variant: string
 }
 
-export const formationName = (formation: string): string => FORMATION_NAMES[formation] ?? ""
+const FORMATION_DISPLAYS: Record<string, FormationDisplay> = {
+  "4-3-3": { title: "4-3-3", variant: "Équilibré" },
+  "4-1-2-3": { title: "4-3-3", variant: "Défensif" },
+  "4-2-1-3": { title: "4-3-3", variant: "Offensif" },
+  "4-4-2": { title: "4-4-2", variant: "Équilibré" },
+  "4-2-2-2": { title: "4-4-2", variant: "Défensif" },
+  "4-2-3-1": { title: "4-2-3-1", variant: "Moderne" },
+  "4-1-4-1": { title: "4-1-4-1", variant: "Pivot" },
+  "4-2-4": { title: "4-2-4", variant: "Audacieux" },
+  "3-4-3": { title: "3-4-3", variant: "Équilibré" },
+  "3-2-2-3": { title: "3-4-3", variant: "Défensif" },
+  "4-1-2-1-2": { title: "4-1-2-1-2", variant: "Losange" },
+  "4-1-3-2": { title: "4-1-2-1-2", variant: "Large" },
+  "3-5-2": { title: "3-5-2", variant: "Équilibré" },
+  "3-1-4-2": { title: "3-5-2", variant: "Défensif" },
+  "3-4-1-2": { title: "3-5-2", variant: "Offensif" },
+  "3-4-2-1": { title: "3-4-2-1", variant: "Créatif" },
+  "5-3-2": { title: "5-3-2", variant: "Équilibré" },
+  "5-1-2-2": { title: "5-3-2", variant: "Défensif" },
+  "5-2-1-2": { title: "5-3-2", variant: "Offensif" },
+  "5-2-3": { title: "5-2-3", variant: "Contre" },
+  "5-4-1": { title: "5-4-1", variant: "Verrou" },
+}
+
+const isFamilyVariant = (formation: string): boolean => {
+  const title = FORMATION_DISPLAYS[formation]?.title
+  return Object.values(FORMATION_DISPLAYS).filter((display) => display.title === title).length > 1
+}
+
+export const formationTitle = (formation: string): string => FORMATION_DISPLAYS[formation]?.title ?? formation
+export const formationVariant = (formation: string): string => FORMATION_DISPLAYS[formation]?.variant ?? ""
+export const formationDisplayName = (formation: string): string =>
+  isFamilyVariant(formation) ? `${formationTitle(formation)} ${formationVariant(formation).toLowerCase()}` : formationTitle(formation)
 export const positionLabel =(position: string): string => POSITION_LABELS[position] ?? position
 export const positionName = (position: string): string => POSITION_NAMES[position] ?? position
 export const roundLabel = (round: Round): string => ROUND_LABELS[round]

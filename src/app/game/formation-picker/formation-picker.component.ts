@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, input } from "@angular/core"
 import { Formation } from "game/models/game.model"
-import { formationName } from "game/utils/position-labels"
+import { formationTitle, formationVariant } from "game/utils/position-labels"
 
 @Component({
   selector: "formation-picker",
@@ -15,5 +15,6 @@ export class FormationPickerComponent {
   readonly disabled = input(false)
   @Output() readonly formationSelected = new EventEmitter<string>()
 
-  readonly name = formationName
+  readonly title = formationTitle
+  readonly variant = formationVariant
 }

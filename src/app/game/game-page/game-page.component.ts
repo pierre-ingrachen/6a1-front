@@ -11,6 +11,7 @@ import { DrawPlayer, Formation, Game, PickCommand, RedrawType } from "game/model
 import { RedrawActionsComponent } from "game/redraw-actions/redraw-actions.component"
 import { GameApiService } from "game/services/game-api.service"
 import { buildSimulationSteps } from "game/utils/simulation-steps"
+import { formationDisplayName } from "game/utils/position-labels"
 import { moveTargetsOf } from "game/utils/move-targets"
 import { previewSlotsOf } from "game/utils/preview-slots"
 import { SquadBoardComponent } from "game/squad-board/squad-board.component"
@@ -37,6 +38,7 @@ export class GamePageComponent {
   private readonly api = inject(GameApiService)
   private readonly destroyRef = inject(DestroyRef)
 
+  readonly formationDisplayName = formationDisplayName
   readonly formations = toSignal(this.api.findFormations(), { initialValue: [] })
   readonly previewedLabel = signal<string | null>(null)
   readonly previewedFormation = computed<Formation | null>(

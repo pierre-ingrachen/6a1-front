@@ -7,6 +7,7 @@ describe("FormationPickerComponent", () => {
 
   const formations: Formation[] = [
     { label: "4-1-2-1-2", positions: [] },
+    { label: "5-1-2-2", positions: [] },
     { label: "9-0-1", positions: [] },
   ]
 
@@ -20,11 +21,24 @@ describe("FormationPickerComponent", () => {
 
   beforeEach(() => TestBed.configureTestingModule({ imports: [FormationPickerComponent] }))
 
-  it("shows the nickname of known formations only", () => {
-    const buttons = create().querySelectorAll(".formation")
+  it("shows the family title and the variant of a tactical variant", () => {
+    const button = create().querySelectorAll(".formation")[1]
 
-    expect(buttons[0].querySelector(".nickname")?.textContent?.trim()).toBe("Losange")
-    expect(buttons[1].querySelector(".nickname")).toBeNull()
+    expect(button.querySelector("strong")?.textContent?.trim()).toBe("5-3-2")
+    expect(button.querySelector(".nickname")?.textContent?.trim()).toBe("Défensif")
+  })
+
+  it("shows a single word under a standalone formation", () => {
+    const button = create().querySelectorAll(".formation")[0]
+
+    expect(button.querySelector("strong")?.textContent?.trim()).toBe("4-1-2-1-2")
+    expect(button.querySelector(".nickname")?.textContent?.trim()).toBe("Losange")
+  })
+
+  it("shows no word for an unknown formation", () => {
+    const button = create().querySelectorAll(".formation")[2]
+
+    expect(button.querySelector(".nickname")).toBeNull()
   })
 
   it("emits the label of the chosen formation", () => {
@@ -46,7 +60,7 @@ describe("FormationPickerComponent", () => {
       (button as HTMLElement).getAttribute("aria-pressed"),
     )
 
-    expect(pressed).toEqual(["false", "true"])
+    expect(pressed).toEqual(["false", "false", "true"])
   })
 
   it("disables every formation while a request is running", () => {
