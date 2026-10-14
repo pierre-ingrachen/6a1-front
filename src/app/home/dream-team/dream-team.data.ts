@@ -9,7 +9,7 @@ export interface DreamPlayer {
 export const DREAM_TEAM: DreamPlayer[] = [
   { playerId: 73798, name: "Courtois", position: "GK", seasonStartYear: 2021 },
   { playerId: 395221, name: "Nuno Mendes", position: "LB", seasonStartYear: 2024 },
-  { playerId: 4567, name: "Schweinsteiger", position: "CB", seasonStartYear: 2012 },
+  { playerId: 21541, name: "Hummels", position: "CB", seasonStartYear: 2023 },
   { playerId: 101949, name: "Marquinhos", position: "CB", seasonStartYear: 2024 },
   { playerId: 320834, name: "Hakimi", position: "RB", seasonStartYear: 2024 },
   { playerId: 31772, name: "Kroos", position: "CM", seasonStartYear: 2011 },
