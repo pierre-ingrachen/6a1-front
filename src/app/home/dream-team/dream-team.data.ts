@@ -7,15 +7,15 @@ export interface DreamPlayer {
 }
 
 export const DREAM_TEAM: DreamPlayer[] = [
-  { playerId: 35758, name: "Sommer", position: "GK", seasonStartYear: 2024 },
-  { playerId: 128967, name: "Cancelo", position: "LB", seasonStartYear: 2023 },
-  { playerId: 9909, name: "Sergio Ramos", position: "CB", seasonStartYear: 2016, captain: true },
+  { playerId: 73798, name: "Courtois", position: "GK", seasonStartYear: 2021 },
+  { playerId: 395221, name: "Nuno Mendes", position: "LB", seasonStartYear: 2024 },
+  { playerId: 4567, name: "Schweinsteiger", position: "CB", seasonStartYear: 2012 },
   { playerId: 101949, name: "Marquinhos", position: "CB", seasonStartYear: 2024 },
-  { playerId: 283323, name: "Kimmich", position: "RB", seasonStartYear: 2020 },
-  { playerId: 74939, name: "Thiago", position: "CM", seasonStartYear: 2015 },
-  { playerId: 44721, name: "Busquets", position: "CM", seasonStartYear: 2010 },
+  { playerId: 320834, name: "Hakimi", position: "RB", seasonStartYear: 2024 },
   { playerId: 31772, name: "Kroos", position: "CM", seasonStartYear: 2011 },
-  { playerId: 300713, name: "Mbappé", position: "LW", seasonStartYear: 2025 },
-  { playerId: 5583, name: "Ronaldo", position: "ST", seasonStartYear: 2015 },
-  { playerId: 11119, name: "Messi", position: "RW", seasonStartYear: 2014 },
+  { playerId: 9486, name: "Iniesta", position: "CM", seasonStartYear: 2010 },
+  { playerId: 20874, name: "Modric", position: "CM", seasonStartYear: 2013 },
+  { playerId: 5583, name: "Ronaldo", position: "LW", seasonStartYear: 2013 },
+  { playerId: 29400, name: "Lewandowski", position: "ST", seasonStartYear: 2019 },
+  { playerId: 11119, name: "Messi", position: "RW", seasonStartYear: 2014, captain: true },
 ]
