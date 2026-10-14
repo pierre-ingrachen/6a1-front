@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signa
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop"
 import { Observable, timer } from "rxjs"
 import { CompetitionResultComponent } from "game/competition-result/competition-result.component"
+import { CompetitionSimulationComponent } from "game/competition-simulation/competition-simulation.component"
 import { FormationPickerComponent } from "game/formation-picker/formation-picker.component"
 import { CompetitionResult } from "game/models/competition.model"
 import { DrawPlayer, Formation, Game, PickCommand, RedrawType } from "game/models/game.model"
@@ -24,6 +25,7 @@ const DEFAULT_FORMATION = "4-3-3"
     TeamDrawCardComponent,
     RedrawActionsComponent,
     CompetitionResultComponent,
+    CompetitionSimulationComponent,
   ],
   templateUrl: "./game-page.component.html",
   styleUrls: ["./game-page.component.scss"],
@@ -45,6 +47,7 @@ export class GamePageComponent {
   readonly previewSlots = computed(() => previewSlotsOf(this.previewedFormation()?.positions ?? []))
   readonly game = signal<Game | null>(null)
   readonly result = signal<CompetitionResult | null>(null)
+  readonly simulationFinished = signal(false)
   readonly loading = signal(false)
   readonly errorMessage = signal<string | null>(null)
   readonly drawRevealed = signal(false)
@@ -176,7 +179,12 @@ export class GamePageComponent {
   }
 
   simulate(): void {
-    this.withGame((game) => this.run(this.api.simulateCompetition(game.id), (result) => this.result.set(result)))
+    this.withGame((game) =>
+      this.run(this.api.simulateCompetition(game.id), (result) => {
+        this.simulationFinished.set(false)
+        this.result.set(result)
+      }),
+    )
   }
 
   restart(): void {
@@ -186,6 +194,7 @@ export class GamePageComponent {
     this.selectedDrawPlayer.set(null)
     this.selectedSlot.set(null)
     this.result.set(null)
+    this.simulationFinished.set(false)
     this.errorMessage.set(null)
   }
 

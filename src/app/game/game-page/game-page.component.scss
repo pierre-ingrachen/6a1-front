@@ -90,24 +90,59 @@ aside squad-board {
 }
 
 .intro {
-  padding-bottom: 1rem;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 55%, rgba(80, 90, 240, 0.55), transparent 75%),
+    linear-gradient(160deg, #2b2fc7 0%, #3338d0 50%, #2a2ec2 100%);
+  color: #fff;
+  text-align: center;
 
   h1 {
-    margin-bottom: 1rem;
+    margin: 0.2rem 0 0.8rem;
+    font: 800 1.8rem/1.1 "Nunito Sans", "Fira Sans", sans-serif;
+    letter-spacing: 0.02em;
     text-align: center;
+    color: #fff;
+    text-shadow: 0 0.1rem 0.5rem rgba(0, 0, 40, 0.35);
   }
 }
 
 .summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  margin-bottom: 0.75rem;
-  color: #4b5a85;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-family: "Nunito Sans", "Fira Sans", sans-serif;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
 
-  strong {
-    color: #0a2260;
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+
+  & + & {
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
   }
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+}
+
+.stat-value {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0.1rem 0.5rem rgba(0, 0, 40, 0.35);
 }
 
 .hint {

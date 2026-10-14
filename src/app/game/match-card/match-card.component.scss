@@ -1,0 +1,140 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 18px;
+  background: linear-gradient(90deg, #040b24, #0a2260 70%, #0d3a9a);
+  color: #fff;
+  transition: box-shadow 0.3s ease;
+
+  &.goal {
+    box-shadow: 0 0 0 3px #f2cf72, 0 0 32px rgba(242, 207, 114, 0.55);
+  }
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #f2cf72;
+}
+
+.clock {
+  min-width: 4.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  text-align: center;
+
+  small {
+    margin-left: 0.3rem;
+    font-weight: 600;
+    opacity: 0.8;
+  }
+
+  &.live::before {
+    content: "";
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-right: 0.4rem;
+    border-radius: 50%;
+    background: #ff5a5a;
+    animation: blink 1s infinite;
+  }
+}
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  font-size: 1.15rem;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+
+  small {
+    font-size: 0.75rem;
+    opacity: 0.75;
+  }
+}
+
+.score {
+  font-size: 2.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.penalties {
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  color: #f2cf72;
+}
+
+.goals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  min-height: 3rem;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 0.6rem;
+    animation: goal-in 0.45s ease-out;
+  }
+
+  &.against li {
+    justify-content: flex-end;
+  }
+}
+
+.minute {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #f2cf72;
+}
+
+@keyframes goal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .side li,
+  .clock.live::before {
+    animation: none;
+  }
+}

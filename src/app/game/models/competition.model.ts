@@ -1,8 +1,14 @@
-import { Round } from "game/models/game.model"
+import { Line, Round } from "game/models/game.model"
 
 export interface TeamStrength {
   attack: number
   defense: number
+}
+
+export interface OpponentPlayer {
+  name: string
+  rating: number
+  line: Line
 }
 
 export interface OpponentSummary {
@@ -10,6 +16,7 @@ export interface OpponentSummary {
   teamName: string
   seasonLabel: string
   rating: number
+  players: OpponentPlayer[]
 }
 
 export interface MatchResult {

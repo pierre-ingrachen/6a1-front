@@ -8,7 +8,15 @@
   }
 
   @if (result(); as competitionResult) {
+  @if (simulationFinished()) {
   <competition-result [result]="competitionResult" (replayRequested)="restart()" />
+  } @else {
+  <competition-simulation
+    [result]="competitionResult"
+    [squad]="game()?.slots ?? []"
+    (finished)="simulationFinished.set(true)"
+  />
+  }
   } @else {
   @if (game(); as currentGame) {
   <div class="draft draft--playing">
@@ -16,20 +24,15 @@
       <div class="intro">
         <h1>Compose ton onze de légende</h1>
         <div class="summary">
-          <span>Formation <strong>{{ currentGame.formation }}</strong></span>
-          <span>Choix restants <strong>{{ currentGame.picksRemaining }}</strong></span>
-          @if (currentGame.squadAverageRating !== null) {
-          <span>Note moyenne <strong>{{ currentGame.squadAverageRating.toFixed(1) }}</strong></span>
-          }
+          <div class="stat">
+            <span class="stat-label">Formation</span>
+            <strong class="stat-value">{{ currentGame.formation }}</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Choix restants</span>
+            <strong class="stat-value">{{ currentGame.picksRemaining }}</strong>
+          </div>
         </div>
-        <p class="hint">
-          @if (selectedDrawPlayer(); as player) {
-          Choisis un poste en surbrillance pour placer {{ player.name }}.
-          } @else {
-          Clique sur un joueur tiré au sort, puis sur un poste compatible du terrain pour le placer. Tu peux aussi déplacer
-          un joueur déjà dans ton équipe en le sélectionnant sur le terrain.
-          }
-        </p>
       </div>
       <squad-board
         [slots]="currentGame.slots"
