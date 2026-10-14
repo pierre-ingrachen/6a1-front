@@ -1,5 +1,5 @@
 <main class="game">
-  @if (result() || !game()) {
+  @if (result()) {
   <h1>Compose ton onze de légende</h1>
   }
 
@@ -86,6 +86,7 @@
   } @else {
   <div class="draft">
     <aside>
+      <h1 class="preview-title">Compose ton onze de légende</h1>
       <squad-board [slots]="previewSlots()" [formation]="previewedFormation()?.label ?? ''" />
       <p class="hint">Aperçu de la formation. Tu pourras placer tes joueurs une fois la formation choisie.</p>
     </aside>
