@@ -1,3 +1,4 @@
+import { environment } from "../../environments/environment"
 import { TestBed } from "@angular/core/testing"
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing"
 import { PlayerService } from "services/player.service"
@@ -24,7 +25,7 @@ describe("PlayerService and SeasonService", () => {
 
     seasonService.findAllSeasons().subscribe((receivedSeasons) => expect(receivedSeasons).toEqual(seasons))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/seasons")
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/seasons`)
     expect(request.request.method).toBe("GET")
     request.flush(seasons)
   })
@@ -34,7 +35,7 @@ describe("PlayerService and SeasonService", () => {
 
     playerService.searchPlayers("mba").subscribe((receivedResults) => expect(receivedResults).toEqual(results))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/players/search?query=mba")
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/players/search?query=mba`)
     expect(request.request.method).toBe("GET")
     request.flush(results)
   })
@@ -42,7 +43,7 @@ describe("PlayerService and SeasonService", () => {
   it("fetches player stats with GET /players/{playerId}/stats?season=", () => {
     playerService.findPlayerStats(300713, 2025).subscribe((stats) => expect(stats.name).toBe("Kylian Mbappé"))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/players/300713/stats?season=2025")
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/players/300713/stats?season=2025`)
     expect(request.request.method).toBe("GET")
     request.flush({ name: "Kylian Mbappé" })
   })

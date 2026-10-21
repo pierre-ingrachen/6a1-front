@@ -17,7 +17,6 @@ export function defaultSortDirection(key: PlayerSortKey): SortDirection {
   return key === "name" ? "asc" : "desc"
 }
 
-// Valeurs absentes toujours en fin de liste, quel que soit le sens.
 export function sortPlayers(players: Player[], key: PlayerSortKey, direction: SortDirection): Player[] {
   const sign = direction === "asc" ? 1 : -1
   return [...players].sort((a, b) => {

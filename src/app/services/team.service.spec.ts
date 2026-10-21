@@ -1,3 +1,4 @@
+import { environment } from "../../environments/environment"
 import { TestBed } from "@angular/core/testing"
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing"
 import { TeamService } from "services/team.service"
@@ -22,7 +23,7 @@ describe("TeamService", () => {
 
     teamService.findAllTeams().subscribe((receivedTeams) => expect(receivedTeams).toEqual(teams))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/teams")
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/teams`)
     expect(request.request.method).toBe("GET")
     request.flush(teams)
   })
@@ -32,7 +33,7 @@ describe("TeamService", () => {
 
     teamService.findTeamById(13).subscribe((receivedTeam) => expect(receivedTeam).toEqual(team))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/teams/13")
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/teams/13`)
     expect(request.request.method).toBe("GET")
     request.flush(team)
   })
@@ -42,7 +43,7 @@ describe("TeamService", () => {
 
     teamService.findSeasonsByTeam(13).subscribe((receivedSeasons) => expect(receivedSeasons).toEqual(seasons))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/teams/13/seasons")
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/teams/13/seasons`)
     expect(request.request.method).toBe("GET")
     request.flush(seasons)
   })
@@ -52,7 +53,7 @@ describe("TeamService", () => {
 
     teamService.findPlayersByTeam(13, 2024).subscribe((receivedPlayers) => expect(receivedPlayers).toEqual(players))
 
-    const request = httpTestingController.expectOne("http://localhost:8080/teams/13/players?season=2024")
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/teams/13/players?season=2024`)
     expect(request.request.method).toBe("GET")
     request.flush(players)
   })

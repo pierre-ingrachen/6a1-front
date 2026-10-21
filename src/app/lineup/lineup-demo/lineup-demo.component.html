@@ -17,7 +17,7 @@
     <li>
       <input type="number" min="0" max="99" [value]="player.number" (input)="updateNumber($index, $event)" />
       <input type="text" [value]="player.name" (input)="updateName($index, $event)" />
-      <label><input type="checkbox" [checked]="!!player.captain" (change)="updateCaptain($index, $event)" /> C</label>
+      <label><input type="checkbox" [checked]="player.captain === true" (change)="updateCaptain($index, $event)" /> C</label>
     </li>
     }
   </ul>

@@ -5,31 +5,33 @@
 </header>
 
 <div class="mode-toggle">
-  <mat-button-toggle-group [value]="mode" (change)="mode = $event.value" aria-label="Mode d'affichage des stats">
+  <mat-button-toggle-group [value]="mode()" (change)="mode.set($event.value)" aria-label="Mode d'affichage des stats">
     <mat-button-toggle value="total">Totaux</mat-button-toggle>
     <mat-button-toggle value="per90">Par 90 min</mat-button-toggle>
   </mat-button-toggle-group>
 </div>
 
-@if (seasons.length) {
+@if (seasonsFailed()) {
+<p class="error-message" role="alert">Impossible de charger les saisons. Réessayez plus tard.</p>
+} @else if (seasons().length) {
 <section class="players" aria-label="Sélection des joueurs">
   <player-picker
     inputId="first-player"
     label="Joueur 1"
-    [seasons]="firstSeasons"
-    [selectedSeason]="firstSeason"
-    [selectedName]="firstSlot.player?.name"
-    [hasPlayer]="!!firstPlayerId"
+    [seasons]="firstSeasons()"
+    [selectedSeason]="firstSeason()"
+    [selectedName]="firstSlot().player?.name"
+    [hasPlayer]="firstPlayerId() !== null"
     (playerSelected)="selectFirstPlayer($event)"
     (seasonSelected)="selectFirstSeason($event)"
   />
   <player-picker
     inputId="second-player"
     label="Joueur 2"
-    [seasons]="secondSeasons"
-    [selectedSeason]="secondSeason"
-    [selectedName]="secondSlot.player?.name"
-    [hasPlayer]="!!secondPlayerId"
+    [seasons]="secondSeasons()"
+    [selectedSeason]="secondSeason()"
+    [selectedName]="secondSlot().player?.name"
+    [hasPlayer]="secondPlayerId() !== null"
     (playerSelected)="selectSecondPlayer($event)"
     (seasonSelected)="selectSecondSeason($event)"
   />
@@ -86,20 +88,20 @@
 </ng-template>
 
 <div class="headers">
-  <ng-container *ngTemplateOutlet="header; context: { $implicit: firstSlot }" />
-  <ng-container *ngTemplateOutlet="header; context: { $implicit: secondSlot }" />
+  <ng-container *ngTemplateOutlet="header; context: { $implicit: firstSlot() }" />
+  <ng-container *ngTemplateOutlet="header; context: { $implicit: secondSlot() }" />
 </div>
 
 
-@for (category of categories; track category.key) {
+@for (category of categories(); track category.key) {
 <section class="category">
   <h3>{{ category.label }}</h3>
   <div class="category-body">
   @for (row of category.mainStats; track row.key) {
   <stat-row
     [label]="row.label"
-    [first]="row.first?.[mode] ?? null"
-    [second]="row.second?.[mode] ?? null"
+    [first]="row.first?.[mode()] ?? null"
+    [second]="row.second?.[mode()] ?? null"
     [lowerIsBetter]="row.lowerIsBetter"
   />
   }
@@ -109,8 +111,8 @@
     @for (row of category.detailStats; track row.key) {
     <stat-row
       [label]="row.label"
-      [first]="row.first?.[mode] ?? null"
-      [second]="row.second?.[mode] ?? null"
+      [first]="row.first?.[mode()] ?? null"
+      [second]="row.second?.[mode()] ?? null"
       [lowerIsBetter]="row.lowerIsBetter"
     />
     }

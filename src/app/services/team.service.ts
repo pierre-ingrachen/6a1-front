@@ -1,17 +1,17 @@
-import { Injectable } from "@angular/core"
+import { Injectable, inject } from "@angular/core"
 import { HttpClient, HttpParams } from "@angular/common/http"
 import { Observable } from "rxjs"
 import { Team } from "models/team.model"
 import { Season } from "models/season.model"
 import { Player } from "models/player.model"
+import { ApiUrlService } from "services/api-url.service"
 
 @Injectable({
   providedIn: "root",
 })
 export class TeamService {
-  private teamUrl = "http://localhost:8080/teams"
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient)
+  private readonly teamUrl = inject(ApiUrlService).resolve("teams")
 
   findAllTeams(): Observable<Team[]> {
     return this.http.get<Team[]>(this.teamUrl)

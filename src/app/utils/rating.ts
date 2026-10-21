@@ -1,4 +1,3 @@
-// Seuils calés sur la distribution des notes moyennes en base (P25 = 6.29, P50 = 6.60, P75 = 6.92, P90 = 7.22)
 export type RatingLevel = "poor" | "average" | "good" | "great" | "outstanding" | "none"
 
 export function ratingLevel(rating: number | null | undefined): RatingLevel {

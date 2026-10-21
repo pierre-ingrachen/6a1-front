@@ -169,7 +169,8 @@
   white-space: nowrap;
 }
 
-.empty-state {
+.empty-state,
+.error-message {
   padding: 2rem;
   border: 1px dashed rgba(128, 73, 170, 0.3);
   border-radius: 18px;
@@ -186,4 +187,9 @@
   .stat {
     grid-template-columns: 1fr auto;
   }
+}
+
+.error-message {
+  border-color: rgba(190, 45, 65, 0.3);
+  color: #9b2639;
 }

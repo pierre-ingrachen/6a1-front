@@ -1,6 +1,6 @@
 export type Line = "GOALKEEPER" | "DEFENDER" | "MIDFIELDER" | "ATTACKER"
 export type RedrawType = "SEASON" | "TEAM"
-export type GameStatus = "DRAFTING" | "READY_TO_SIMULATE" | "COMPLETED"
+export type GameStatus = "DRAFTING" | "READY_TO_SIMULATE"
 export type Round = "GROUP_STAGE" | "ROUND_OF_16" | "QUARTER_FINAL" | "SEMI_FINAL" | "FINAL" | "WINNER"
 
 export interface Formation {

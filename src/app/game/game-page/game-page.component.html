@@ -3,6 +3,9 @@
   <h1>Compose ton onze de légende</h1>
   }
 
+  @if (formationsFailed()) {
+  <p class="error" role="alert">Impossible de charger les formations. Réessayez plus tard.</p>
+  }
   @if (errorMessage(); as message) {
   <p class="error" role="alert">{{ message }}</p>
   }

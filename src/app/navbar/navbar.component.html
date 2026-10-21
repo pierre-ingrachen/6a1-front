@@ -9,10 +9,9 @@
 
     </div>
 
-    <mat-nav-list class="nav-links">
+    <div class="nav-links">
       @for (link of links; track link) {
       <a
-        mat-list-item
         [routerLink]="link.href ? '/' + link.href : '/'"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: link.href === '' }"
@@ -23,6 +22,6 @@
         </span>
       </a>
       }
-    </mat-nav-list>
+    </div>
   </div>
 </nav>
