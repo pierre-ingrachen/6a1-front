@@ -48,8 +48,7 @@ describe("TeamDetailComponent", () => {
     teamService.findPlayersByTeam.and.callFake((teamId, season) => of(playersBySeason[season]))
 
     TestBed.configureTestingModule({
-      declarations: [TeamDetailComponent],
-      imports: [FormsModule, RouterLink],
+      imports: [TeamDetailComponent],
       providers: [
         provideRouter([]),
         { provide: TeamService, useValue: teamService },
@@ -83,6 +82,25 @@ describe("TeamDetailComponent", () => {
 
     expect(teamService.findPlayersByTeam).toHaveBeenCalledTimes(2)
     expect(teamService.findPlayersByTeam).toHaveBeenCalledWith(13, 2024)
+    expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "8", "—", "0", "2", "—", "none"]])
+  }))
+
+  it("shows an error when the squad cannot be loaded and recovers on another season", fakeAsync(() => {
+    teamService.findPlayersByTeam.and.returnValues(
+      throwError(() => new Error("500")),
+      of(playersBySeason[2024]),
+    )
+    render()
+    expect(element().querySelector(".error-message")?.textContent).toContain("Impossible de charger les joueurs")
+    expect(element().querySelector(".player-card")).toBeNull()
+
+    select().value = select().options[1].value
+    select().dispatchEvent(new Event("change"))
+    fixture.detectChanges()
+    tick()
+    fixture.detectChanges()
+
+    expect(element().querySelector(".error-message")).toBeNull()
     expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "8", "—", "0", "2", "—", "none"]])
   }))
 

@@ -1,4 +1,7 @@
 import { Component } from "@angular/core"
+import { MatIconModule } from "@angular/material/icon"
+import { RouterLink } from "@angular/router"
+import { DreamTeamComponent } from "home/dream-team/dream-team.component"
 
 interface HomeLink {
   title: string
@@ -9,6 +12,8 @@ interface HomeLink {
 
 @Component({
   selector: "home",
+  standalone: true,
+  imports: [RouterLink, MatIconModule, DreamTeamComponent],
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })

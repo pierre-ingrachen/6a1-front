@@ -14,8 +14,7 @@ describe("PlayerPickerComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PlayerPickerComponent, PlayerSearchComponent],
-      imports: [FormsModule, ReactiveFormsModule, MatAutocompleteModule, NoopAnimationsModule],
+      imports: [PlayerPickerComponent, NoopAnimationsModule],
       providers: [{ provide: PlayerService, useValue: { searchPlayers: () => of([]) } }],
     })
     fixture = TestBed.createComponent(PlayerPickerComponent)

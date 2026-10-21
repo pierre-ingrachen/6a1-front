@@ -85,6 +85,7 @@ describe("PlayerCompareComponent", () => {
     TestBed.overrideProvider(ActivatedRoute, { useValue: { queryParamMap: of(convertToParamMap(params)) } })
     fixture = TestBed.createComponent(PlayerCompareComponent)
     fixture.detectChanges()
+    fixture.detectChanges()
   }
 
   beforeEach(() => {
@@ -96,8 +97,7 @@ describe("PlayerCompareComponent", () => {
     playerService.searchPlayers.and.returnValue(of([]))
 
     TestBed.configureTestingModule({
-      declarations: [PlayerCompareComponent, PlayerPickerComponent, PlayerSearchComponent, StatRowComponent],
-      imports: [FormsModule, ReactiveFormsModule, MatAutocompleteModule, MatButtonToggleModule, MatIconModule, NoopAnimationsModule],
+      imports: [PlayerCompareComponent, NoopAnimationsModule],
       providers: [
         { provide: Router, useValue: router },
         { provide: ActivatedRoute, useValue: {} },
@@ -183,6 +183,16 @@ describe("PlayerCompareComponent", () => {
     expect(details.textContent).toContain("De la tête")
     const categoryTitles = Array.from(element().querySelectorAll(".category h3")).map((title) => title.textContent)
     expect(categoryTitles).toEqual(["Buts", "Discipline"])
+  })
+
+  it("shows an error when the seasons cannot be loaded", () => {
+    TestBed.overrideProvider(SeasonService, { useValue: { findAllSeasons: () => throwError(() => new Error("500")) } })
+
+    render({ p1: "1", s1: "2025" })
+
+    expect(element().querySelector(".error-message")?.textContent).toContain("Impossible de charger les saisons")
+    expect(element().querySelector("player-picker")).toBeNull()
+    expect(playerService.findPlayerStats).not.toHaveBeenCalled()
   })
 
   it("tells when a player has no stats in the selected season", () => {

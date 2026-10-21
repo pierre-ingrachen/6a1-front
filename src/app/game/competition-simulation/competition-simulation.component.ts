@@ -52,13 +52,13 @@ export class CompetitionSimulationComponent implements OnInit {
   readonly currentStep = computed<MatchStep | undefined>(() => this.steps()[this.stepIndex()])
   readonly currentMatchFinished = computed(() => {
     const step = this.currentStep()
-    return !!step && this.minute() >= step.duration && this.kicksRevealed() >= step.shootout.length
+    return step !== undefined && this.minute() >= step.duration && this.kicksRevealed() >= step.shootout.length
   })
   readonly lastMatch = computed(() => this.stepIndex() === this.steps().length - 1)
   readonly lastGroupIndex = computed(() => this.steps().filter(isGroupStep).length - 1)
   readonly canSkipGroupStage = computed(() => {
     const step = this.currentStep()
-    return !!step && isGroupStep(step) && this.stepIndex() < this.lastGroupIndex()
+    return step !== undefined && isGroupStep(step) && this.stepIndex() < this.lastGroupIndex()
   })
 
   readonly playedSteps = computed(() => this.steps().slice(0, this.stepIndex() + (this.currentMatchFinished() ? 1 : 0)))

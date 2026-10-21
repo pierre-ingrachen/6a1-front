@@ -1,10 +1,14 @@
-import { Component, Input } from "@angular/core"
+import { DecimalPipe, NgTemplateOutlet } from "@angular/common"
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
 import { StatValue } from "models/player-stats.model"
 
 @Component({
   selector: "stat-row",
+  standalone: true,
+  imports: [NgTemplateOutlet, DecimalPipe],
   templateUrl: "./stat-row.component.html",
   styleUrls: ["./stat-row.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatRowComponent {
   @Input() label = ""

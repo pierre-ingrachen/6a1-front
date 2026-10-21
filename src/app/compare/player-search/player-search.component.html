@@ -13,9 +13,12 @@
   [displayWith]="displayPlayer"
   (optionSelected)="playerSelected.emit($event.option.value)"
 >
-  @for (player of results$ | async; track player.id) {
+  @for (player of results(); track player.id) {
   <mat-option [value]="player">
     {{ player.name }}
   </mat-option>
   }
 </mat-autocomplete>
+@if (searchFailed()) {
+<p class="search-error" role="alert">La recherche a échoué. Réessayez dans un instant.</p>
+}

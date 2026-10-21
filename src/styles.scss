@@ -2,7 +2,14 @@
 @use "theme";
 
 @include mat.core();
-@include mat.all-component-colors(theme.$my-theme);
+@include mat.typography-hierarchy(theme.$my-theme);
+@include mat.autocomplete-theme(theme.$my-theme);
+@include mat.option-theme(theme.$my-theme);
+@include mat.optgroup-theme(theme.$my-theme);
+@include mat.pseudo-checkbox-theme(theme.$my-theme);
+@include mat.button-theme(theme.$my-theme);
+@include mat.button-toggle-theme(theme.$my-theme);
+@include mat.icon-theme(theme.$my-theme);
 
 @import "./bootstrap/_bootstrap";
 

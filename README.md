@@ -40,3 +40,14 @@ Depuis le dossier du front, lancer `npm run dev`. Cette commande :
 | `npm run db` | Démarre la base de données via Docker |
 | `npm run back` | Lance le back (Maven wrapper, avec le `.env`) |
 | `npm run dev` | Lance la base, le back et le front ensemble |
+
+## URL de l'API
+
+Les services HTTP n'écrivent aucune URL en dur : ils passent par `ApiUrlService`, qui préfixe chaque chemin avec `environment.apiUrl`.
+
+| Environnement | Fichier | Valeur de `apiUrl` |
+|---|---|---|
+| Développement (`ng serve`) | `src/environments/environment.ts` | `http://localhost:8080` |
+| Production (`ng build`) | `src/environments/environment.prod.ts` | `/api` |
+
+En production, `/api` est une URL relative : le front doit être servi derrière un reverse proxy qui redirige `/api/*` vers le back en retirant le préfixe `/api` (par exemple `location /api/ { proxy_pass http://back:8080/; }` avec nginx). Pour pointer directement vers un back hébergé ailleurs, remplacer la valeur par son URL complète avant le build, et ajouter l'origine du front dans `app.cors.allowed-origins` côté back.

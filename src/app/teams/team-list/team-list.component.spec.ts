@@ -1,6 +1,6 @@
 import { FormsModule } from "@angular/forms"
 import { TestBed } from "@angular/core/testing"
-import { of } from "rxjs"
+import { of, throwError } from "rxjs"
 import { provideRouter, RouterLink } from "@angular/router"
 import { TeamListComponent } from "teams/team-list/team-list.component"
 import { TeamService } from "services/team.service"
@@ -42,8 +42,7 @@ describe("TeamListComponent", () => {
     )
 
     TestBed.configureTestingModule({
-      declarations: [TeamListComponent],
-      imports: [FormsModule, RouterLink],
+      imports: [TeamListComponent],
       providers: [provideRouter([]), { provide: TeamService, useValue: teamService }],
     })
   })
@@ -83,5 +82,32 @@ describe("TeamListComponent", () => {
     expect(teamService.findSeasonsByTeam).toHaveBeenCalledWith(37)
     expect(teamService.findPlayersByTeam).toHaveBeenCalledWith(37, 2025)
     expect(fixture.nativeElement.querySelector(".player-card").textContent).toContain("Alex Martin")
+  })
+
+  it("shows an error when the teams cannot be loaded", () => {
+    teamService.findAllTeams.and.returnValue(throwError(() => new Error("500")))
+    const fixture = TestBed.createComponent(TeamListComponent)
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector(".error-message")?.textContent).toContain("Impossible de charger les équipes")
+  })
+
+  it("shows an error when the players fail and keeps working for the next selection", () => {
+    teamService.findPlayersByTeam.and.returnValues(
+      throwError(() => new Error("500")),
+      of([{ id: 2, name: "Jamie Lee", position: "Midfielder", goals: 1, assists: 0, averageRating: 6.5, rating: 80, matchesPlayed: 5 }]),
+    )
+    const fixture = TestBed.createComponent(TeamListComponent)
+    fixture.detectChanges()
+
+    fixture.componentInstance.selectTeam(37)
+    fixture.detectChanges()
+    expect(fixture.nativeElement.querySelector(".error-message")?.textContent).toContain("Impossible de charger les joueurs")
+
+    fixture.componentInstance.selectSeason(2024)
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector(".error-message")).toBeNull()
+    expect(fixture.nativeElement.querySelector(".player-card").textContent).toContain("Jamie Lee")
   })
 })

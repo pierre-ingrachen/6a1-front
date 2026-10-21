@@ -18,18 +18,18 @@
           role="combobox"
           aria-autocomplete="list"
           aria-controls="team-options"
-          [attr.aria-expanded]="showTeamOptions"
-          [ngModel]="teamSearch"
+          [attr.aria-expanded]="showTeamOptions()"
+          [ngModel]="teamSearch()"
           (ngModelChange)="searchTeams($event)"
           (focus)="openTeamSearch()"
           (blur)="closeTeamSearch()"
           (keydown.escape)="closeTeamSearch()"
-          [disabled]="isLoadingTeams || teams.length === 0"
+          [disabled]="isLoadingTeams() || teams().length === 0"
         />
-        @if (showTeamOptions && filteredTeams.length > 0) {
+        @if (showTeamOptions() && filteredTeams().length > 0) {
         <ul id="team-options" class="team-options" role="listbox">
-          @for (team of filteredTeams; track team.id) {
-          <li role="option" [attr.aria-selected]="selectedTeamId === team.id">
+          @for (team of filteredTeams(); track team.id) {
+          <li role="option" [attr.aria-selected]="selectedTeamId() === team.id">
             <button
               type="button"
               (mousedown)="$event.preventDefault()"
@@ -41,7 +41,7 @@
           </li>
           }
         </ul>
-        } @else if (showTeamOptions && teamSearch.trim()) {
+        } @else if (showTeamOptions() && teamSearch().trim()) {
         <div class="team-options no-results">Aucune équipe trouvée.</div>
         }
       </div>
@@ -52,12 +52,12 @@
       <select
         id="season"
         class="form-select"
-        [ngModel]="selectedSeason"
+        [ngModel]="selectedSeason()"
         (ngModelChange)="selectSeason($event)"
-        [disabled]="selectedTeamId === null || isLoadingSeasons || seasons.length === 0"
+        [disabled]="selectedTeamId() === null || isLoadingSeasons() || seasons().length === 0"
       >
         <option [ngValue]="null">Choisir une saison</option>
-        @for (season of seasons; track season.startYear) {
+        @for (season of seasons(); track season.startYear) {
         <option [ngValue]="season.startYear">{{ season.label }}</option>
         }
       </select>
@@ -66,12 +66,12 @@
     <div class="filter-field">
       <label for="sort">Trier par</label>
       <div class="sort-field">
-      <select id="sort" class="form-select" [ngModel]="sortKey" (ngModelChange)="selectSortKey($event)">
+      <select id="sort" class="form-select" [ngModel]="sortKey()" (ngModelChange)="selectSortKey($event)">
         @for (option of sortOptions; track option.key) {
         <option [ngValue]="option.key">{{ option.label }}</option>
         }
       </select>
-      <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [(ngModel)]="sortDirection">
+      <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [ngModel]="sortDirection()" (ngModelChange)="sortDirection.set($event)">
         <option value="asc">Croissant</option>
         <option value="desc">Décroissant</option>
       </select>
@@ -79,32 +79,32 @@
     </div>
   </section>
 
-  @if (isLoadingTeams) {
+  @if (isLoadingTeams()) {
   <p class="status-message">Chargement des équipes…</p>
-  } @else if (teams.length === 0 && !errorMessage) {
+  } @else if (teams().length === 0 && !errorMessage()) {
   <p class="status-message">Aucune équipe disponible pour le moment.</p>
   }
 
-  @if (isLoadingSeasons) {
+  @if (isLoadingSeasons()) {
   <p class="status-message">Chargement des saisons…</p>
-  } @else if (selectedTeamId !== null && seasons.length === 0 && !errorMessage) {
+  } @else if (selectedTeamId() !== null && seasons().length === 0 && !errorMessage()) {
   <p class="status-message">Aucune saison disponible pour cette équipe.</p>
   }
 
-  @if (errorMessage) {
-  <p class="status-message error-message" role="alert">{{ errorMessage }}</p>
+  @if (errorMessage()) {
+  <p class="status-message error-message" role="alert">{{ errorMessage() }}</p>
   }
 
-  @if (selectedTeamId === null && !isLoadingTeams && teams.length > 0 && !errorMessage) {
+  @if (selectedTeamId() === null && !isLoadingTeams() && teams().length > 0 && !errorMessage()) {
   <p class="status-message">Recherchez puis sélectionnez une équipe pour afficher son effectif.</p>
   }
 
-  @if (isLoadingPlayers) {
+  @if (isLoadingPlayers()) {
   <p class="status-message">Chargement des joueurs…</p>
-  } @else if (selectedSeason !== null && players.length > 0) {
+  } @else if (selectedSeason() !== null && players().length > 0) {
   <section class="player-grid" aria-label="Joueurs de l’équipe sélectionnée">
-    @for (player of sorted(players); track player.id) {
-    <a class="player-card" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season: selectedSeason }">
+    @for (player of sortedPlayers(); track player.id) {
+    <a class="player-card" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season: selectedSeason() }">
       <div class="player-card-header">
         <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
         <div class="player-heading">
@@ -134,7 +134,7 @@
     </a>
     }
   </section>
-  } @else if (selectedSeason !== null && !errorMessage && !isLoadingPlayers) {
+  } @else if (selectedSeason() !== null && !errorMessage() && !isLoadingPlayers()) {
   <p class="status-message">Aucun joueur disponible pour cette saison.</p>
   }
 </main>

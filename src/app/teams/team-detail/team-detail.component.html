@@ -1,9 +1,9 @@
 <main class="team-page">
   <a class="back-link" mat-button routerLink="/teams">← Toutes les équipes</a>
-@if (teamNotFound) {
+@if (teamNotFound()) {
 <p class="not-found">Équipe introuvable</p>
 } @else {
-@if (team$ | async; as team) {
+@if (team(); as team) {
 <header class="team-header">
   <div>
     <span class="eyebrow">Effectif de l’équipe</span>
@@ -12,31 +12,35 @@
   </div>
   <div class="season">
     <label for="season" class="form-label">Saison</label>
-    <select id="season" class="form-select" [ngModel]="selectedSeason" (ngModelChange)="selectSeason($event)">
-      @for (season of seasons; track season.startYear) {
+    <select id="season" class="form-select" [ngModel]="selectedSeason()" (ngModelChange)="selectSeason($event)">
+      @for (season of seasons(); track season.startYear) {
       <option [ngValue]="season.startYear">{{ season.label }}</option>
       }
     </select>
   </div>
 </header>
 }
-@if (players$ | async; as players) {
-  @if (players.length > 0) {
+@if (isLoadingPlayers()) {
+<p class="empty-state">Chargement des joueurs…</p>
+} @else if (playersFailed()) {
+<p class="error-message" role="alert">Impossible de charger les joueurs de cette saison.</p>
+} @else if (playersLoaded()) {
+  @if (players().length > 0) {
   <div class="sort-bar">
     <label for="sort">Trier par</label>
-    <select id="sort" class="form-select" [ngModel]="sortKey" (ngModelChange)="selectSortKey($event)">
+    <select id="sort" class="form-select" [ngModel]="sortKey()" (ngModelChange)="selectSortKey($event)">
         @for (option of sortOptions; track option.key) {
         <option [ngValue]="option.key">{{ option.label }}</option>
         }
       </select>
-    <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [(ngModel)]="sortDirection">
+    <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [ngModel]="sortDirection()" (ngModelChange)="sortDirection.set($event)">
         <option value="asc">Croissant</option>
         <option value="desc">Décroissant</option>
       </select>
   </div>
   <section class="player-grid" aria-label="Joueurs de l’équipe">
-    @for (player of sorted(players); track player.id) {
-    <a class="player-card" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season: selectedSeason }">
+    @for (player of sortedPlayers(); track player.id) {
+    <a class="player-card" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season: selectedSeason() }">
       <div class="player-card-header">
         <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
         <div class="player-heading">
