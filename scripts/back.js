@@ -15,7 +15,7 @@ if (!fs.existsSync(envFile)) {
   process.exit(1)
 }
 
-const env = { ...process.env }
+const env = { SWAGGER_ENABLED: "true", ...process.env }
 for (const line of fs.readFileSync(envFile, "utf8").split(/\r?\n/)) {
   const match = line.match(/^\s*([\w.]+)\s*=\s*(.*?)\s*$/)
   if (match && !line.trim().startsWith("#")) {

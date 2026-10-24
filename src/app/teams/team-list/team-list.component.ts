@@ -1,22 +1,21 @@
-import { DecimalPipe } from "@angular/common"
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from "@angular/core"
 import { toObservable, toSignal } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { MatIconModule } from "@angular/material/icon"
-import { RouterLink } from "@angular/router"
 import { of, switchMap } from "rxjs"
 import { Player } from "models/player.model"
 import { Season } from "models/season.model"
 import { Team } from "models/team.model"
+import { PlayerCardComponent } from "teams/player-card/player-card.component"
+import { PlayerSortBarComponent } from "teams/player-sort-bar/player-sort-bar.component"
 import { TeamService } from "services/team.service"
 import { idleState, loadingState, toLoadState } from "utils/load-state"
-import { defaultSortDirection, PLAYER_SORT_OPTIONS, PlayerSortKey, SortDirection, sortPlayers } from "utils/player-sort"
-import { ratingLevel } from "utils/rating"
+import { PlayerSortKey, SortDirection, sortPlayers } from "utils/player-sort"
 
 @Component({
   selector: "team-list",
   standalone: true,
-  imports: [FormsModule, RouterLink, MatIconModule, DecimalPipe],
+  imports: [FormsModule, MatIconModule, PlayerCardComponent, PlayerSortBarComponent],
   templateUrl: "./team-list.component.html",
   styleUrls: ["./team-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,8 +23,6 @@ import { ratingLevel } from "utils/rating"
 export class TeamListComponent {
   private readonly teamService = inject(TeamService)
 
-  readonly ratingLevel = ratingLevel
-  readonly sortOptions = PLAYER_SORT_OPTIONS
   readonly sortKey = signal<PlayerSortKey>("averageRating")
   readonly sortDirection = signal<SortDirection>("desc")
   readonly teamSearch = signal("")
@@ -124,11 +121,6 @@ export class TeamListComponent {
 
   selectSeason(season: number | null): void {
     this.seasonChoice.set(season)
-  }
-
-  selectSortKey(key: PlayerSortKey): void {
-    this.sortKey.set(key)
-    this.sortDirection.set(defaultSortDirection(key))
   }
 
   private labelOf(teamId: number | null): string {

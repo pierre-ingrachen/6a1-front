@@ -72,6 +72,61 @@ describe("TeamListComponent", () => {
     expect(teamService.findPlayersByTeam).toHaveBeenCalledWith(37, 2025)
   })
 
+  it("reorders the player cards when the sort select changes", () => {
+    teamService.findPlayersByTeam.and.returnValue(
+      of([
+        { id: 1, name: "Alex Martin", position: "Forward", goals: 4, assists: 1, averageRating: 6.72, rating: 85, matchesPlayed: 8 },
+        { id: 2, name: "Zoe Bell", position: "Midfielder", goals: 9, assists: 0, averageRating: 6.5, rating: 80, matchesPlayed: 5 },
+      ]),
+    )
+    const fixture = TestBed.createComponent(TeamListComponent)
+    fixture.detectChanges()
+    fixture.componentInstance.selectTeam(37)
+    fixture.detectChanges()
+    const names = () => Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll(".player-card h2")).map((h) => h.textContent?.trim())
+    expect(names()).toEqual(["Alex Martin", "Zoe Bell"])
+
+    const sort: HTMLSelectElement = fixture.nativeElement.querySelector("#sort")
+    sort.selectedIndex = 2
+    sort.dispatchEvent(new Event("change"))
+    fixture.detectChanges()
+
+    expect(names()).toEqual(["Zoe Bell", "Alex Martin"])
+  })
+
+  it("reverses the player cards when the direction select changes", () => {
+    teamService.findPlayersByTeam.and.returnValue(
+      of([
+        { id: 1, name: "Alex Martin", position: "Forward", goals: 4, assists: 1, averageRating: 6.72, rating: 85, matchesPlayed: 8 },
+        { id: 2, name: "Zoe Bell", position: "Midfielder", goals: 9, assists: 0, averageRating: 6.5, rating: 80, matchesPlayed: 5 },
+      ]),
+    )
+    const fixture = TestBed.createComponent(TeamListComponent)
+    fixture.detectChanges()
+    fixture.componentInstance.selectTeam(37)
+    fixture.detectChanges()
+    const names = () => Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll(".player-card h2")).map((h) => h.textContent?.trim())
+    expect(names()).toEqual(["Alex Martin", "Zoe Bell"])
+
+    const direction: HTMLSelectElement = fixture.nativeElement.querySelector("#sort-direction")
+    direction.selectedIndex = 0
+    direction.dispatchEvent(new Event("change"))
+    fixture.detectChanges()
+
+    expect(names()).toEqual(["Zoe Bell", "Alex Martin"])
+  })
+
+  it("links each compact card to the player profile of the selected season", () => {
+    const fixture = TestBed.createComponent(TeamListComponent)
+    fixture.detectChanges()
+    fixture.componentInstance.selectTeam(37)
+    fixture.detectChanges()
+
+    const card: HTMLAnchorElement = fixture.nativeElement.querySelector(".player-card")
+    expect(card.getAttribute("href")).toBe("/joueurs/1?season=2025")
+    expect(card.classList).toContain("compact")
+  })
+
   it("loads seasons and players when a searched team is selected", () => {
     const fixture = TestBed.createComponent(TeamListComponent)
     fixture.detectChanges()

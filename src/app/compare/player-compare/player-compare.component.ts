@@ -13,6 +13,7 @@ import { Season, SeasonOption } from "models/season.model"
 import { PlayerService } from "services/player.service"
 import { SeasonService } from "services/season.service"
 import { loadingState, toLoadState } from "utils/load-state"
+import { playerPositionLabel } from "utils/position-label"
 import { ratingLevel } from "utils/rating"
 
 export type StatMode = "total" | "per90"
@@ -60,12 +61,7 @@ export class PlayerCompareComponent {
   private readonly playerService = inject(PlayerService)
 
   readonly ratingLevel = ratingLevel
-  readonly positionLabels: Partial<Record<string, string>> = {
-    Forward: "Attaquant",
-    Midfielder: "Milieu",
-    Defender: "Défenseur",
-    Goalkeeper: "Gardien",
-  }
+  readonly positionLabel = playerPositionLabel
 
   readonly mode = signal<StatMode>("total")
 

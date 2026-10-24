@@ -1,9 +1,10 @@
-import { provideHttpClient } from "@angular/common/http"
+import { provideHttpClient, withInterceptors } from "@angular/common/http"
 import { ApplicationConfig } from "@angular/core"
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async"
 import { provideRouter } from "@angular/router"
 import { routes } from "app.routes"
+import { httpErrorLoggingInterceptor } from "utils/http-error-logging.interceptor"
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideHttpClient(), provideAnimationsAsync()],
+  providers: [provideRouter(routes), provideHttpClient(withInterceptors([httpErrorLoggingInterceptor])), provideAnimationsAsync()],
 }
