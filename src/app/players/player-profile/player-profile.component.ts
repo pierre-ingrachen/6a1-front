@@ -11,6 +11,7 @@ import { Season } from "models/season.model"
 import { PlayerService } from "services/player.service"
 import { SeasonService } from "services/season.service"
 import { idleState, loadingState, toLoadState } from "utils/load-state"
+import { playerPositionLabel } from "utils/position-label"
 import { ratingLevel } from "utils/rating"
 
 export type StatMode = "total" | "per90"
@@ -31,12 +32,7 @@ export class PlayerProfileComponent {
   private readonly seasonService = inject(SeasonService)
 
   readonly ratingLevel = ratingLevel
-  readonly positionLabels: Partial<Record<string, string>> = {
-    Forward: "Attaquant",
-    Midfielder: "Milieu",
-    Defender: "Défenseur",
-    Goalkeeper: "Gardien",
-  }
+  readonly positionLabel = playerPositionLabel
 
   readonly mode = signal<StatMode>("total")
   readonly playerId = Number(this.route.snapshot.paramMap.get("playerId"))

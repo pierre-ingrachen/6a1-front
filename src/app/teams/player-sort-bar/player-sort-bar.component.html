@@ -1,0 +1,14 @@
+<div class="sort-bar" [class.stacked]="stacked()">
+  <label for="sort">Trier par</label>
+  <div class="sort-controls">
+    <select id="sort" class="form-select" [ngModel]="sortKey()" (ngModelChange)="selectSortKey($event)">
+      @for (option of sortOptions; track option.key) {
+      <option [ngValue]="option.key">{{ option.label }}</option>
+      }
+    </select>
+    <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [ngModel]="direction()" (ngModelChange)="directionChange.emit($event)">
+      <option value="asc">Croissant</option>
+      <option value="desc">Décroissant</option>
+    </select>
+  </div>
+</div>

@@ -124,6 +124,7 @@ describe("PlayerCompareComponent", () => {
     expect(router.navigate).not.toHaveBeenCalled()
     const names = Array.from(element().querySelectorAll(".player-header h2")).map((title) => title.textContent)
     expect(names).toEqual(["Kylian Mbappé", "Erling Haaland"])
+    expect(Array.from(element().querySelectorAll(".player-header .position")).map((p) => p.textContent?.trim().split(" · ")[0])).toEqual(["Attaquant", "Attaquant"])
     expect(element().querySelectorAll(".estimated").length).toBe(1)
   })
 

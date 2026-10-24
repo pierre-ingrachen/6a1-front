@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.sort-controls {
+  display: contents;
+}
+
+.stacked {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin-bottom: 0;
+
+  label {
+    color: #3a4a6b;
+    font-size: 0.8rem;
+    font-weight: 650;
+  }
+
+  .sort-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .form-select {
+    min-width: 0;
+    min-height: 46px;
+    flex: 1 1 0;
+    border-radius: 11px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #0a1a40;
+    box-shadow: none;
+
+    &:focus {
+      border-color: #2a64dc;
+      box-shadow: 0 0 0 3px rgba(42, 100, 220, 0.12);
+    }
+  }
+}

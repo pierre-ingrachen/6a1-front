@@ -78,6 +78,7 @@ describe("PlayerProfileComponent", () => {
     expect(playerService.findPlayerStats).toHaveBeenCalledOnceWith(11119, 2025)
     expect(element().querySelector("h1")?.textContent).toBe("Lionel Messi")
     expect(element().textContent).toContain("86/99")
+    expect(element().textContent).toContain("Attaquant · PSG")
   })
 
   it("loads the season given in the URL", () => {

@@ -70,7 +70,7 @@ describe("TeamDetailComponent", () => {
 
     expect(select().selectedOptions[0].textContent?.trim()).toBe("2025/2026")
     expect(teamService.findPlayersByTeam).toHaveBeenCalledOnceWith(13, 2025)
-    expect(playerCells()).toEqual([["Bukayo Saka", "Forward", "8", "88/99", "5", "—", "7.30", "outstanding"]])
+    expect(playerCells()).toEqual([["Bukayo Saka", "Attaquant", "8", "88/99", "5", "—", "7.30", "outstanding"]])
   }))
 
   it("reloads the squad when another season is selected", fakeAsync(() => {
@@ -82,7 +82,57 @@ describe("TeamDetailComponent", () => {
 
     expect(teamService.findPlayersByTeam).toHaveBeenCalledTimes(2)
     expect(teamService.findPlayersByTeam).toHaveBeenCalledWith(13, 2024)
-    expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "8", "—", "0", "2", "—", "none"]])
+    expect(playerCells()).toEqual([["Declan Rice", "Milieu", "8", "—", "0", "2", "—", "none"]])
+  }))
+
+  it("reorders the squad when the sort select changes", fakeAsync(() => {
+    teamService.findPlayersByTeam.and.returnValue(
+      of([
+        { id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: 1, averageRating: 7.3, rating: 88, matchesPlayed: 8 },
+        { id: 2, name: "Declan Rice", position: "Midfielder", goals: 9, assists: 2, averageRating: 6.9, rating: 85, matchesPlayed: 8 },
+      ]),
+    )
+    render()
+    const names = () => Array.from(element().querySelectorAll(".player-card h2")).map((h) => h.textContent?.trim())
+    expect(names()).toEqual(["Bukayo Saka", "Declan Rice"])
+
+    const sort = element().querySelector<HTMLSelectElement>("#sort")!
+    sort.selectedIndex = 2
+    sort.dispatchEvent(new Event("change"))
+    fixture.detectChanges()
+    tick()
+    fixture.detectChanges()
+
+    expect(names()).toEqual(["Declan Rice", "Bukayo Saka"])
+  }))
+
+  it("reverses the squad when the direction select changes", fakeAsync(() => {
+    teamService.findPlayersByTeam.and.returnValue(
+      of([
+        { id: 1, name: "Bukayo Saka", position: "Forward", goals: 5, assists: 1, averageRating: 7.3, rating: 88, matchesPlayed: 8 },
+        { id: 2, name: "Declan Rice", position: "Midfielder", goals: 9, assists: 2, averageRating: 6.9, rating: 85, matchesPlayed: 8 },
+      ]),
+    )
+    render()
+    const names = () => Array.from(element().querySelectorAll(".player-card h2")).map((h) => h.textContent?.trim())
+    expect(names()).toEqual(["Bukayo Saka", "Declan Rice"])
+
+    const direction = element().querySelector<HTMLSelectElement>("#sort-direction")!
+    direction.selectedIndex = 0
+    direction.dispatchEvent(new Event("change"))
+    fixture.detectChanges()
+    tick()
+    fixture.detectChanges()
+
+    expect(names()).toEqual(["Declan Rice", "Bukayo Saka"])
+  }))
+
+  it("links each card to the player profile of the selected season without compact style", fakeAsync(() => {
+    render()
+
+    const card = element().querySelector<HTMLAnchorElement>(".player-card")!
+    expect(card.getAttribute("href")).toBe("/joueurs/1?season=2025")
+    expect(card.classList).not.toContain("compact")
   }))
 
   it("shows an error when the squad cannot be loaded and recovers on another season", fakeAsync(() => {
@@ -101,7 +151,7 @@ describe("TeamDetailComponent", () => {
     fixture.detectChanges()
 
     expect(element().querySelector(".error-message")).toBeNull()
-    expect(playerCells()).toEqual([["Declan Rice", "Midfielder", "8", "—", "0", "2", "—", "none"]])
+    expect(playerCells()).toEqual([["Declan Rice", "Milieu", "8", "—", "0", "2", "—", "none"]])
   }))
 
   it("displays a message when the team does not exist", fakeAsync(() => {

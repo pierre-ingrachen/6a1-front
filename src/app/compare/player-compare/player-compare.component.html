@@ -45,7 +45,7 @@
       <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
       <div class="player-heading">
         <h2>{{ player.name }}</h2>
-        <span class="position">{{ positionLabels[player.position] ?? player.position }} · {{ player.teamName }}</span>
+        <span class="position">{{ positionLabel(player.position) }} · {{ player.teamName }}</span>
       </div>
       <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne">{{ player.averageRating !== null ? (player.averageRating | number : "1.2-2") : "—" }}</span>
     </div>

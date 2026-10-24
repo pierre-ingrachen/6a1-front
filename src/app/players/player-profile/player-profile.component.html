@@ -24,7 +24,7 @@
     <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
     <div class="identity">
       <h1>{{ player.name }}</h1>
-      <p>{{ positionLabels[player.position] ?? player.position }} · {{ player.teamName }}</p>
+      <p>{{ positionLabel(player.position) }} · {{ player.teamName }}</p>
       @if (player.teamEstimated) {
       <p class="estimated">Équipe estimée : le joueur a joué pour 2 clubs cette saison et l’ordre n’est pas connu en base.</p>
       }

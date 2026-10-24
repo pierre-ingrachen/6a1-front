@@ -64,18 +64,7 @@
     </div>
 
     <div class="filter-field">
-      <label for="sort">Trier par</label>
-      <div class="sort-field">
-      <select id="sort" class="form-select" [ngModel]="sortKey()" (ngModelChange)="selectSortKey($event)">
-        @for (option of sortOptions; track option.key) {
-        <option [ngValue]="option.key">{{ option.label }}</option>
-        }
-      </select>
-      <select id="sort-direction" class="form-select" aria-label="Ordre de tri" [ngModel]="sortDirection()" (ngModelChange)="sortDirection.set($event)">
-        <option value="asc">Croissant</option>
-        <option value="desc">Décroissant</option>
-      </select>
-      </div>
+      <player-sort-bar [stacked]="true" [sortKey]="sortKey()" (sortKeyChange)="sortKey.set($event)" [direction]="sortDirection()" (directionChange)="sortDirection.set($event)" />
     </div>
   </section>
 
@@ -104,34 +93,7 @@
   } @else if (selectedSeason() !== null && players().length > 0) {
   <section class="player-grid" aria-label="Joueurs de l’équipe sélectionnée">
     @for (player of sortedPlayers(); track player.id) {
-    <a class="player-card" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season: selectedSeason() }">
-      <div class="player-card-header">
-        <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
-        <div class="player-heading">
-          <h2>{{ player.name }}</h2>
-          <span class="position">{{ player.position }}</span>
-        </div>
-        <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne">{{ player.averageRating !== null ? (player.averageRating | number: "1.2-2") : "—" }}</span>
-      </div>
-      <div class="player-details">
-        <div class="player-detail">
-          <span class="detail-label">Matchs joués</span>
-          <strong>{{ player.matchesPlayed }}</strong>
-        </div>
-        <div class="player-detail">
-          <span class="detail-label">Rating</span>
-          <strong>@if (player.rating !== null) {{{ player.rating }}/99} @else {—}</strong>
-        </div>
-        <div class="player-detail">
-          <span class="detail-label">Buts</span>
-          <strong>{{ player.goals ?? "—" }}</strong>
-        </div>
-        <div class="player-detail">
-          <span class="detail-label">Passes décisives</span>
-          <strong>{{ player.assists ?? "—" }}</strong>
-        </div>
-      </div>
-    </a>
+    <player-card [player]="player" [season]="selectedSeason()" [compact]="true" />
     }
   </section>
   } @else if (selectedSeason() !== null && !errorMessage() && !isLoadingPlayers()) {
