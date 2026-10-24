@@ -30,4 +30,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import("compare/player-compare/player-compare.component").then((module) => module.PlayerCompareComponent),
   },
+  {
+    path: "**",
+    loadComponent: () => import("not-found/not-found.component").then((module) => module.NotFoundComponent),
+  },
 ]
