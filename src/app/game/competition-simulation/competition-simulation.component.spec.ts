@@ -2,9 +2,12 @@ import { ComponentFixture, TestBed, fakeAsync, discardPeriodicTasks, tick } from
 import { CompetitionResult, MatchResult } from "game/models/competition.model"
 import { MatchStep } from "game/models/simulation.model"
 import { CompetitionSimulationComponent } from "game/competition-simulation/competition-simulation.component"
-import { SIMULATION_SPEEDS } from "game/utils/simulation-speed"
+import { SIMULATION_SPEEDS, minuteDelayMs } from "game/utils/simulation-speed"
 
 const FAST = SIMULATION_SPEEDS[2]
+
+const clockMs = (minutes: number): number =>
+  Array.from({ length: minutes }, (_, index) => minuteDelayMs(FAST, index + 1)).reduce((total, delay) => total + delay, 0)
 
 const matchOf = (round: MatchResult["round"], overrides: Partial<MatchResult> = {}): MatchResult => ({
   round,
@@ -61,7 +64,7 @@ describe("CompetitionSimulationComponent", () => {
 
   it("waits for the user to move on once a match is over", fakeAsync(() => {
     setup()
-    tick(FAST.minuteMs * 100)
+    tick(clockMs(90))
 
     expect(component().currentMatchFinished()).toBeTrue()
     expect(component().stepIndex()).toBe(0)
@@ -71,7 +74,7 @@ describe("CompetitionSimulationComponent", () => {
 
   it("moves to the next match on demand", fakeAsync(() => {
     setup()
-    tick(FAST.minuteMs * 100)
+    tick(clockMs(90))
 
     component().goToNextMatch()
     tick(0)
@@ -99,7 +102,7 @@ describe("CompetitionSimulationComponent", () => {
     component().skipGroupStage()
     tick(0)
     component().goToNextMatch()
-    tick(FAST.minuteMs * 120)
+    tick(clockMs(120))
 
     expect(component().minute()).toBe(120)
     expect(component().currentMatchFinished()).toBeFalse()
@@ -112,9 +115,22 @@ describe("CompetitionSimulationComponent", () => {
     discardPeriodicTasks()
   }))
 
+  it("slows the clock down at the end of the match", fakeAsync(() => {
+    setup()
+    tick(clockMs(80))
+    expect(component().minute()).toBe(80)
+
+    tick(FAST.minuteMs)
+    expect(component().minute()).toBe(80)
+
+    tick(minuteDelayMs(FAST, 81) - FAST.minuteMs)
+    expect(component().minute()).toBe(81)
+    discardPeriodicTasks()
+  }))
+
   it("tracks our top scorer live", fakeAsync(() => {
     setup()
-    tick(FAST.minuteMs * 100)
+    tick(clockMs(90))
 
     expect(component().topScorer()).toEqual({ name: "Striker", goals: 1 })
     discardPeriodicTasks()
@@ -125,7 +141,7 @@ describe("CompetitionSimulationComponent", () => {
     component().skipGroupStage()
     tick(0)
     component().goToNextMatch()
-    tick(FAST.minuteMs * 120 + FAST.kickMs * 2)
+    tick(clockMs(120) + FAST.kickMs * 2)
     component().goToNextMatch()
     tick(0)
 

@@ -12,3 +12,17 @@ export const SIMULATION_SPEEDS: SimulationSpeed[] = [
 ]
 
 export const DEFAULT_SIMULATION_SPEED = SIMULATION_SPEEDS[1]
+
+const SUSPENSE_PHASES = [
+  { remainingMinutes: 3, slowdown: 4 },
+  { remainingMinutes: 6, slowdown: 2.5 },
+  { remainingMinutes: 10, slowdown: 1.5 },
+]
+
+const periodEndOf = (minute: number): number => (minute <= 90 ? 90 : 120)
+
+export const minuteDelayMs = (speed: SimulationSpeed, minute: number): number => {
+  const remaining = periodEndOf(minute) - minute
+  const phase = SUSPENSE_PHASES.find((candidate) => remaining < candidate.remainingMinutes)
+  return speed.minuteMs * (phase?.slowdown ?? 1)
+}

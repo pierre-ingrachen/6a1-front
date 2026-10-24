@@ -6,13 +6,26 @@ import { Random, Scorer, pickScorer, scorersOfSquad } from "game/utils/scorer-pi
 export const REGULAR_TIME = 90
 export const FULL_TIME = 120
 
-interface PeriodGoals {
-  regular: number
-  extra: number
+export const MIN_GOAL_GAP = 5
+
+const spacedMinutes = (count: number, first: number, last: number, random: Random): number[] => {
+  if (count === 0) {
+    return []
+  }
+  const gap = count > 1 ? Math.min(MIN_GOAL_GAP, Math.floor((last - first) / (count - 1))) : 0
+  const start = Math.min(first, last - (count - 1) * gap)
+  const room = last - start - (count - 1) * gap
+  return Array.from({ length: count }, () => start + Math.floor(random() * (room + 1)))
+    .sort((a, b) => a - b)
+    .map((minute, index) => minute + index * gap)
 }
 
-const randomMinutes = (count: number, first: number, last: number, random: Random): number[] =>
-  Array.from({ length: count }, () => first + Math.floor(random() * (last - first + 1))).sort((a, b) => a - b)
+const shuffled = <T>(items: T[], random: Random): T[] =>
+  items.reduceRight((deck, _, index) => {
+    const other = Math.floor(random() * (index + 1))
+    ;[deck[index], deck[other]] = [deck[other], deck[index]]
+    return deck
+  }, [...items])
 
 const extraTimeGoalsOf = (goalsFor: number, goalsAgainst: number, random: Random): { for: number; against: number } => {
   const gap = goalsFor - goalsAgainst
@@ -22,8 +35,6 @@ const extraTimeGoalsOf = (goalsFor: number, goalsAgainst: number, random: Random
   return { for: mandatoryFor + shared, against: mandatoryAgainst + shared }
 }
 
-const periodGoalsOf = (total: number, extra: number): PeriodGoals => ({ regular: total - extra, extra })
-
 export const matchDuration = (match: MatchResult): number => (match.extraTime ? FULL_TIME : REGULAR_TIME)
 
 export const buildGoals = (match: MatchResult, squad: Slot[], random: Random = Math.random): GoalEvent[] => {
@@ -32,18 +43,29 @@ export const buildGoals = (match: MatchResult, squad: Slot[], random: Random = M
   const squadScorers = scorersOfSquad(squad)
   const opponentScorers: Scorer[] = match.opponent.players ?? []
 
-  const goalsOf = (side: GoalSide, period: PeriodGoals, scorers: Scorer[]): GoalEvent[] =>
-    [
-      ...randomMinutes(period.regular, 1, REGULAR_TIME, random),
-      ...randomMinutes(period.extra, REGULAR_TIME + 1, FULL_TIME, random),
-    ].map((minute) => ({
-      minute,
+  const sidesOf = (period: { for: number; against: number }): GoalSide[] =>
+    shuffled(
+      [
+        ...Array.from({ length: period.for }, (): GoalSide => "FOR"),
+        ...Array.from({ length: period.against }, (): GoalSide => "AGAINST"),
+      ],
+      random,
+    )
+
+  const goalsOf = (sides: GoalSide[], minutes: number[]): GoalEvent[] =>
+    sides.map((side, index) => ({
+      minute: minutes[index],
       side,
-      scorerName: pickScorer(scorers, random)?.name ?? null,
+      scorerName: pickScorer(side === "FOR" ? squadScorers : opponentScorers, random)?.name ?? null,
     }))
 
-  return [
-    ...goalsOf("FOR", periodGoalsOf(match.goalsFor, extra.for), squadScorers),
-    ...goalsOf("AGAINST", periodGoalsOf(match.goalsAgainst, extra.against), opponentScorers),
-  ].sort((a, b) => a.minute - b.minute)
+  const regularFor = match.goalsFor - extra.for
+  const regularAgainst = match.goalsAgainst - extra.against
+  const regularSides = sidesOf({ for: regularFor, against: regularAgainst })
+  const regularMinutes = spacedMinutes(regularSides.length, 1, REGULAR_TIME, random)
+  const extraSides = sidesOf(extra)
+  const extraStart = Math.max(REGULAR_TIME + 1, (regularMinutes.at(-1) ?? 0) + MIN_GOAL_GAP)
+  const extraMinutes = spacedMinutes(extraSides.length, extraStart, FULL_TIME, random)
+
+  return [...goalsOf(regularSides, regularMinutes), ...goalsOf(extraSides, extraMinutes)]
 }

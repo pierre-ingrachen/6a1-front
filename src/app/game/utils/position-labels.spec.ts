@@ -7,9 +7,15 @@ describe("formation display", () => {
     expect(formationVariant("5-2-1-2")).toBe("Offensif")
   })
 
-  it("gives a single word to every formation", () => {
+  it("gives no word to a formation without variants", () => {
     expect(formationTitle("4-2-3-1")).toBe("4-2-3-1")
-    expect(formationVariant("4-2-3-1")).toBe("Moderne")
+    expect(formationVariant("4-2-3-1")).toBe("")
+    expect(formationVariant("5-4-1")).toBe("")
+  })
+
+  it("keeps the large and diamond words for the 4-1-2-1-2 family", () => {
+    expect(formationVariant("4-1-3-2")).toBe("Large")
+    expect(formationVariant("4-1-2-1-2")).toBe("Losange")
   })
 
   it("builds a readable full name", () => {
@@ -18,8 +24,8 @@ describe("formation display", () => {
     expect(formationDisplayName("4-3-3")).toBe("4-3-3 équilibré")
   })
 
-  it("gives a word to every formation offered by the game", () => {
-    const labels = ["4-3-3", "4-1-2-3", "4-2-1-3", "4-4-2", "4-2-2-2", "4-2-3-1", "4-1-4-1", "4-2-4", "3-4-3", "3-2-2-3", "4-1-2-1-2", "4-1-3-2", "3-5-2", "3-1-4-2", "3-4-1-2", "3-4-2-1", "5-3-2", "5-1-2-2", "5-2-1-2", "5-2-3", "5-4-1"]
+  it("gives a word to every formation that has variants", () => {
+    const labels = ["4-3-3", "4-1-2-3", "4-2-1-3", "4-4-2", "4-2-2-2", "3-4-3", "3-2-2-3", "4-1-2-1-2", "4-1-3-2", "3-5-2", "3-1-4-2", "3-4-1-2", "5-3-2", "5-1-2-2", "5-2-1-2"]
 
     expect(labels.every((label) => formationVariant(label).length > 0)).toBeTrue()
   })

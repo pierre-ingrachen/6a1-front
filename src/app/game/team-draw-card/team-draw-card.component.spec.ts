@@ -7,6 +7,8 @@ const draw: Draw = {
   teamName: "Barcelona",
   country: "Spain",
   seasonLabel: "2012/2013",
+  seasonRedrawAvailable: true,
+  teamRedrawAvailable: true,
   players: [
     { playerId: 1, name: "Keeper", rating: 95, line: "GOALKEEPER", positions: ["GK"], eligibleSlots: [3], alreadyPicked: false },
     { playerId: 2, name: "Defender", rating: 90, line: "DEFENDER", positions: ["CB"], eligibleSlots: [2], alreadyPicked: false },

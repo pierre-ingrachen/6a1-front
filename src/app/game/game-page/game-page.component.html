@@ -61,6 +61,8 @@
       >
         <redraw-actions
           [redrawsRemaining]="currentGame.redrawsRemaining"
+          [seasonAvailable]="draw.seasonRedrawAvailable"
+          [teamAvailable]="draw.teamRedrawAvailable"
           [disabled]="loading()"
           (redrawRequested)="redraw($event)"
         />

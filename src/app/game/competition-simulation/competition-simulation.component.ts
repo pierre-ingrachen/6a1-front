@@ -11,13 +11,13 @@ import {
   signal,
 } from "@angular/core"
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop"
-import { EMPTY, Observable, Subject, concat, defer, interval, switchMap, take, takeUntil, takeWhile, tap } from "rxjs"
+import { EMPTY, Observable, Subject, concat, defer, interval, repeat, switchMap, take, takeUntil, takeWhile, tap, timer } from "rxjs"
 import { CompetitionRecapComponent } from "game/competition-recap/competition-recap.component"
 import { MatchCardComponent } from "game/match-card/match-card.component"
 import { CompetitionResult } from "game/models/competition.model"
 import { MatchStep } from "game/models/simulation.model"
 import { TopScorerCardComponent } from "game/top-scorer-card/top-scorer-card.component"
-import { DEFAULT_SIMULATION_SPEED, SIMULATION_SPEEDS, SimulationSpeed } from "game/utils/simulation-speed"
+import { DEFAULT_SIMULATION_SPEED, SIMULATION_SPEEDS, SimulationSpeed, minuteDelayMs } from "game/utils/simulation-speed"
 import { topScorerOf } from "game/utils/top-scorer"
 
 const isGroupStep = (step: MatchStep): boolean => step.match.round === "GROUP_STAGE"
@@ -139,7 +139,7 @@ export class CompetitionSimulationComponent implements OnInit {
   }
 
   private clockOf(step: MatchStep): Observable<unknown> {
-    return this.ticksEvery((speed) => speed.minuteMs).pipe(
+    return this.minuteTicks().pipe(
       tap(() => this.minute.update((minute) => minute + 1)),
       takeWhile(() => this.minute() < step.duration),
       takeUntil(this.skipClock$),
@@ -155,6 +155,12 @@ export class CompetitionSimulationComponent implements OnInit {
       tap(() => this.kicksRevealed.update((revealed) => revealed + 1)),
       takeWhile(() => this.kicksRevealed() < step.shootout.length),
       takeUntil(this.skipClock$),
+    )
+  }
+
+  private minuteTicks(): Observable<number> {
+    return this.speedChanges$.pipe(
+      switchMap((speed) => defer(() => timer(minuteDelayMs(speed, this.minute() + 1))).pipe(repeat())),
     )
   }
 

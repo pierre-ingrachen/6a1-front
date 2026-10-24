@@ -2,9 +2,6 @@
   <header class="banner" [class.champion]="result().champion">
     <h2>{{ message().title }}</h2>
     <p>{{ message().subtitle }}</p>
-    <small>
-      Attaque {{ result().squadStrength.attack.toFixed(1) }} · Défense {{ result().squadStrength.defense.toFixed(1) }}
-    </small>
   </header>
 
   <competition-recap

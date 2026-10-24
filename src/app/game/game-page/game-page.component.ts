@@ -88,6 +88,7 @@ export class GamePageComponent {
   readonly readyToSimulate = computed(() => this.game()?.status === "READY_TO_SIMULATE")
 
   constructor() {
+    this.gameSession.newGameRequested$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.restart())
     this.restoreSavedGame()
   }
 

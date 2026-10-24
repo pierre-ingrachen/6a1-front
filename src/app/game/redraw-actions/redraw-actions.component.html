@@ -3,10 +3,22 @@
     <span>Relances restantes</span>
     <strong [class.exhausted]="exhausted()">{{ redrawsRemaining() }}</strong>
   </div>
-  <button type="button" class="season" [disabled]="disabled() || exhausted()" (click)="redrawRequested.emit('SEASON')">
+  <button
+    type="button"
+    class="season"
+    [disabled]="disabled() || exhausted() || !seasonAvailable()"
+    [attr.title]="seasonUnavailableHint()"
+    (click)="redrawRequested.emit('SEASON')"
+  >
     Autre année
   </button>
-  <button type="button" class="team" [disabled]="disabled() || exhausted()" (click)="redrawRequested.emit('TEAM')">
+  <button
+    type="button"
+    class="team"
+    [disabled]="disabled() || exhausted() || !teamAvailable()"
+    [attr.title]="teamUnavailableHint()"
+    (click)="redrawRequested.emit('TEAM')"
+  >
     Autre équipe
   </button>
 </section>
