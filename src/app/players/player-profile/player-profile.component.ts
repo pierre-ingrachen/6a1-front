@@ -8,14 +8,13 @@ import { MatIconModule } from "@angular/material/icon"
 import { ActivatedRoute, Router, RouterLink } from "@angular/router"
 import { catchError, forkJoin, map, Observable, of, switchMap, throwError } from "rxjs"
 import { PlayerStat, PlayerStats } from "models/player-stats.model"
+import { StatMode } from "models/stat-mode.model"
 import { Season } from "models/season.model"
 import { PlayerService } from "services/player.service"
 import { SeasonService } from "services/season.service"
 import { idleState, loadingState, toLoadState } from "utils/load-state"
 import { playerPositionLabel } from "utils/position-label"
 import { ratingLevel } from "utils/rating"
-
-export type StatMode = "total" | "per90"
 
 @Component({
   selector: "player-profile",
@@ -52,9 +51,7 @@ export class PlayerProfileComponent {
   })
 
   private readonly playerState = toSignal(
-    toObservable(
-      computed(() => (this.seasonsState().status === "loaded" ? { season: this.season() } : null)),
-    ).pipe(
+    toObservable(computed(() => (this.seasonsState().status === "loaded" ? { season: this.season() } : null))).pipe(
       switchMap((request) => {
         if (request === null) {
           return of(idleState<PlayerStats | null>(null))
@@ -73,9 +70,13 @@ export class PlayerProfileComponent {
   private findPlayerSeasonOptions(): Observable<Season[]> {
     return forkJoin({
       seasons: this.seasonService.findAllSeasons(),
-      playerSeasons: this.playerService.findPlayerSeasons(this.playerId).pipe(
-        catchError((error) => (error instanceof HttpErrorResponse && error.status === 404 ? of([]) : throwError(() => error))),
-      ),
+      playerSeasons: this.playerService
+        .findPlayerSeasons(this.playerId)
+        .pipe(
+          catchError((error) =>
+            error instanceof HttpErrorResponse && error.status === 404 ? of([]) : throwError(() => error),
+          ),
+        ),
     }).pipe(
       map(({ seasons, playerSeasons }) =>
         seasons.filter((season) => playerSeasons.some((playerSeason) => playerSeason.startYear === season.startYear)),

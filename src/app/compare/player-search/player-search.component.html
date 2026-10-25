@@ -1,6 +1,6 @@
-<label class="form-label" [for]="inputId">{{ label }}</label>
+<label class="form-label" [for]="inputId()">{{ label() }}</label>
 <input
-  [id]="inputId"
+  [id]="inputId()"
   class="form-control"
   type="search"
   placeholder="Rechercher un joueur…"

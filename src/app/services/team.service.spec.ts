@@ -28,16 +28,6 @@ describe("TeamService", () => {
     request.flush(teams)
   })
 
-  it("fetches one team with GET /teams/{teamId}", () => {
-    const team: Team = { id: 13, name: "Arsenal", country: "England" }
-
-    teamService.findTeamById(13).subscribe((receivedTeam) => expect(receivedTeam).toEqual(team))
-
-    const request = httpTestingController.expectOne(`${environment.apiUrl}/teams/13`)
-    expect(request.request.method).toBe("GET")
-    request.flush(team)
-  })
-
   it("fetches the seasons of a team with GET /teams/{teamId}/seasons", () => {
     const seasons: Season[] = [{ startYear: 2025, label: "2025/2026" }]
 

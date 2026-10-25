@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core"
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core"
 import { MatIconModule } from "@angular/material/icon"
 import { Router, RouterLink, RouterLinkActive } from "@angular/router"
 import { GameSessionService } from "game/services/game-session.service"
@@ -16,6 +16,7 @@ const NAVIGATION_LINKS: readonly Link[] = [
 @Component({
   selector: "navbar",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatIconModule, RouterLink, RouterLinkActive],
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"],
