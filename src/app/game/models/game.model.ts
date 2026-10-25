@@ -39,6 +39,8 @@ export interface Draw {
   teamName: string
   country: string
   seasonLabel: string
+  seasonRedrawAvailable: boolean
+  teamRedrawAvailable: boolean
   players: DrawPlayer[]
 }
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
-import { ActivatedRoute, convertToParamMap, Params, Router } from "@angular/router"
+import { ActivatedRoute, convertToParamMap, Params, provideRouter, Router } from "@angular/router"
 import { MatAutocompleteModule } from "@angular/material/autocomplete"
 import { MatButtonToggleModule } from "@angular/material/button-toggle"
 import { NoopAnimationsModule } from "@angular/platform-browser/animations"
@@ -69,7 +69,7 @@ describe("PlayerCompareComponent", () => {
     1: player(1, "Kylian Mbappé", { goals: 6, per90Goals: 1.5, yellowCards: 3, penalties: 2 }),
     2: player(2, "Erling Haaland", { goals: 4, per90Goals: 1.8, yellowCards: 1, penalties: null }),
   }
-  let router: jasmine.SpyObj<Router>
+  let navigate: jasmine.Spy<Router["navigate"]>
   let playerService: jasmine.SpyObj<PlayerService>
   let fixture: ComponentFixture<PlayerCompareComponent>
 
@@ -83,13 +83,13 @@ describe("PlayerCompareComponent", () => {
 
   const render = (params: Params) => {
     TestBed.overrideProvider(ActivatedRoute, { useValue: { queryParamMap: of(convertToParamMap(params)) } })
+    navigate = spyOn(TestBed.inject(Router), "navigate").and.resolveTo(true)
     fixture = TestBed.createComponent(PlayerCompareComponent)
     fixture.detectChanges()
     fixture.detectChanges()
   }
 
   beforeEach(() => {
-    router = jasmine.createSpyObj<Router>("Router", ["navigate"])
     playerService = jasmine.createSpyObj<PlayerService>("PlayerService", ["findPlayerStats", "searchPlayers"])
     playerService.findPlayerStats.and.callFake((playerId) =>
       players[playerId] ? of(players[playerId]) : throwError(() => new Error("404")),
@@ -99,7 +99,7 @@ describe("PlayerCompareComponent", () => {
     TestBed.configureTestingModule({
       imports: [PlayerCompareComponent, NoopAnimationsModule],
       providers: [
-        { provide: Router, useValue: router },
+        provideRouter([]),
         { provide: ActivatedRoute, useValue: {} },
         { provide: PlayerService, useValue: playerService },
         {
@@ -121,11 +121,18 @@ describe("PlayerCompareComponent", () => {
 
     expect(playerService.findPlayerStats).toHaveBeenCalledWith(1, 2024)
     expect(playerService.findPlayerStats).toHaveBeenCalledWith(2, 2025)
-    expect(router.navigate).not.toHaveBeenCalled()
+    expect(navigate).not.toHaveBeenCalled()
     const names = Array.from(element().querySelectorAll(".player-header h2")).map((title) => title.textContent)
     expect(names).toEqual(["Kylian Mbappé", "Erling Haaland"])
     expect(Array.from(element().querySelectorAll(".player-header .position")).map((p) => p.textContent?.trim().split(" · ")[0])).toEqual(["Attaquant", "Attaquant"])
     expect(element().querySelectorAll(".estimated").length).toBe(1)
+  })
+
+  it("links each player name to their profile on the selected season", () => {
+    render({ p1: "1", s1: "2024", p2: "2", s2: "2025" })
+
+    const links = Array.from(element().querySelectorAll<HTMLAnchorElement>(".player-header h2 a")).map((link) => link.getAttribute("href"))
+    expect(links).toEqual(["/joueurs/1?season=2024", "/joueurs/2?season=2025"])
   })
 
   it("selects the latest season the player actually played when chosen", () => {
@@ -134,7 +141,7 @@ describe("PlayerCompareComponent", () => {
     fixture.componentInstance.selectFirstPlayer({ id: 1, name: "Kylian Mbappé", position: "Forward", teamName: "PSG", seasons: [{ startYear: 2025, teamName: "PSG" }, { startYear: 2024, teamName: "PSG" }] })
     fixture.componentInstance.selectSecondPlayer({ id: 2, name: "Erling Haaland", position: "Forward", teamName: "City", seasons: [{ startYear: 2024, teamName: "City" }] })
 
-    const urlUpdates = router.navigate.calls.allArgs().map(([, extras]) => extras?.queryParams)
+    const urlUpdates = navigate.calls.allArgs().map(([, extras]) => extras?.queryParams)
     expect(urlUpdates).toEqual([
       { p1: 1, s1: 2025 },
       { p2: 2, s2: 2024 },
@@ -146,7 +153,7 @@ describe("PlayerCompareComponent", () => {
 
     fixture.componentInstance.selectSecondSeason(2024)
 
-    const urlUpdates = router.navigate.calls.allArgs().map(([, extras]) => extras?.queryParams)
+    const urlUpdates = navigate.calls.allArgs().map(([, extras]) => extras?.queryParams)
     expect(urlUpdates).toEqual([{ s2: 2024 }])
   })
 

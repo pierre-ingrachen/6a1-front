@@ -1,5 +1,5 @@
 import { DecimalPipe, NgTemplateOutlet } from "@angular/common"
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
+import { ChangeDetectionStrategy, Component, computed, input } from "@angular/core"
 import { StatValue } from "models/player-stats.model"
 
 @Component({
@@ -11,18 +11,18 @@ import { StatValue } from "models/player-stats.model"
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatRowComponent {
-  @Input() label = ""
-  @Input() first: StatValue | null = null
-  @Input() second: StatValue | null = null
-  @Input() lowerIsBetter = false
+  readonly label = input("")
+  readonly first = input<StatValue | null>(null)
+  readonly second = input<StatValue | null>(null)
+  readonly lowerIsBetter = input(false)
 
-  get best(): "first" | "second" | null {
-    const firstValue = this.first?.value ?? null
-    const secondValue = this.second?.value ?? null
+  readonly best = computed<"first" | "second" | null>(() => {
+    const firstValue = this.first()?.value ?? null
+    const secondValue = this.second()?.value ?? null
     if (firstValue === null || secondValue === null || firstValue === secondValue) {
       return null
     }
-    const firstIsBetter = this.lowerIsBetter ? firstValue < secondValue : firstValue > secondValue
+    const firstIsBetter = this.lowerIsBetter() ? firstValue < secondValue : firstValue > secondValue
     return firstIsBetter ? "first" : "second"
-  }
+  })
 }

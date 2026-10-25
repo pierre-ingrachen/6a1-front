@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, EventEmitter, inject, Input, Output } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  EventEmitter,
+  inject,
+  input,
+  Output,
+} from "@angular/core"
 import { toSignal } from "@angular/core/rxjs-interop"
 import { FormControl, ReactiveFormsModule } from "@angular/forms"
 import { MatAutocompleteModule } from "@angular/material/autocomplete"
@@ -21,14 +30,16 @@ const SEARCH_DEBOUNCE_MS = 300
 export class PlayerSearchComponent {
   private readonly playerService = inject(PlayerService)
 
-  @Input({ required: true }) inputId!: string
-  @Input({ required: true }) label!: string
-  @Input() set selectedName(name: string | null | undefined) {
-    this.searchControl.setValue(name ?? "", { emitEvent: false })
-  }
+  readonly inputId = input.required<string>()
+  readonly label = input.required<string>()
+  readonly selectedName = input<string | null | undefined>(null)
   @Output() playerSelected = new EventEmitter<PlayerSearchResult>()
 
   readonly searchControl = new FormControl<string | PlayerSearchResult>("", { nonNullable: true })
+
+  constructor() {
+    effect(() => this.searchControl.setValue(this.selectedName() ?? "", { emitEvent: false }))
+  }
 
   private readonly searchState = toSignal(
     this.searchControl.valueChanges.pipe(

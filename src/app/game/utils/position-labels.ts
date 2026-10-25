@@ -50,9 +50,9 @@ const FORMATION_DISPLAYS: Record<string, FormationDisplay> = {
   "4-2-1-3": { title: "4-3-3", variant: "Offensif" },
   "4-4-2": { title: "4-4-2", variant: "Équilibré" },
   "4-2-2-2": { title: "4-4-2", variant: "Défensif" },
-  "4-2-3-1": { title: "4-2-3-1", variant: "Moderne" },
-  "4-1-4-1": { title: "4-1-4-1", variant: "Pivot" },
-  "4-2-4": { title: "4-2-4", variant: "Audacieux" },
+  "4-2-3-1": { title: "4-2-3-1", variant: "" },
+  "4-1-4-1": { title: "4-1-4-1", variant: "" },
+  "4-2-4": { title: "4-2-4", variant: "" },
   "3-4-3": { title: "3-4-3", variant: "Équilibré" },
   "3-2-2-3": { title: "3-4-3", variant: "Défensif" },
   "4-1-2-1-2": { title: "4-1-2-1-2", variant: "Losange" },
@@ -60,12 +60,12 @@ const FORMATION_DISPLAYS: Record<string, FormationDisplay> = {
   "3-5-2": { title: "3-5-2", variant: "Équilibré" },
   "3-1-4-2": { title: "3-5-2", variant: "Défensif" },
   "3-4-1-2": { title: "3-5-2", variant: "Offensif" },
-  "3-4-2-1": { title: "3-4-2-1", variant: "Créatif" },
+  "3-4-2-1": { title: "3-4-2-1", variant: "" },
   "5-3-2": { title: "5-3-2", variant: "Équilibré" },
   "5-1-2-2": { title: "5-3-2", variant: "Défensif" },
   "5-2-1-2": { title: "5-3-2", variant: "Offensif" },
-  "5-2-3": { title: "5-2-3", variant: "Contre" },
-  "5-4-1": { title: "5-4-1", variant: "Verrou" },
+  "5-2-3": { title: "5-2-3", variant: "" },
+  "5-4-1": { title: "5-4-1", variant: "" },
 }
 
 const isFamilyVariant = (formation: string): boolean => {

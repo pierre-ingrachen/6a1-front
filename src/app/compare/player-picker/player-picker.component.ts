@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core"
+import { ChangeDetectionStrategy, Component, EventEmitter, input, Output } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { PlayerSearchComponent } from "compare/player-search/player-search.component"
 import { PlayerSearchResult } from "models/player-search-result.model"
@@ -13,12 +13,12 @@ import { SeasonOption } from "models/season.model"
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerPickerComponent {
-  @Input({ required: true }) inputId!: string
-  @Input({ required: true }) label!: string
-  @Input() seasons: SeasonOption[] = []
-  @Input() selectedSeason: number | null = null
-  @Input() selectedName: string | null | undefined = null
-  @Input() hasPlayer = false
+  readonly inputId = input.required<string>()
+  readonly label = input.required<string>()
+  readonly seasons = input<SeasonOption[]>([])
+  readonly selectedSeason = input<number | null>(null)
+  readonly selectedName = input<string | null | undefined>(null)
+  readonly hasPlayer = input(false)
   @Output() playerSelected = new EventEmitter<PlayerSearchResult>()
   @Output() seasonSelected = new EventEmitter<number>()
 }

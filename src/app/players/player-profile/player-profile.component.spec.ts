@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from "@angular/router"
+import { HttpErrorResponse } from "@angular/common/http"
 import { of, throwError } from "rxjs"
 import { PlayerProfileComponent } from "players/player-profile/player-profile.component"
 import { PlayerStats } from "models/player-stats.model"
@@ -51,8 +52,14 @@ describe("PlayerProfileComponent", () => {
   }
 
   beforeEach(() => {
-    playerService = jasmine.createSpyObj<PlayerService>("PlayerService", ["findPlayerStats"])
+    playerService = jasmine.createSpyObj<PlayerService>("PlayerService", ["findPlayerStats", "findPlayerSeasons"])
     playerService.findPlayerStats.and.returnValue(of(stats))
+    playerService.findPlayerSeasons.and.returnValue(
+      of([
+        { startYear: 2025, teamName: "PSG" },
+        { startYear: 2024, teamName: "PSG" },
+      ]),
+    )
     TestBed.configureTestingModule({
       imports: [PlayerProfileComponent],
       providers: [
@@ -65,6 +72,7 @@ describe("PlayerProfileComponent", () => {
               of([
                 { startYear: 2025, label: "2025/2026" },
                 { startYear: 2024, label: "2024/2025" },
+                { startYear: 2023, label: "2023/2024" },
               ]),
           },
         },
@@ -87,6 +95,19 @@ describe("PlayerProfileComponent", () => {
     expect(playerService.findPlayerStats).toHaveBeenCalledOnceWith(11119, 2024)
   })
 
+  it("only offers the seasons the player has stats for", () => {
+    render()
+
+    const labels = Array.from(element().querySelectorAll<HTMLOptionElement>("#season option")).map((option) => option.textContent?.trim())
+    expect(labels).toEqual(["2025/2026", "2024/2025"])
+  })
+
+  it("falls back to the latest season of the player when the URL season is not available", () => {
+    render({ season: "2023" })
+
+    expect(playerService.findPlayerStats).toHaveBeenCalledOnceWith(11119, 2025)
+  })
+
   it("switches the stats between totals and per 90 minutes", () => {
     render()
     expect(element().querySelector(".stat .value")?.textContent?.trim()).toBe("5")
@@ -105,6 +126,15 @@ describe("PlayerProfileComponent", () => {
     render()
 
     expect(element().querySelector(".empty-state")?.textContent).toContain("pas de stats sur cette saison")
+  })
+
+  it("tells the player has no stats when the player is unknown", () => {
+    playerService.findPlayerSeasons.and.returnValue(throwError(() => new HttpErrorResponse({ status: 404 })))
+
+    render()
+
+    expect(element().querySelector(".empty-state")?.textContent).toContain("pas de stats sur cette saison")
+    expect(element().querySelector(".error-message")).toBeNull()
   })
 
   it("shows an error instead of loading forever when the seasons cannot be loaded", () => {

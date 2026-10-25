@@ -16,6 +16,7 @@
       <a
         [routerLink]="link.href ? '/' + link.href : '/'"
         routerLinkActive="active"
+        (click)="onLinkClicked(link)"
         [routerLinkActiveOptions]="{ exact: link.href === '' }"
       >
         <span class="nav-link-content">

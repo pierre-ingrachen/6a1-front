@@ -1,9 +1,17 @@
 import { Injectable } from "@angular/core"
+import { Observable, Subject } from "rxjs"
 
 const CURRENT_GAME_KEY = "6a1.currentGameId"
 
 @Injectable({ providedIn: "root" })
 export class GameSessionService {
+  private readonly newGameRequests = new Subject<void>()
+  readonly newGameRequested$: Observable<void> = this.newGameRequests.asObservable()
+
+  requestNewGame(): void {
+    this.newGameRequests.next()
+  }
+
   read(): string | null {
     try {
       return sessionStorage.getItem(CURRENT_GAME_KEY)

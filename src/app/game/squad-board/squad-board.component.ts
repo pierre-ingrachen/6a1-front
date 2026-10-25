@@ -30,6 +30,11 @@ export class SquadBoardComponent {
     return new Map(placed.map(({ slot }, index) => [slot.index, numbers[index]]))
   })
 
+  readonly filledJerseyColor = "#d62828"
+  readonly filledNumberColor = "#ffffff"
+  readonly emptyJerseyColor = "#ffffff"
+  readonly emptyNumberColor = "#1b2e5c"
+
   readonly label = positionLabel
   readonly name = positionName
   readonly shortName = shortName

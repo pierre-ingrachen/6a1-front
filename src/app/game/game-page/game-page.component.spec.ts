@@ -20,6 +20,8 @@ const draftingGame: Game = {
     teamName: "Barcelona",
     country: "Spain",
     seasonLabel: "2012/2013",
+    seasonRedrawAvailable: true,
+    teamRedrawAvailable: true,
     players: [
       {
         playerId: 5,
@@ -73,6 +75,7 @@ const result: CompetitionResult = {
 describe("GamePageComponent", () => {
   let api: jasmine.SpyObj<GameApiService>
   let session: jasmine.SpyObj<GameSessionService>
+  let newGameRequests: Subject<void>
 
   const create = () => {
     const fixture = TestBed.createComponent(GamePageComponent)
@@ -81,7 +84,10 @@ describe("GamePageComponent", () => {
   }
 
   beforeEach(() => {
-    session = jasmine.createSpyObj<GameSessionService>("GameSessionService", ["read", "save", "clear"])
+    newGameRequests = new Subject<void>()
+    session = jasmine.createSpyObj<GameSessionService>("GameSessionService", ["read", "save", "clear"], {
+      newGameRequested$: newGameRequests.asObservable(),
+    })
     session.read.and.returnValue(null)
     api = jasmine.createSpyObj<GameApiService>("GameApiService", [
       "findFormations",
@@ -458,6 +464,19 @@ describe("GamePageComponent", () => {
 
       expect(session.clear).not.toHaveBeenCalled()
       expect(fixture.componentInstance.errorMessage()).toBe("Le serveur ne répond pas.")
+    })
+
+    it("starts a brand new game when a new game is requested during a game", () => {
+      session.read.and.returnValue("game-1")
+      api.findGame.and.returnValue(of(draftingGame))
+      const fixture = create()
+
+      newGameRequests.next()
+      fixture.detectChanges()
+
+      expect(session.clear).toHaveBeenCalled()
+      expect(fixture.componentInstance.game()).toBeNull()
+      expect(fixture.nativeElement.querySelectorAll(".formation").length).toBe(2)
     })
 
     it("does not look for a game when none is saved", () => {

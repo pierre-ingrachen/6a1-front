@@ -1,0 +1,11 @@
+<main class="search-page">
+  <header class="page-heading">
+    <span class="eyebrow"><mat-icon>person_search</mat-icon> Joueurs</span>
+    <h1>Rechercher un joueur</h1>
+    <p>Tapez au moins deux lettres du nom pour accéder à sa fiche et à ses statistiques.</p>
+  </header>
+
+  <section class="search-panel">
+    <player-search inputId="player-search" label="Nom du joueur" (playerSelected)="openProfile($event)" />
+  </section>
+</main>

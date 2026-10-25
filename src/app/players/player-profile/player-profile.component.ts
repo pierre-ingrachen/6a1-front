@@ -1,20 +1,20 @@
 import { DecimalPipe, Location } from "@angular/common"
+import { HttpErrorResponse } from "@angular/common/http"
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from "@angular/core"
 import { toObservable, toSignal } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { ActivatedRoute, Router, RouterLink } from "@angular/router"
-import { of, switchMap } from "rxjs"
+import { catchError, forkJoin, map, Observable, of, switchMap, throwError } from "rxjs"
 import { PlayerStat, PlayerStats } from "models/player-stats.model"
+import { StatMode } from "models/stat-mode.model"
 import { Season } from "models/season.model"
 import { PlayerService } from "services/player.service"
 import { SeasonService } from "services/season.service"
 import { idleState, loadingState, toLoadState } from "utils/load-state"
 import { playerPositionLabel } from "utils/position-label"
 import { ratingLevel } from "utils/rating"
-
-export type StatMode = "total" | "per90"
 
 @Component({
   selector: "player-profile",
@@ -37,21 +37,21 @@ export class PlayerProfileComponent {
   readonly mode = signal<StatMode>("total")
   readonly playerId = Number(this.route.snapshot.paramMap.get("playerId"))
 
-  private readonly seasonsState = toSignal(toLoadState(this.seasonService.findAllSeasons(), [] as Season[]), {
+  private readonly seasonsState = toSignal(toLoadState(this.findPlayerSeasonOptions(), [] as Season[]), {
     initialValue: loadingState([] as Season[]),
   })
   private readonly queryParams = toSignal(this.route.queryParamMap, { requireSync: true })
 
   readonly seasons = computed(() => this.seasonsState().data)
   readonly seasonsFailed = computed(() => this.seasonsState().status === "error")
-  readonly season = computed(
-    () => Number(this.queryParams().get("season")) || this.seasons()[0]?.startYear || null,
-  )
+  readonly season = computed(() => {
+    const requested = Number(this.queryParams().get("season"))
+    const available = this.seasons()
+    return available.find((season) => season.startYear === requested)?.startYear ?? available[0]?.startYear ?? null
+  })
 
   private readonly playerState = toSignal(
-    toObservable(
-      computed(() => (this.seasonsState().status === "loaded" ? { season: this.season() } : null)),
-    ).pipe(
+    toObservable(computed(() => (this.seasonsState().status === "loaded" ? { season: this.season() } : null))).pipe(
       switchMap((request) => {
         if (request === null) {
           return of(idleState<PlayerStats | null>(null))
@@ -66,6 +66,23 @@ export class PlayerProfileComponent {
 
   readonly player = computed(() => this.playerState().data)
   readonly playerMissing = computed(() => this.playerState().status === "error")
+
+  private findPlayerSeasonOptions(): Observable<Season[]> {
+    return forkJoin({
+      seasons: this.seasonService.findAllSeasons(),
+      playerSeasons: this.playerService
+        .findPlayerSeasons(this.playerId)
+        .pipe(
+          catchError((error) =>
+            error instanceof HttpErrorResponse && error.status === 404 ? of([]) : throwError(() => error),
+          ),
+        ),
+    }).pipe(
+      map(({ seasons, playerSeasons }) =>
+        seasons.filter((season) => playerSeasons.some((playerSeason) => playerSeason.startYear === season.startYear)),
+      ),
+    )
+  }
 
   back(): void {
     this.location.back()

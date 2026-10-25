@@ -17,8 +17,9 @@ export const routes: Routes = [
     loadComponent: () => import("teams/team-list/team-list.component").then((module) => module.TeamListComponent),
   },
   {
-    path: "teams/:teamId",
-    loadComponent: () => import("teams/team-detail/team-detail.component").then((module) => module.TeamDetailComponent),
+    path: "joueurs",
+    loadComponent: () =>
+      import("players/player-search-page/player-search-page.component").then((module) => module.PlayerSearchPageComponent),
   },
   {
     path: "joueurs/:playerId",

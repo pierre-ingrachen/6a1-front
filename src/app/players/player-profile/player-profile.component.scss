@@ -12,7 +12,7 @@
 
 .back-link {
   margin: 0 0 1.5rem -0.5rem;
-  color: #5a2a7a;
+  color: #12285a;
   font-weight: 600;
 }
 
@@ -34,11 +34,11 @@
   padding: 0 1.75rem;
   border-radius: 999px;
   white-space: nowrap;
-  --mdc-filled-button-container-color: #60336f;
+  --mdc-filled-button-container-color: #0b2a6b;
   --mdc-filled-button-label-text-color: #fff;
   --mdc-filled-button-container-shape: 999px;
   font-weight: 650;
-  background-image: linear-gradient(140deg, #281233, #60336f 72%, #824481);
+  background-image: linear-gradient(140deg, #050e2b, #0b2a6b 72%, #1747b0);
 }
 
 .profile-header {
@@ -48,7 +48,7 @@
   padding: 1.5rem;
   border-radius: 22px;
   color: #fff;
-  background: linear-gradient(140deg, #281233, #60336f 72%, #824481);
+  background: linear-gradient(140deg, #050e2b, #0b2a6b 72%, #1747b0);
 
   h1 {
     margin: 0;
@@ -82,7 +82,7 @@
   place-items: center;
   border: 2px solid rgba(255, 255, 255, 0.28);
   border-radius: 18px;
-  background: linear-gradient(145deg, #db9b57, #a64f61);
+  background: linear-gradient(145deg, #3b82ff, #1747b0);
   font-size: 1.6rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -98,11 +98,11 @@
     padding: 0.8rem 1rem;
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 8px 24px rgba(46, 19, 58, 0.06);
+    box-shadow: 0 8px 24px rgba(10, 22, 51, 0.08);
   }
 
   dt {
-    color: #756b7b;
+    color: #4a5b7d;
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -111,14 +111,14 @@
 
   dd {
     margin: 0.3rem 0 0;
-    color: #32163d;
+    color: #0a1633;
     font-size: 1.2rem;
     font-weight: 700;
   }
 }
 
 .legend {
-  color: #756b7b;
+  color: #4a5b7d;
   font-size: 0.85rem;
 }
 
@@ -140,7 +140,7 @@
   border-bottom: 1px solid #eee;
 
   &.detail .label {
-    color: #756b7b;
+    color: #4a5b7d;
     font-size: 0.85rem;
   }
 }
@@ -172,10 +172,10 @@
 .empty-state,
 .error-message {
   padding: 2rem;
-  border: 1px dashed rgba(128, 73, 170, 0.3);
+  border: 1px dashed rgba(23, 71, 176, 0.3);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.6);
-  color: #62546e;
+  color: #4a5b7d;
   text-align: center;
 }
 

@@ -19,7 +19,9 @@
     <app-jersey
       class="jersey"
       [number]="placed.slot.player ? (jerseyNumbers().get(placed.slot.index) ?? '') : ''"
-      [goalkeeper]="placed.slot.line === 'GOALKEEPER'"
+      [color]="placed.slot.player ? filledJerseyColor : emptyJerseyColor"
+      [numberColor]="placed.slot.player ? filledNumberColor : emptyNumberColor"
+      [goalkeeper]="placed.slot.line === 'GOALKEEPER' && placed.slot.player !== null"
     />
     <span class="label">{{ placed.slot.player ? shortName(placed.slot.player.name) : label(placed.slot.position) }}</span>
   </button>

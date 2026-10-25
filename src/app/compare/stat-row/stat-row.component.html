@@ -21,6 +21,6 @@
   </div>
 </ng-template>
 
-<ng-container *ngTemplateOutlet="side; context: { $implicit: first, isBest: best === 'first', position: 'first' }" />
-<div class="label">{{ label }}</div>
-<ng-container *ngTemplateOutlet="side; context: { $implicit: second, isBest: best === 'second', position: 'second' }" />
+<ng-container *ngTemplateOutlet="side; context: { $implicit: first(), isBest: best() === 'first', position: 'first' }" />
+<div class="label">{{ label() }}</div>
+<ng-container *ngTemplateOutlet="side; context: { $implicit: second(), isBest: best() === 'second', position: 'second' }" />

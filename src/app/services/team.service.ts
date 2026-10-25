@@ -17,10 +17,6 @@ export class TeamService {
     return this.http.get<Team[]>(this.teamUrl)
   }
 
-  findTeamById(teamId: number): Observable<Team> {
-    return this.http.get<Team>(`${this.teamUrl}/${teamId}`)
-  }
-
   findSeasonsByTeam(teamId: number): Observable<Season[]> {
     return this.http.get<Season[]>(`${this.teamUrl}/${teamId}/seasons`)
   }

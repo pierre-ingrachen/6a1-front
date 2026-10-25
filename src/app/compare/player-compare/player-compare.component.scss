@@ -134,6 +134,16 @@
     white-space: nowrap;
   }
 
+  .profile-link {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+
   .placeholder,
   .missing {
     margin: 0;

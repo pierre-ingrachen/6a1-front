@@ -3,20 +3,19 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from "@a
 import { toObservable, toSignal } from "@angular/core/rxjs-interop"
 import { MatButtonToggleModule } from "@angular/material/button-toggle"
 import { MatIconModule } from "@angular/material/icon"
-import { ActivatedRoute, ParamMap, Params, Router } from "@angular/router"
+import { ActivatedRoute, ParamMap, Params, Router, RouterLink } from "@angular/router"
 import { catchError, forkJoin, map, Observable, of, switchMap } from "rxjs"
 import { PlayerPickerComponent } from "compare/player-picker/player-picker.component"
 import { StatRowComponent } from "compare/stat-row/stat-row.component"
 import { PlayerSearchResult } from "models/player-search-result.model"
 import { PlayerStat, PlayerStats } from "models/player-stats.model"
+import { StatMode } from "models/stat-mode.model"
 import { Season, SeasonOption } from "models/season.model"
 import { PlayerService } from "services/player.service"
 import { SeasonService } from "services/season.service"
 import { loadingState, toLoadState } from "utils/load-state"
 import { playerPositionLabel } from "utils/position-label"
 import { ratingLevel } from "utils/rating"
-
-export type StatMode = "total" | "per90"
 
 export interface StatComparison {
   key: string
@@ -49,7 +48,15 @@ const NO_SLOTS: [PlayerSlot, PlayerSlot] = [EMPTY_SLOT, EMPTY_SLOT]
 @Component({
   selector: "player-compare",
   standalone: true,
-  imports: [PlayerPickerComponent, StatRowComponent, MatButtonToggleModule, MatIconModule, NgTemplateOutlet, DecimalPipe],
+  imports: [
+    PlayerPickerComponent,
+    StatRowComponent,
+    MatButtonToggleModule,
+    MatIconModule,
+    NgTemplateOutlet,
+    DecimalPipe,
+    RouterLink,
+  ],
   templateUrl: "./player-compare.component.html",
   styleUrls: ["./player-compare.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,8 +81,12 @@ export class PlayerCompareComponent {
 
   readonly seasons = computed(() => this.seasonsState().data)
   readonly seasonsFailed = computed(() => this.seasonsState().status === "error")
-  readonly firstSeasons = computed(() => (this.firstSeasonOptions().length ? this.firstSeasonOptions() : this.seasons()))
-  readonly secondSeasons = computed(() => (this.secondSeasonOptions().length ? this.secondSeasonOptions() : this.seasons()))
+  readonly firstSeasons = computed(() =>
+    this.firstSeasonOptions().length ? this.firstSeasonOptions() : this.seasons(),
+  )
+  readonly secondSeasons = computed(() =>
+    this.secondSeasonOptions().length ? this.secondSeasonOptions() : this.seasons(),
+  )
 
   private readonly selection = computed(() => ({
     first: this.toSlotSelection(this.queryParams(), "p1", "s1"),
@@ -89,9 +100,7 @@ export class PlayerCompareComponent {
   private readonly slots = toSignal(
     toObservable(computed(() => (this.seasonsState().status === "loaded" ? this.selection() : null))).pipe(
       switchMap((selection) =>
-        selection === null
-          ? of(NO_SLOTS)
-          : forkJoin([this.loadSlot(selection.first), this.loadSlot(selection.second)]),
+        selection === null ? of(NO_SLOTS) : forkJoin([this.loadSlot(selection.first), this.loadSlot(selection.second)]),
       ),
     ),
     { initialValue: NO_SLOTS },
@@ -121,7 +130,10 @@ export class PlayerCompareComponent {
 
   private seasonsOf(player: PlayerSearchResult): SeasonOption[] {
     return this.seasons()
-      .map((season) => ({ ...season, teamName: player.seasons.find((played) => played.startYear === season.startYear)?.teamName }))
+      .map((season) => ({
+        ...season,
+        teamName: player.seasons.find((played) => played.startYear === season.startYear)?.teamName,
+      }))
       .filter((season) => season.teamName !== undefined)
   }
 

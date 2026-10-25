@@ -41,6 +41,35 @@ describe("SquadBoardComponent", () => {
     expect(empty.querySelector("text")?.textContent?.trim()).toBe("")
   })
 
+  it("colors the jersey red with a white number only when the slot is filled", () => {
+    const root = create()
+    const filled = root.querySelector(".slot.filled") as HTMLElement
+    const empty = Array.from(root.querySelectorAll<HTMLElement>(".slot:not(.filled)")).find((slot) => slot.textContent?.includes("AG"))!
+
+    expect(filled.querySelector(".body")?.getAttribute("fill")).toBe("#d62828")
+    expect(filled.querySelector("text")?.getAttribute("fill")).toBe("#ffffff")
+    expect(empty.querySelector(".body")?.getAttribute("fill")).toBe("#ffffff")
+  })
+
+  it("shows a white goalkeeper jersey while its slot is empty", () => {
+    const goalkeeper = Array.from(create().querySelectorAll<HTMLElement>(".slot:not(.filled)")).find((slot) =>
+      slot.title.length > 0 && !slot.textContent?.includes("AG"),
+    )!
+
+    expect(goalkeeper.querySelector(".body")?.getAttribute("fill")).toBe("#ffffff")
+  })
+
+  it("keeps the goalkeeper jersey green when its slot is filled", () => {
+    const fixture = TestBed.createComponent(SquadBoardComponent)
+    const filledGoalkeeper: Slot = { ...slots[0], player: slots[1].player }
+    fixture.componentRef.setInput("slots", [filledGoalkeeper])
+    fixture.detectChanges()
+
+    const body = fixture.nativeElement.querySelector(".slot.filled .body") as SVGElement
+
+    expect(body.getAttribute("fill")).toBe("#3aa84a")
+  })
+
   it("highlights only empty eligible slots", () => {
     const highlighted = create([1, 2]).querySelectorAll(".slot.highlighted")
 

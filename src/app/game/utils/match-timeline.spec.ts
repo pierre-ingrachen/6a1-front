@@ -1,6 +1,6 @@
 import { MatchResult } from "game/models/competition.model"
 import { Slot } from "game/models/game.model"
-import { buildGoals, matchDuration } from "game/utils/match-timeline"
+import { MIN_GOAL_GAP, buildGoals, matchDuration } from "game/utils/match-timeline"
 
 const matchOf = (overrides: Partial<MatchResult>): MatchResult => ({
   round: "ROUND_OF_16",
@@ -68,6 +68,31 @@ describe("buildGoals", () => {
       expect(regular.for).toBe(regular.against)
       expect(score(goals, 120)).toEqual({ for: match.goalsFor, against: match.goalsAgainst })
     })
+  })
+
+  it("spaces every goal of the match by at least five minutes", () => {
+    const random = seeded()
+    const matches = [
+      matchOf({ goalsFor: 3, goalsAgainst: 3 }),
+      matchOf({ goalsFor: 5, goalsAgainst: 4 }),
+      matchOf({ goalsFor: 2, goalsAgainst: 2, extraTime: true, penaltiesFor: 4, penaltiesAgainst: 3 }),
+      matchOf({ goalsFor: 3, goalsAgainst: 2, extraTime: true }),
+    ]
+    Array.from({ length: 200 }).forEach(() =>
+      matches.forEach((match) => {
+        const minutes = buildGoals(match, squad, random).map((goal) => goal.minute)
+        minutes.slice(1).forEach((minute, index) => expect(minute - minutes[index]).toBeGreaterThanOrEqual(MIN_GOAL_GAP))
+        expect(minutes.every((minute) => minute >= 1 && minute <= matchDuration(match))).toBeTrue()
+      }),
+    )
+  })
+
+  it("keeps goals distinct and ordered even when the score is very high", () => {
+    const minutes = buildGoals(matchOf({ goalsFor: 12, goalsAgainst: 8 }), squad, seeded()).map((goal) => goal.minute)
+    expect(minutes.length).toBe(20)
+    expect(new Set(minutes).size).toBe(20)
+    expect(minutes).toEqual([...minutes].sort((a, b) => a - b))
+    expect(minutes.every((minute) => minute >= 1 && minute <= 90)).toBeTrue()
   })
 
   it("returns no goal for a goalless draw", () => {
