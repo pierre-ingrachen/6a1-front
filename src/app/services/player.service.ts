@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core"
 import { HttpClient, HttpParams } from "@angular/common/http"
 import { Observable } from "rxjs"
-import { PlayerSearchResult } from "models/player-search-result.model"
+import { PlayerSearchResult, PlayerSeasonTeam } from "models/player-search-result.model"
 import { PlayerStats } from "models/player-stats.model"
 import { ApiUrlService } from "services/api-url.service"
 
@@ -15,6 +15,10 @@ export class PlayerService {
   searchPlayers(query: string): Observable<PlayerSearchResult[]> {
     const params = new HttpParams().set("query", query)
     return this.http.get<PlayerSearchResult[]>(`${this.playerUrl}/search`, { params })
+  }
+
+  findPlayerSeasons(playerId: number): Observable<PlayerSeasonTeam[]> {
+    return this.http.get<PlayerSeasonTeam[]>(`${this.playerUrl}/${playerId}/seasons`)
   }
 
   findPlayerStats(playerId: number, season: number): Observable<PlayerStats> {

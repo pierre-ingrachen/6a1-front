@@ -9,6 +9,7 @@ const GAME_HREF = "jeu"
 const NAVIGATION_LINKS: readonly Link[] = [
   { name: "Jouer", href: GAME_HREF, icon: "sports_soccer" },
   { name: "Équipes", href: "teams", icon: "groups" },
+  { name: "Joueurs", href: "joueurs", icon: "person_search" },
   { name: "Comparer", href: "compare", icon: "compare_arrows" },
 ]
 

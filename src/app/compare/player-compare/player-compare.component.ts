@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from "@a
 import { toObservable, toSignal } from "@angular/core/rxjs-interop"
 import { MatButtonToggleModule } from "@angular/material/button-toggle"
 import { MatIconModule } from "@angular/material/icon"
-import { ActivatedRoute, ParamMap, Params, Router } from "@angular/router"
+import { ActivatedRoute, ParamMap, Params, Router, RouterLink } from "@angular/router"
 import { catchError, forkJoin, map, Observable, of, switchMap } from "rxjs"
 import { PlayerPickerComponent } from "compare/player-picker/player-picker.component"
 import { StatRowComponent } from "compare/stat-row/stat-row.component"
@@ -49,7 +49,7 @@ const NO_SLOTS: [PlayerSlot, PlayerSlot] = [EMPTY_SLOT, EMPTY_SLOT]
 @Component({
   selector: "player-compare",
   standalone: true,
-  imports: [PlayerPickerComponent, StatRowComponent, MatButtonToggleModule, MatIconModule, NgTemplateOutlet, DecimalPipe],
+  imports: [PlayerPickerComponent, StatRowComponent, MatButtonToggleModule, MatIconModule, NgTemplateOutlet, DecimalPipe, RouterLink],
   templateUrl: "./player-compare.component.html",
   styleUrls: ["./player-compare.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

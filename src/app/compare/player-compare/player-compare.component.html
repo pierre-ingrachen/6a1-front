@@ -38,13 +38,13 @@
 </section>
 }
 
-<ng-template #header let-slot>
+<ng-template #header let-slot let-season="season">
   <article class="player-header player-card">
     @if (slot.player; as player) {
     <div class="player-card-header">
       <div class="player-avatar" aria-hidden="true">{{ player.name.charAt(0) }}</div>
       <div class="player-heading">
-        <h2>{{ player.name }}</h2>
+        <h2><a class="profile-link" [routerLink]="['/joueurs', player.id]" [queryParams]="{ season }">{{ player.name }}</a></h2>
         <span class="position">{{ positionLabel(player.position) }} · {{ player.teamName }}</span>
       </div>
       <span class="rating-badge rating-{{ ratingLevel(player.averageRating) }}" title="Note moyenne">{{ player.averageRating !== null ? (player.averageRating | number : "1.2-2") : "—" }}</span>
@@ -88,8 +88,8 @@
 </ng-template>
 
 <div class="headers">
-  <ng-container *ngTemplateOutlet="header; context: { $implicit: firstSlot() }" />
-  <ng-container *ngTemplateOutlet="header; context: { $implicit: secondSlot() }" />
+  <ng-container *ngTemplateOutlet="header; context: { $implicit: firstSlot(), season: firstSeason() }" />
+  <ng-container *ngTemplateOutlet="header; context: { $implicit: secondSlot(), season: secondSeason() }" />
 </div>
 
 

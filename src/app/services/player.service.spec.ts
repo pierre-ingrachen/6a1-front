@@ -40,6 +40,14 @@ describe("PlayerService and SeasonService", () => {
     request.flush(results)
   })
 
+  it("fetches the seasons of a player with GET /players/{playerId}/seasons", () => {
+    playerService.findPlayerSeasons(300713).subscribe((seasons) => expect(seasons.length).toBe(1))
+
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/players/300713/seasons`)
+    expect(request.request.method).toBe("GET")
+    request.flush([{ startYear: 2025, teamName: "Real Madrid" }])
+  })
+
   it("fetches player stats with GET /players/{playerId}/stats?season=", () => {
     playerService.findPlayerStats(300713, 2025).subscribe((stats) => expect(stats.name).toBe("Kylian Mbappé"))
 
