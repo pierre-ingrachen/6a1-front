@@ -15,7 +15,8 @@ L'API associée est le dépôt [6a1-back](https://github.com/pierre-ingrachen/6a
 7. [Tests et qualité](#tests-et-qualité)
 8. [Intégration continue et hooks git](#intégration-continue-et-hooks-git)
 9. [Maquette de la composition](#maquette-de-la-composition)
-10. [Consignes et agents IA](#consignes-et-agents-ia)
+10. [Consignes, agents et skills IA](#consignes-agents-et-skills-ia)
+11. [Utilisation de l'IA](#utilisation-de-lia)
 
 ## Fonctionnalités
 
@@ -161,7 +162,7 @@ node scripts/lineup-visual-diff.mjs [dossier-de-sortie]   # défaut : scripts/ou
 
 Il utilise Playwright (`npx playwright install chromium` la première fois) ; l'URL se change avec `LINEUP_URL`.
 
-## Consignes et agents IA
+## Consignes, agents et skills IA
 
 Les consignes données à Claude Code pour les deux dépôts sont versionnées ici :
 
@@ -169,9 +170,37 @@ Les consignes données à Claude Code pour les deux dépôts sont versionnées i
 |---|---|
 | `CLAUDE.md` | Règles du projet (back, front, audit) |
 | `.claude/agents/auditor.md` | Sous-agent d'audit en lecture seule (verdict PASS/FAIL avec preuves) |
-| `.claude/commands/audit.md` | Commande `/audit [back \| front \| chemin]` |
+| `.claude/skills/audit/SKILL.md` | Skill `/audit [back \| front \| chemin]` : lance l'agent d'audit sur les deux dépôts |
+| `.claude/skills/verify-readme/SKILL.md` | Skill `/verify-readme [back \| front]` : vérifie chaque affirmation des README contre le code |
 | `.claude/settings.json`, `.claude/hooks/` | Hooks : le garde de règles tourne après chaque édition et à la fin de chaque tâche |
 | `docs/ia/PLAN_7A0.md` | Plan initial du jeu |
 | `docs/ia/AUDIT.md` | Rapport d'audit du 22/10/2026 (historique, les chiffres ont pu évoluer depuis) |
 
 Ouvrir Claude Code dans `6a1-front`, avec `6a1-back` cloné à côté. Le test du garde se lance avec `bash .githooks/audit-guard.test.sh`.
+
+## Utilisation de l'IA
+
+Ce projet a été développé avec **Claude Code** (extension VS Code), utilisé comme assistant de développement sur les deux dépôts. Le code, les choix de conception et le contenu des README restent sous la responsabilité de l'équipe : chaque modification de l'IA est relue avant d'être conservée.
+
+### Pourquoi
+
+- Le sujet dépasse un site basique (catalogue, recherche, comparaison, jeu avec moteur de simulation) : l'IA accélère l'écriture du code répétitif, des tests et de la documentation.
+- Les règles du projet (architecture en couches, pas de logique métier dans les contrôleurs, standalone et signals côté Angular, pas de fuite mémoire) sont écrites dans `CLAUDE.md`, pour que l'IA les applique de façon constante au lieu de les redécouvrir à chaque demande.
+- Une relecture indépendante détecte des problèmes que l'auteur d'une modification ne voit plus (sécurité, régressions, code mort).
+
+### Comment : une boucle itérative avec vérification à chaque étape
+
+1. **Petite étape** : on demande une modification ciblée (une fonctionnalité, une correction, un test), pas une réécriture globale.
+2. **Vérification automatique après chaque modification de l'IA** : le garde de règles `.githooks/audit-guard.sh` se lance après chaque édition (hook Claude Code `PostToolUse`) et à la fin de chaque tâche (hook `Stop`), puis avant chaque commit (hook git `pre-commit`). Les tests (`./mvnw verify`, `ng test`) et `ng build` sont relancés avant de considérer l'étape terminée.
+3. **Contrôle de la codebase** : le sous-agent `auditor`, en lecture seule, relit le code et ne se fie à aucun rapport précédent. Il relance le garde et les tests lui-même, puis rend un verdict **PASS** ou **FAIL** avec des preuves. Une tâche n'est pas terminée tant que le verdict n'est pas `PASS`, ou que les points restants n'ont pas été expliqués. Le skill `/audit` le lance, et le skill `/verify-readme` contrôle que les README disent vrai.
+4. **Relecture humaine** : les diffs sont relus, les résultats sont comparés au code réel, puis on corrige et on recommence.
+5. **Intégration continue** : GitHub Actions rejoue le garde, les tests (y compris Testcontainers, avec échec si un test est ignoré) et le build sur chaque push.
+
+Les rapports d'audit successifs sont conservés dans `docs/ia/AUDIT.md`. Ils ont permis, par exemple, de désactiver Swagger par défaut, d'ajouter un limiteur de débit à la création de parties, de valider les origines CORS en production et de supprimer du code mort.
+
+### Conclusions
+
+- **Gains** : développement plus rapide, tests nombreux (plus de 390 côté back, 218 côté front), conventions homogènes et documentation à jour.
+- **Limites** : l'IA peut affirmer des choses inexactes (état de git, contenu d'un fichier, ce qu'un test couvre). Un rapport d'IA n'est donc jamais pris comme preuve : on relance les commandes et on relit le code. Elle peut aussi ajouter du contenu non demandé, ou corriger un problème en en créant un autre.
+- **Ce que l'IA ne remplace pas** : les décisions de conception, les règles du jeu, la lecture critique du résultat et les vérifications qui exigent l'environnement réel (par exemple Docker pour les tests d'intégration, qu'un test ignoré ne prouve pas).
+- **Conclusion** : l'IA est un bon accélérateur à condition de la cadrer (règles écrites, étapes petites) et de la contrôler (garde automatique, audit indépendant, tests, CI). Sans ces garde-fous, la vitesse gagnée se paie en erreurs difficiles à repérer.
