@@ -27,7 +27,7 @@ L'API associée est le dépôt [6a1-back](https://github.com/pierre-ingrachen/6a
 | `/joueurs` | Recherche de joueurs |
 | `/joueurs/:playerId` | Fiche d'un joueur : statistiques par saison et percentiles |
 | `/compare` | Comparaison de deux joueurs, statistique par statistique |
-| `/lineup` | Démonstration du composant de composition d'équipe (pelouse, maillots, formations) |
+| `/lineup` | Démonstration du composant de composition d'équipe (pelouse, maillots, formations), disponible en développement uniquement |
 | `**` | Page 404 |
 
 ## Prérequis

@@ -7,4 +7,8 @@ describe("routes", () => {
 
     expect(await route?.loadComponent?.()).toBe(PlayerSearchPageComponent)
   })
+
+  it("serves the lineup demo outside production", () => {
+    expect(routes.some((candidate) => candidate.path === "lineup")).toBe(true)
+  })
 })

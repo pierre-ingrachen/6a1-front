@@ -1,4 +1,15 @@
 import { Routes } from "@angular/router"
+import { environment } from "../environments/environment"
+
+const lineupDemoRoutes: Routes = environment.production
+  ? []
+  : [
+      {
+        path: "lineup",
+        loadComponent: () => import("lineup/lineup-demo/lineup-demo.component").then((module) => module.LineupDemoComponent),
+      },
+    ]
+
 export const routes: Routes = [
   {
     path: "",
@@ -8,10 +19,7 @@ export const routes: Routes = [
     path: "jeu",
     loadComponent: () => import("game/game-page/game-page.component").then((module) => module.GamePageComponent),
   },
-  {
-    path: "lineup",
-    loadComponent: () => import("lineup/lineup-demo/lineup-demo.component").then((module) => module.LineupDemoComponent),
-  },
+  ...lineupDemoRoutes,
   {
     path: "teams",
     loadComponent: () => import("teams/team-list/team-list.component").then((module) => module.TeamListComponent),
