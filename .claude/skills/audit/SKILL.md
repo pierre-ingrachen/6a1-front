@@ -1,5 +1,6 @@
 ---
-description: Lance le sous-agent auditor sur les changements courants (argument optionnel : back, front ou un chemin)
+name: audit
+description: Lance le sous-agent auditor sur les changements courants des dépôts 6a1-front et 6a1-back (argument optionnel : back, front ou un chemin). À utiliser avant de déclarer une tâche terminée ou après toute modification de code.
 argument-hint: "[back | front | chemin]"
 ---
 
